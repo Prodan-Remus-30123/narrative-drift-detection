@@ -20,5 +20,6 @@ def detect_changepoints(drift_signal: List[float]):
     Returns:
         List[int]: Indices of detected change points.
     """
-    # TODO: Implement using 'ruptures' or similar library
+    # TODO: # implement PELT-based change point detection using the 'ruptures' library.
+# The drift signal will be treated as a 1D time series and structural breaks will be detected.
     return []
