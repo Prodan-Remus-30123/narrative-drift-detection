@@ -1,26 +1,56 @@
 """
-Entity-level framing drift analysis.
+entities.py
 
-This module will:
-- Extract named entities
-- Build contextual embeddings per entity
-- Compute temporal drift per entity
+Entity-level framing analysis.
 """
 
-from typing import List
+import spacy
+from collections import defaultdict, Counter
 
 
-def extract_entities(texts: List[str]):
+nlp = spacy.load("en_core_web_sm")
+
+
+def analyze_entities(texts):
     """
-    Placeholder for Named Entity Recognition.
+    Analyze entity roles and associated verbs.
 
     Args:
-        texts (List[str]): Documents.
+        texts (list): List of documents
 
     Returns:
-        dict: Mapping of entity -> list of contexts
+        dict: Entity statistics
     """
-    # TODO: # Planned: use spaCy for Named Entity Recognition and dependency parsing.
-# Entity-level role statistics (subject/object frequency, associated verbs)
-# will be computed per time window.
-    return {}
+
+    entity_data = defaultdict(lambda: {
+        "subject_count": 0,
+        "object_count": 0,
+        "verbs": Counter()
+    })
+
+    for text in texts:
+
+        doc = nlp(text)
+
+        for token in doc:
+
+            # Ignore tokens that are not part of named entities
+            if token.ent_type_ == "":
+                continue
+
+            entity = token.text
+
+            # Subject roles
+            if token.dep_ in ("nsubj", "nsubjpass"):
+                entity_data[entity]["subject_count"] += 1
+
+            # Object roles
+            if token.dep_ in ("dobj", "pobj", "obj"):
+                entity_data[entity]["object_count"] += 1
+
+            # Associated verbs
+            if token.head.pos_ == "VERB":
+                verb = token.head.lemma_.lower()
+                entity_data[entity]["verbs"][verb] += 1
+
+    return entity_data

@@ -1,25 +1,40 @@
 """
-Statistical change-point detection over drift signal.
+changepoints.py
 
-Planned integration:
-- CUSUM
-- PELT (via ruptures library)
-- Other time-series structural break methods
+Change-point detection over narrative drift signals.
 """
 
-from typing import List
+import ruptures as rpt
+import numpy as np
 
 
-def detect_changepoints(drift_signal: List[float]):
+def detect_changepoints(
+    drift_signal,
+    model="l2",
+    penalty=0.01
+):
     """
-    Placeholder for change-point detection logic.
+    Detect structural breaks in drift signal.
 
     Args:
-        drift_signal (List[float]): Temporal drift values.
+        drift_signal (list): Temporal drift values
+        model (str): Cost model for ruptures
+        penalty (float): Controls sensitivity
 
     Returns:
-        List[int]: Indices of detected change points.
+        list: Indices of detected change points
     """
-    # TODO: # implement PELT-based change point detection using the 'ruptures' library.
-# The drift signal will be treated as a 1D time series and structural breaks will be detected.
-    return []
+
+    signal = np.array(drift_signal).reshape(-1, 1)
+
+    algo = rpt.Pelt(model=model).fit(signal)
+
+    breakpoints = algo.predict(pen=penalty)
+
+    # Remove final endpoint
+    breakpoints = [
+        bp for bp in breakpoints
+        if bp < len(drift_signal)
+    ]
+
+    return breakpoints

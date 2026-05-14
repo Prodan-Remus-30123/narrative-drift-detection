@@ -7,23 +7,42 @@ Utilities for visualizing narrative drift over time.
 import matplotlib.pyplot as plt
 
 
-def plot_drift(month_labels, drift_values):
+def plot_multiple_sources(source_results):
     """
-    Plot temporal narrative drift signal.
+    Plot drift signals for multiple sources.
 
     Args:
-        month_labels (list): Labels for time windows.
-        drift_values (list): Drift values between windows.
+        source_results (dict):
+            {
+                source_name: {
+                    "labels": [...],
+                    "values": [...]
+                }
+            }
     """
 
-    plt.figure(figsize=(8, 5))
+    plt.figure(figsize=(10, 6))
 
-    plt.plot(month_labels, drift_values, marker="o")
+    for source, data in source_results.items():
 
-    plt.title("Narrative Drift Over Time")
+        plt.plot(
+            data["labels"],
+            data["values"],
+            marker="o",
+            label=source
+        )
+
+    plt.title("Narrative Drift Comparison Across Sources")
+
     plt.xlabel("Time Window")
     plt.ylabel("Drift Magnitude")
 
+    plt.xticks(rotation=30)
+
     plt.grid(True)
+
+    plt.legend()
+
+    plt.tight_layout()
 
     plt.show()

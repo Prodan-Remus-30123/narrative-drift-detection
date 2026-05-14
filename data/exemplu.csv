@@ -1,16 +1,48 @@
 date,source,text
-2020-03-10,BBC,"The government reported new COVID-19 cases and urged caution among citizens."
-2020-03-15,BBC,"Health officials are monitoring the spread of the virus and expanding testing."
-2020-03-20,BBC,"Vaccination efforts are being discussed as part of long-term response strategies."
+2020-01-08,BBC,"WHO announced that the new coronavirus outbreak was being closely monitored by international health authorities."
+2020-01-15,BBC,"China reported additional COVID-19 cases while WHO coordinated international response discussions."
+2020-01-24,BBC,"Government officials stated that WHO recommendations would guide national prevention measures."
 
-2020-04-05,BBC,"The government is facing criticism over its handling of the COVID-19 outbreak."
-2020-04-10,BBC,"Experts argue that authorities reacted too slowly to the crisis."
-2020-04-15,BBC,"Public trust in institutions is declining amid growing dissatisfaction."
+2020-02-05,BBC,"WHO emphasized global cooperation as China continued containment efforts against COVID-19."
+2020-02-14,BBC,"Government representatives worked with WHO experts to expand healthcare preparedness."
+2020-02-22,BBC,"China introduced additional travel restrictions following WHO health advisories."
 
-2020-03-12,CNN,"Officials confirmed rising COVID-19 cases and emphasized public safety measures."
-2020-03-18,CNN,"Authorities are working to contain the virus through coordinated responses."
-2020-03-22,CNN,"Healthcare systems are under pressure but continue to operate."
+2020-03-06,BBC,"WHO declared COVID-19 a major international health concern as governments expanded emergency measures."
+2020-03-15,BBC,"Government officials followed WHO recommendations to increase hospital preparedness."
+2020-03-25,BBC,"China continued reporting infection data while WHO coordinated global response strategies."
 
-2020-04-07,CNN,"Critics accuse the government of mismanaging the pandemic response."
-2020-04-12,CNN,"Concerns grow over lack of preparedness in handling COVID-19."
-2020-04-18,CNN,"Public frustration increases as the crisis deepens."
+2020-04-04,BBC,"Critics accused China of delaying critical COVID-19 information during the early outbreak stages."
+2020-04-12,BBC,"Government leaders questioned whether WHO reacted quickly enough to the pandemic."
+2020-04-22,BBC,"Media coverage increasingly criticized WHO and China for lack of transparency."
+
+2020-05-05,BBC,"Political debates intensified as governments evaluated WHO decisions during the pandemic."
+2020-05-13,BBC,"China faced increasing criticism regarding its handling of early COVID-19 reporting."
+2020-05-24,BBC,"Government officials discussed reforms to WHO emergency response mechanisms."
+
+2020-06-03,BBC,"WHO defended its pandemic response while governments debated future healthcare reforms."
+2020-06-11,BBC,"China rejected accusations regarding misinformation during the COVID-19 outbreak."
+2020-06-20,BBC,"Government leaders emphasized international cooperation despite criticism toward WHO."
+
+2020-01-09,CNN,"WHO monitored the coronavirus outbreak as China attempted to contain early infections."
+2020-01-18,CNN,"Government officials relied on WHO guidance to prepare national healthcare systems."
+2020-01-27,CNN,"China reported rising COVID-19 cases while WHO coordinated emergency discussions."
+
+2020-02-07,CNN,"WHO warned that COVID-19 could become a global crisis if governments delayed action."
+2020-02-16,CNN,"China introduced strict containment policies following WHO recommendations."
+2020-02-25,CNN,"Government health agencies expanded testing efforts as WHO raised international concerns."
+
+2020-03-08,CNN,"WHO described COVID-19 as a global emergency while governments implemented lockdown measures."
+2020-03-17,CNN,"Government leaders cited WHO guidance while expanding emergency healthcare responses."
+2020-03-28,CNN,"China continued sharing COVID-19 statistics as WHO coordinated international cooperation."
+
+2020-04-05,CNN,"Critics argued that China concealed critical COVID-19 information during the early outbreak."
+2020-04-14,CNN,"Government officials accused WHO of responding too slowly to the pandemic crisis."
+2020-04-23,CNN,"Media narratives increasingly portrayed WHO and China as responsible for global failures."
+
+2020-05-06,CNN,"Political commentators criticized WHO leadership and questioned China's transparency."
+2020-05-15,CNN,"Government representatives demanded investigations into China's early COVID-19 reporting."
+2020-05-26,CNN,"WHO faced growing political pressure as criticism of China intensified globally."
+
+2020-06-04,CNN,"WHO defended its pandemic decisions while governments debated future accountability measures."
+2020-06-12,CNN,"China rejected accusations regarding misinformation and mishandling of the outbreak."
+2020-06-21,CNN,"Government officials discussed reforms to WHO coordination and international pandemic response."
