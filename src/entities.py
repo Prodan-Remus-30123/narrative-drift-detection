@@ -32,25 +32,45 @@ def analyze_entities(texts):
 
         doc = nlp(text)
 
-        for token in doc:
+        for ent in doc.ents:
 
             # Ignore tokens that are not part of named entities
-            if token.ent_type_ == "":
+            allowed_entity_types = {
+                "ORG",
+                "GPE",
+                "PERSON"
+            }
+
+            if ent.label_ not in allowed_entity_types:
                 continue
 
-            entity = token.text
+            entity = ent.text
+            if len(entity) < 3:
+                continue
+
+            ignored_entities = {
+                "month",
+                "year",
+                "day",
+                "time"
+            }
+
+            if entity.lower() in ignored_entities:
+                continue
 
             # Subject roles
-            if token.dep_ in ("nsubj", "nsubjpass"):
+            root = ent.root
+            dep = root.dep_
+            if dep in ("nsubj", "nsubjpass"):
                 entity_data[entity]["subject_count"] += 1
 
             # Object roles
-            if token.dep_ in ("dobj", "pobj", "obj"):
+            if dep in ("dobj", "pobj", "obj"):
                 entity_data[entity]["object_count"] += 1
 
             # Associated verbs
-            if token.head.pos_ == "VERB":
-                verb = token.head.lemma_.lower()
+            if root.head.pos_ == "VERB":
+                verb = root.head.lemma_.lower()
                 entity_data[entity]["verbs"][verb] += 1
 
     return entity_data

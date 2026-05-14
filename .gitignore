@@ -35,7 +35,7 @@ Thumbs.db
 
 # Data files (optional)
 # Uncomment if datasets become large/private
-# data/*.csv
+database
 
 # Matplotlib cache
 .matplotlib/

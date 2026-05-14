@@ -7,7 +7,9 @@ from drift import compute_cosine_drift
 from visualization import plot_multiple_sources
 from changepoints import detect_changepoints
 from entities import analyze_entities
-
+from interpreter import interpret_shift
+from database import load_full_articles
+from agents.drift_agent import analyze_drift
 
 def group_by_source_and_month(df):
     df["date"] = pd.to_datetime(df["date"])
@@ -26,10 +28,23 @@ def group_by_source_and_month(df):
 
 def main():
     # 🔹 Load CSV
-    df = pd.read_csv("data/exemplu.csv")
+    df = load_full_articles()
 
     # 🔹 Group by month
     grouped = group_by_source_and_month(df)
+
+    print("\n=== GROUPED DATA ===")
+
+    for source in grouped:
+
+        print(f"\nSource: {source}")
+
+        for month in grouped[source]:
+
+            print(
+                month,
+                len(grouped[source][month])
+            )
 
     # 🔹 Preprocess
     for source in grouped:
@@ -73,6 +88,14 @@ def main():
             drift_labels.append(f"{m1}->{m2}")
 
             print(f"{m1} → {m2} | Drift: {drift:.4f}")
+            drift_interpretation = analyze_drift(
+            source=source,
+            period=f"{m1}->{m2}",
+            drift_value=drift
+            )
+
+            print("\n[Drift Agent]")
+            print(drift_interpretation)
 
             if drift > 0.1:
                 print("  → Significant shift detected")
@@ -112,31 +135,34 @@ def main():
                     f"Top verbs: {stats['verbs'].most_common(5)}"
                 )
 
-        # Change point
-        change_points = detect_changepoints(drift_values)
-        print(f"Detected change points: {change_points}")
+        # 🔹 Narrative interpretation per transition
 
-    # 🔹 Compute drift between consecutive months
-    print("\n=== Narrative Drift on Real Data ===")
+        for i in range(len(months_sorted) - 1):
 
-    drift_values = []
-    drift_labels = []
+            current_month = months_sorted[i + 1]
 
-    for i in range(len(aggregated_vectors) - 1):
-        m1, v1 = aggregated_vectors[i]
-        m2, v2 = aggregated_vectors[i + 1]
+            entity_stats = analyze_entities(
+                grouped[source][current_month]
+            )
 
-        drift = compute_cosine_drift(v1, v2)
+            interpretation = interpret_shift(
+                source=source,
+                period=f"{months_sorted[i]}->{current_month}",
+                drift=drift_values[i],
+                entity_stats=entity_stats
+            )
 
-        drift_values.append(drift)
-        drift_labels.append(f"{m1}->{m2}")
+            print("\nNarrative Interpretation:")
+            print(
+                f"{months_sorted[i]}->{current_month}"
+            )
 
-        print(f"{m1} → {m2} | Drift: {drift:.4f}")
+            print(interpretation)
 
-        if drift > 0.1:
-            print("  → Significant shift detected")
-        else:
-            print("  → Minor variation")
+        # # Change point
+        # change_points = detect_changepoints(drift_values)
+        # print(f"Detected change points: {change_points}")
+
 
     # 🔹 Plot drift signal
     plot_multiple_sources(source_results)
