@@ -19,66 +19,171 @@ provider_configs = {
 
     "GDELTProvider": {
 
-         "queries": [
+        "queries": [
 
-        {
-            "query": "COVID-19",
-            "num_records": 20
-        },
+            # INSTITUTIONAL RESPONSE
 
-        {
-            "query": "coronavirus",
-            "num_records": 20
-        },
+            {
+                "query":
+                    "WHO pandemic response",
+                "num_records": 15
+            },
 
-        {
-            "query": "COVID WHO",
-            "num_records": 5
-        },
+            {
+                "query":
+                    "CDC COVID response",
+                "num_records": 10
+            },
 
-        {
-            "query": "Coronavirus China",
-            "num_records": 5
-        },
+            {
+                "query":
+                    "government lockdown measures",
+                "num_records": 10
+            },
 
-        {
-            "query": "Pandemic Beijing",
-            "num_records": 5
-        }
-    ],
+            # GEOPOLITICAL
+
+            {
+                "query":
+                    "China COVID responsibility",
+                "num_records": 15
+            },
+
+            {
+                "query":
+                    "US China pandemic tensions",
+                "num_records": 10
+            },
+
+            {
+                "query":
+                    "Beijing coronavirus response",
+                "num_records": 10
+            },
+
+            # VACCINES
+
+            {
+                "query":
+                    "COVID vaccine approval",
+                "num_records": 15
+            },
+
+            {
+                "query":
+                    "vaccine diplomacy China",
+                "num_records": 10
+            },
+
+            {
+                "query":
+                    "WHO vaccine guidance",
+                "num_records": 10
+            },
+
+            # PUBLIC HEALTH
+
+            {
+                "query":
+                    "COVID lockdown protests",
+                "num_records": 10
+            },
+
+            {
+                "query":
+                    "pandemic restrictions",
+                "num_records": 10
+            },
+
+            {
+                "query":
+                    "hospital system COVID",
+                "num_records": 10
+            }
+        ],
 
         "domains": [
             "bbc.co.uk",
             "cnn.com",
-            "reuters.com",
-            "nytimes.com"
+            "nytimes.com",
+            "foxnews.com",
+            "washingtonpost.com",
+            "npr.org",
+            "politico.com",
+            "aljazeera.com",
+            "cnbc.com"
         ]
-
     },
 
     "GuardianProvider": {
 
         "queries": [
 
-        {
-            "query": '"COVID-19" AND WHO',
-            "num_records": 20
-        },
+            # INSTITUTIONAL RESPONSE
 
-        {
-            "query": '"COVID-19" AND China',
-            "num_records": 20
-        },
+            {
+                "query":
+                    '"World Health Organization" AND COVID',
+                "num_records": 15
+            },
 
-        {
-            "query": '"pandemic" AND Beijing',
-            "num_records": 20
-        }
-    ],
+            {
+                "query":
+                    '"CDC" AND pandemic',
+                "num_records": 10
+            },
 
-        "domains": None,
-    }
-}
+            # GEOPOLITICAL
+
+            {
+                "query":
+                    '"China" AND pandemic',
+                "num_records": 15
+            },
+
+            {
+                "query":
+                    '"US China" AND COVID',
+                "num_records": 10
+            },
+
+            {
+                "query":
+                    '"Beijing" AND coronavirus',
+                "num_records": 10
+            },
+
+            # VACCINES
+
+            {
+                "query":
+                    '"COVID vaccine" AND WHO',
+                "num_records": 15
+            },
+
+            {
+                "query":
+                    '"vaccine diplomacy" AND China',
+                "num_records": 10
+            },
+
+            # PUBLIC HEALTH
+
+            {
+                "query":
+                    '"lockdown" AND pandemic',
+                "num_records": 10
+            },
+
+            {
+                "query":
+                    '"hospital system" AND COVID',
+                "num_records": 10
+            }
+        ],
+
+        "domains": None
+    }}
 
 
 def insert_article(article):
@@ -241,7 +346,7 @@ def run_collection():
                     time.sleep(2)
 
                 provider_articles = deduplicate_articles(provider_articles)
-                provider_articles = filter_articles(provider_articles)
+                # provider_articles = filter_articles(provider_articles)
 
                 print(
                     f"{provider_name} unique articles: "

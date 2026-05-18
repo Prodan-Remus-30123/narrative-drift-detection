@@ -79,6 +79,32 @@ def load_full_articles():
     return df
 
 
+def load_full_articles_with_dates():
+    """
+    Load articles with dates and text.
+    """
+
+    conn = get_connection()
+
+    query = """
+    SELECT
+        source,
+        date,
+        text
+    FROM articles
+    WHERE extraction_status='success'
+    """
+
+    df = pd.read_sql_query(
+        query,
+        conn
+    )
+
+    conn.close()
+
+    return df
+
+
 def get_latest_article_date(
     provider,
     source

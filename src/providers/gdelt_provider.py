@@ -73,10 +73,8 @@ class GDELTProvider(BaseProvider):
 
                 try:
 
-                    results = self.gd.article_search(
-                        filters
-                    )
-
+                    results = self.gd.article_search(filters)
+                    print( f"Articles returned: " f"{len(results)}" )
                     break
 
                 except RateLimitError:

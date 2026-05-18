@@ -6,6 +6,9 @@ Entity-level framing analysis.
 
 import spacy
 from collections import defaultdict, Counter
+from entity_normalization import (
+    normalize_entity
+)
 
 
 nlp = spacy.load("en_core_web_sm")
@@ -44,7 +47,7 @@ def analyze_entities(texts):
             if ent.label_ not in allowed_entity_types:
                 continue
 
-            entity = ent.text
+            entity = normalize_entity(ent.text)
             if len(entity) < 3:
                 continue
 
@@ -69,8 +72,24 @@ def analyze_entities(texts):
                 entity_data[entity]["object_count"] += 1
 
             # Associated verbs
+            ignored_verbs = {
+                "say",
+                "tell",
+                "add",
+                "report",
+                "write",
+                "note",
+                "explain",
+                "include"
+            }
+
             if root.head.pos_ == "VERB":
+
                 verb = root.head.lemma_.lower()
+
+                if verb in ignored_verbs:
+                    continue
+
                 entity_data[entity]["verbs"][verb] += 1
 
-    return entity_data
+                return entity_data
