@@ -1,6 +1,4 @@
 """
-gdelt_provider.py
-
 GDELT-based news collection provider.
 """
 
@@ -34,22 +32,34 @@ class GDELTProvider(BaseProvider):
 
             print(f"\n=== GDELT: {domain} ===")
 
-            latest_date = get_latest_article_date(
-            provider="gdelt",
-            source=domain
-            )
+            provider_start_date = start_date
 
-            if latest_date:
-                start_date = latest_date[:10]
-                print(
-                    f"Incremental collection from "
-                    f"{start_date}"
-                )
+            # latest_date = get_latest_article_date(
+            #     provider="gdelt",
+            #     source=domain
+            # )
+
+            # if latest_date:
+
+            #     provider_start_date = (
+            #         latest_date[:8]
+            #     )
+
+            #     provider_start_date = (
+            #         f"{provider_start_date[:4]}-"
+            #         f"{provider_start_date[4:6]}-"
+            #         f"{provider_start_date[6:8]}"
+            #     )
+
+            #     print(
+            #         f"Incremental collection from "
+            #         f"{provider_start_date}"
+            #     )
 
             filters = Filters(
                 keyword=query,
                 domain=domain,
-                start_date=start_date,
+                start_date=provider_start_date,
                 end_date=end_date,
                 num_records=num_records
             )
@@ -60,40 +70,38 @@ class GDELTProvider(BaseProvider):
             results = None
 
             while retry_count < max_retries:
+
                 try:
+
                     results = self.gd.article_search(
                         filters
                     )
+
                     break
 
                 except RateLimitError:
+
                     retry_count += 1
+
                     print(
                         f"Rate limited. Retry "
                         f"{retry_count}/{max_retries}"
                     )
-                    time.sleep(20)
+
+                    wait_time = 20 * retry_count
+                    print(f"Waiting {wait_time} seconds...")
+
+                    time.sleep(wait_time)
 
                 except Exception as e:
+
                     print(f"GDELT fatal error: {e}")
+
                     break
-            
+
             if results is None:
-                if len(collected_articles) > 0:
-
-                    return {
-                        "status": "partial_success",
-                        "articles": collected_articles
-                    }
-
-                return {
-                    "status": "failed",
-                    "articles": []
-                }
-
-            print(
-                f"Articles returned: {len(results)}"
-            )
+                print( f"Skipping domain: {domain}")
+                continue
 
             for _, row in results.iterrows():
 
@@ -126,7 +134,14 @@ class GDELTProvider(BaseProvider):
                     article
                 )
 
-                time.sleep(3)
+            time.sleep(3)
+
+        if len(collected_articles) == 0:
+
+            return {
+                "status": "failed",
+                "articles": []
+            }
 
         return {
             "status": "success",

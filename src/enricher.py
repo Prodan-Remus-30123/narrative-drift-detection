@@ -11,6 +11,11 @@ from newspaper import Article
 from database import get_connection
 
 
+MIN_ARTICLE_LENGTH = 500
+
+MAX_EXTRACTION_ATTEMPTS = 3
+
+
 def fetch_pending_articles():
 
     conn = get_connection()
@@ -18,10 +23,13 @@ def fetch_pending_articles():
     cursor = conn.cursor()
 
     cursor.execute("""
-    SELECT id, url
+    SELECT id, url, extraction_attempts
     FROM articles
     WHERE extraction_status='pending'
-    """)
+    AND extraction_attempts < ?
+    """, (
+        MAX_EXTRACTION_ATTEMPTS,
+    ))
 
     rows = cursor.fetchall()
 
@@ -33,7 +41,8 @@ def fetch_pending_articles():
 def update_article_text(
     article_id,
     text,
-    status
+    ingestion_status,
+    extraction_status
 ):
 
     conn = get_connection()
@@ -45,15 +54,20 @@ def update_article_text(
     SET
         text=?,
         ingestion_status=?,
-        extraction_attempts = extraction_attempts + 1
+        extraction_status=?,
+        extraction_attempts =
+            extraction_attempts + 1,
+        updated_at=CURRENT_TIMESTAMP
     WHERE id=?
     """, (
         text,
-        status,
+        ingestion_status,
+        extraction_status,
         article_id
     ))
 
     conn.commit()
+
     conn.close()
 
 
@@ -64,11 +78,14 @@ def extract_text(url):
         article = Article(url)
 
         article.download()
+
         article.parse()
 
         return article.text.strip()
 
-    except Exception:
+    except Exception as e:
+
+        print(f"Extraction error: {e}")
 
         return ""
 
@@ -79,31 +96,41 @@ def enrich_articles():
 
     print(f"Pending articles: {len(rows)}")
 
-    for article_id, url in rows:
+    for article_id, url, attempts in rows:
 
-        print(f"Extracting: {url}")
+        print(
+            f"\nExtracting "
+            f"(attempt {attempts + 1}):"
+        )
+
+        print(url)
 
         text = extract_text(url)
 
-        if len(text) > 500:
+        if len(text) >= MIN_ARTICLE_LENGTH:
 
             update_article_text(
                 article_id,
                 text,
-                "full_text"
+                "full_text",
+                "success"
             )
 
-            print("Success.")
+            print(
+                f"Success "
+                f"({len(text)} chars)"
+            )
 
         else:
 
             update_article_text(
                 article_id,
                 "",
+                "metadata_collected",
                 "failed"
             )
 
-            print("Failed.")
+            print("Failed extraction.")
 
         time.sleep(3)
 

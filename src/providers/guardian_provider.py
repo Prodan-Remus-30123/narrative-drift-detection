@@ -1,6 +1,4 @@
 """
-guardian_provider.py
-
 Guardian API news provider.
 """
 
@@ -31,7 +29,7 @@ class GuardianProvider(BaseProvider):
             "q": query,
             "from-date": start_date,
             "to-date": end_date,
-            "page": 2,
+            "page": 1,
             "page-size": num_records,
             "api-key": self.api_key
         }

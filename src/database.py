@@ -55,6 +55,7 @@ def initialize_database():
     conn.commit()
     conn.close()
 
+
 def load_full_articles():
     """
     Load articles with full extracted text.
@@ -77,26 +78,6 @@ def load_full_articles():
 
     return df
 
-def get_latest_article_date(source):
-    """
-    Get latest collected article date for source.
-    """
-
-    conn = get_connection()
-
-    cursor = conn.cursor()
-
-    cursor.execute("""
-    SELECT MAX(date)
-    FROM articles
-    WHERE source=?
-    """, (source,))
-
-    result = cursor.fetchone()
-
-    conn.close()
-
-    return result[0]
 
 def get_latest_article_date(
     provider,
