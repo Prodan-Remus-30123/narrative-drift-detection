@@ -7,7 +7,8 @@ Entity-level framing analysis.
 import spacy
 from collections import defaultdict, Counter
 from entity_normalization import (normalize_entity)
-from entity_filters import (GENERIC_ENTITIES)
+from filters.entity_filters import (ENTITY_BLACKLIST)
+from filters.verb_filters import (SEMANTICALLY_WEAK_VERBS, GENERIC_VERBS)
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -46,10 +47,16 @@ def analyze_entities(texts):
                 continue
 
             entity = normalize_entity(ent.text)
-            if len(entity) < 3:
+
+            # if entity.islower() and len(entity.split()) == 1:
+            #     continue
+
+
+
+            if len(entity.split()) == 1 and len(entity) < 4:
                 continue
 
-            if entity in GENERIC_ENTITIES:
+            if entity in ENTITY_BLACKLIST:
                 continue
 
             ignored_entities = {
@@ -84,10 +91,39 @@ def analyze_entities(texts):
 
                     verb = current.lemma_.lower()
 
+                    if not verb.isalpha():
+                        verb = None
+                        break
+
                     break
 
-            if verb:
+            if verb in GENERIC_VERBS:
+                continue
 
+            # if verb in SEMANTICALLY_WEAK_VERBS:
+            #     continue
+
+            if verb:
                 entity_data[entity]["verbs"][verb] += 1
 
-    return entity_data
+    MIN_LOCAL_VERB_FREQUENCY = 2
+
+    filtered_entity_data = {}
+
+    for entity, stats in entity_data.items():
+
+        filtered_verbs = Counter()
+
+        for verb, count in stats["verbs"].items():
+
+            if count >= MIN_LOCAL_VERB_FREQUENCY:
+                filtered_verbs[verb] = count
+
+        if len(filtered_verbs) == 0:
+            continue
+
+        stats["verbs"] = filtered_verbs
+
+        filtered_entity_data[entity] = stats
+
+    return filtered_entity_data

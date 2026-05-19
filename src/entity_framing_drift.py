@@ -119,12 +119,12 @@ def compare_periods(
 
         for entity in sorted(shared_entities):
 
-            similarity = vector_similarity(
+            shared_verbs = set(vectors_a[entity].keys()).intersection(set(vectors_b[entity].keys()))
 
-                vectors_a[entity],
+            if len(shared_verbs) < 2:
+                continue
 
-                vectors_b[entity]
-            )
+            similarity = vector_similarity(vectors_a[entity], vectors_b[entity])
 
             drift = 1 - similarity
 
@@ -181,7 +181,22 @@ def compute_entity_drift(
             vectors_b.keys()
         )
 
+        print(
+            f"{transition} "
+            f"shared entities: "
+            f"{len(shared_entities)}"
+        )
+
         for entity in shared_entities:
+
+            shared_verbs = set(
+                vectors_a[entity].keys()
+            ).intersection(
+                set(vectors_b[entity].keys())
+            )
+
+            if len(shared_verbs) < 2:
+                continue
 
             similarity = vector_similarity(
 
@@ -202,7 +217,10 @@ def compute_entity_drift(
                     vectors_a[entity],
 
                 "after":
-                    vectors_b[entity]
+                    vectors_b[entity],
+
+                "shared_verbs":
+                    len(shared_verbs)
             }
 
     return drift_results

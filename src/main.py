@@ -11,29 +11,44 @@ from interpreter import interpret_shift
 from database import load_full_articles
 from agents.drift_agent import analyze_drift
 from entity_framing_drift import (compute_entity_drift)
-from plot_entity_drift import (plot_top_entity_drift)
+from plots.plot_entity_drift import (plot_top_entity_drift)
+from plots.plot_entity_heatmap import (plot_entity_heatmap)
+from temporal_entity_analysis import (group_articles_by_period)
 
-def group_by_source_and_month(df):
-    df["date"] = pd.to_datetime(df["date"])
-    df["month"] = df["date"].dt.to_period("M")
+# def group_by_source_and_month(df):
+#     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
+#     df["date"] = df["date"].dt.tz_localize(None)
+#     df["month"] = df["date"].dt.to_period("M")
 
-    grouped = {}
+#     grouped = {}
 
-    for (source, month), rows in df.groupby(["source", "month"]):
-        if source not in grouped:
-            grouped[source] = {}
+#     for (source, month), rows in df.groupby(["source", "month"]):
+#         if source not in grouped:
+#             grouped[source] = {}
 
-        grouped[source][month] = rows["text"].tolist()
+#         grouped[source][month] = rows["text"].tolist()
 
-    return grouped
+#     return grouped
 
 
 def main():
-    # 🔹 Load CSV
+    #  Load CSV
     df = load_full_articles()
 
-    # 🔹 Group by month
-    grouped = group_by_source_and_month(df)
+    #  Group by month
+    grouped = {}
+
+    for source in df["source"].unique():
+
+        source_df = df[
+            df["source"] == source
+        ]
+
+        grouped[source] = (
+            group_articles_by_period(
+                source_df
+            )
+        )
 
     print("\n=== GROUPED DATA ===")
 
@@ -48,14 +63,14 @@ def main():
                 len(grouped[source][month])
             )
 
-    # 🔹 Preprocess
+    #  Preprocess
     for source in grouped:
         for month in grouped[source]:
             grouped[source][month] = preprocess_corpus(
                 grouped[source][month]
             )
 
-    # 🔹 Embeddings
+    #  Embeddings
     model = EmbeddingModel()
 
     source_results = {}
@@ -114,7 +129,9 @@ def main():
         )
 
         framing_drift = compute_entity_drift(grouped[source])
+
         plot_top_entity_drift(framing_drift)
+        plot_entity_heatmap(framing_drift)
 
         for transition, entities in framing_drift.items():
 
@@ -153,7 +170,7 @@ def main():
                     f"{list(stats['after'].keys())[:5]}"
                 )
 
-        # 🔹 Entity analysis per month
+        # Entity analysis per month
 
         months_sorted = sorted(grouped[source].keys())
 
@@ -181,7 +198,7 @@ def main():
                     f"Top verbs: {stats['verbs'].most_common(5)}"
                 )
 
-        # 🔹 Narrative interpretation per transition
+        #  Narrative interpretation per transition
 
         for i in range(len(months_sorted) - 1):
 
@@ -210,7 +227,7 @@ def main():
         # print(f"Detected change points: {change_points}")
 
 
-    # 🔹 Plot drift signal
+    #  Plot drift signal
     plot_multiple_sources(source_results)
 
 

@@ -20,15 +20,13 @@ COMMON_PREFIXES = {
 
 
 MANUAL_ALIASES = {
-
-    "who":
-        "world health organization",
-
-    "covid":
-        "covid-19",
-
-    "covid19":
-        "covid-19"
+    "who": "world health organization",
+    "covid": "covid-19",
+    "covid19": "covid-19",
+    "donald trump": "trump",
+    "president trump": "trump",
+    "u.s.": "united states",
+    "us": "united states",
 }
 
 
@@ -52,6 +50,22 @@ def normalize_entity(entity):
     ]
 
     entity = " ".join(words)
+    
+    if entity.endswith(" who"):
+        entity = entity.replace(
+            " who",
+            ""
+        )
+    
+    if entity.endswith("s"):
+
+        singular_candidate = entity[:-1]
+
+        if singular_candidate in {
+            "hong kong"
+        }:
+
+            entity = singular_candidate
 
     entity = entity.strip()
 

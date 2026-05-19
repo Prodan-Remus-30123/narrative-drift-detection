@@ -6,13 +6,8 @@ Monthly entity framing analysis.
 
 import pandas as pd
 
-from database import (
-    load_full_articles_with_dates
-)
-
-from entities import (
-    analyze_entities
-)
+from database import (load_full_articles_with_dates)
+from entities import (analyze_entities)
 
 
 def group_articles_by_period(df):
