@@ -66,7 +66,7 @@ def print_top_entities(
     top_n=10
 ):
 
-    MIN_ENTITY_FREQUENCY = 3
+    MIN_ENTITY_FREQUENCY = 1
 
     filtered_entities = {
 

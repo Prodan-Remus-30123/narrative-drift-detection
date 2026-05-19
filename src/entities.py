@@ -72,24 +72,33 @@ def analyze_entities(texts):
                 entity_data[entity]["object_count"] += 1
 
             # Associated verbs
-            ignored_verbs = {
-                "say",
-                "tell",
-                "add",
-                "report",
-                "write",
-                "note",
-                "explain",
-                "include"
-            }
+            # ignored_verbs = {
+            #     "say",
+            #     "tell",
+            #     "add",
+            #     "report",
+            #     "write",
+            #     "note",
+            #     "explain",
+            #     "include"
+            # }
 
-            if root.head.pos_ == "VERB":
+            verb = None
 
-                verb = root.head.lemma_.lower()
+            current = root
 
-                if verb in ignored_verbs:
-                    continue
+            while current.head != current:
+
+                current = current.head
+
+                if current.pos_ == "VERB":
+
+                    verb = current.lemma_.lower()
+
+                    break
+
+            if verb:
 
                 entity_data[entity]["verbs"][verb] += 1
 
-                return entity_data
+    return entity_data
