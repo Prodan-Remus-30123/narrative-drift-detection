@@ -3,17 +3,19 @@ from datetime import datetime
 
 from preprocessing import preprocess_corpus
 from embeddings import EmbeddingModel
-from drift import compute_cosine_drift
+from drift import (compute_cosine_drift, compute_dynamic_threshold, classify_drift)
 from visualization import plot_multiple_sources
 from changepoints import detect_changepoints
 from entities import analyze_entities
 from interpreter import interpret_shift
 from database import load_full_articles
 from agents.drift_agent import analyze_drift
-from entity_framing_drift import (compute_entity_drift)
-from plots.plot_entity_drift import (plot_top_entity_drift)
-from plots.plot_entity_heatmap import (plot_entity_heatmap)
-from temporal_entity_analysis import (group_articles_by_period)
+from entity_framing_drift import compute_entity_drift, compute_entity_importance
+from plots.plot_entity_drift import plot_top_entity_drift
+from plots.plot_entity_heatmap import plot_entity_heatmap
+from temporal_entity_analysis import group_articles_by_period
+from plots.plot_semantic_vs_framing import plot_semantic_vs_framing
+
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -40,19 +42,21 @@ def main():
 
     for source in df["source"].unique():
 
-        source_df = df[
-            df["source"] == source
-        ]
+        source_df = df[df["source"] == source]
 
-        grouped[source] = (
-            group_articles_by_period(
-                source_df
-            )
-        )
+        grouped[source] = (group_articles_by_period(source_df))
 
     print("\n=== GROUPED DATA ===")
 
     for source in grouped:
+        total_docs = sum(
+            len(grouped[source][period])
+            for period in grouped[source]
+        )
+
+        if total_docs < 50:
+            print(f"\nSkipping {source}: insufficient documents ({total_docs})")
+            continue
 
         print(f"\nSource: {source}")
 
@@ -66,9 +70,7 @@ def main():
     #  Preprocess
     for source in grouped:
         for month in grouped[source]:
-            grouped[source][month] = preprocess_corpus(
-                grouped[source][month]
-            )
+            grouped[source][month] = preprocess_corpus(grouped[source][month])
 
     #  Embeddings
     model = EmbeddingModel()
@@ -100,35 +102,78 @@ def main():
             m2, v2 = aggregated_vectors[i + 1]
 
             drift = compute_cosine_drift(v1, v2)
-
+            
             drift_values.append(drift)
             drift_labels.append(f"{m1}->{m2}")
 
             print(f"{m1} → {m2} | Drift: {drift:.4f}")
-            drift_interpretation = analyze_drift(
-            source=source,
-            period=f"{m1}->{m2}",
-            drift_value=drift
-            )
+            # drift_interpretation = analyze_drift(
+            # source=source,
+            # period=f"{m1}->{m2}",
+            # drift_value=drift
+            # )
 
-            print("\n[Drift Agent]")
-            print(drift_interpretation)
+            # print("\n[Drift Agent]")
+            # print(drift_interpretation)
+        
+        dynamic_threshold = compute_dynamic_threshold(drift_values,method="median_mad")
 
-            if drift > 0.1:
-                print("  → Significant shift detected")
-            else:
-                print("  → Minor variation")
+        print(f"\nDynamic semantic threshold: " f"{dynamic_threshold:.4f}" if dynamic_threshold is not None else "\nDynamic semantic threshold: insufficient data")
+
+        for label, drift in zip(drift_labels, drift_values):
+            classification = classify_drift(drift, dynamic_threshold)
+
+            print(f"{label} | Drift: {drift:.4f} | " f"Classification: {classification}")
 
         source_results[source] = {
             "labels": drift_labels,
             "values": drift_values
         }
 
-        print(
-            "\n=== Entity Framing Drift ==="
-        )
+        print("\n=== Entity Framing Drift ===")
 
         framing_drift = compute_entity_drift(grouped[source])
+        entity_importance = compute_entity_importance(framing_drift)
+
+        print("\n=== Top Important Narrative Actors ===")
+
+        ranked_importance = sorted(
+
+            entity_importance.items(),
+
+            key=lambda x: x[1],
+
+            reverse=True
+        )
+
+        for entity, score in ranked_importance[:10]:
+
+            print(
+                f"{entity}: {score:.3f}"
+            )
+
+        average_framing_values = []
+
+        for transition, entities in framing_drift.items():
+
+            if len(entities) == 0:
+                average_framing_values.append(0)
+                continue
+
+            avg = sum(stats["drift"] for stats in entities.values()) / len(entities)
+
+            average_framing_values.append(avg)
+
+        plot_semantic_vs_framing(
+
+            semantic_labels=drift_labels,
+
+            semantic_values=drift_values,
+
+            framing_values=average_framing_values,
+
+            source=source
+        )
 
         plot_top_entity_drift(framing_drift)
         plot_entity_heatmap(framing_drift)
@@ -174,53 +219,53 @@ def main():
 
         months_sorted = sorted(grouped[source].keys())
 
-        for month in months_sorted:
+        # for month in months_sorted:
 
-            print(f"\n{source} | {month}")
+        #     print(f"\n{source} | {month}")
 
-            entity_stats = analyze_entities(
-                grouped[source][month]
-            )
+        #     entity_stats = analyze_entities(
+        #         grouped[source][month]
+        #     )
 
-            for entity, stats in entity_stats.items():
+        #     for entity, stats in entity_stats.items():
 
-                print(f"\nEntity: {entity}")
+        #         print(f"\nEntity: {entity}")
 
-                print(
-                    f"Subject count: {stats['subject_count']}"
-                )
+        #         print(
+        #             f"Subject count: {stats['subject_count']}"
+        #         )
 
-                print(
-                    f"Object count: {stats['object_count']}"
-                )
+        #         print(
+        #             f"Object count: {stats['object_count']}"
+        #         )
 
-                print(
-                    f"Top verbs: {stats['verbs'].most_common(5)}"
-                )
+        #         print(
+        #             f"Top verbs: {stats['verbs'].most_common(5)}"
+        #         )
 
         #  Narrative interpretation per transition
 
-        for i in range(len(months_sorted) - 1):
+        # for i in range(len(months_sorted) - 1):
 
-            current_month = months_sorted[i + 1]
+        #     current_month = months_sorted[i + 1]
 
-            entity_stats = analyze_entities(
-                grouped[source][current_month]
-            )
+        #     entity_stats = analyze_entities(
+        #         grouped[source][current_month]
+        #     )
 
-            interpretation = interpret_shift(
-                source=source,
-                period=f"{months_sorted[i]}->{current_month}",
-                drift=drift_values[i],
-                entity_stats=entity_stats
-            )
+        #     interpretation = interpret_shift(
+        #         source=source,
+        #         period=f"{months_sorted[i]}->{current_month}",
+        #         drift=drift_values[i],
+        #         entity_stats=entity_stats
+        #     )
 
-            print("\nNarrative Interpretation:")
-            print(
-                f"{months_sorted[i]}->{current_month}"
-            )
+        #     print("\nNarrative Interpretation:")
+        #     print(
+        #         f"{months_sorted[i]}->{current_month}"
+        #     )
 
-            print(interpretation)
+        #     print(interpretation)
 
         # # Change point
         # change_points = detect_changepoints(drift_values)

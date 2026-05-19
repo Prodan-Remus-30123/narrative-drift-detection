@@ -11,7 +11,16 @@ ENTITY_BLACKLIST = {
     "march",
     "april",
     "covid",
-    "coronavirus"
+    "coronavirus",
+
+
+    "getty images",
+    "cnn health",
+    "cnn healths",
+    "iphone",
+    "education healthcare",
+    "states",
+    "sign",
 }
 
 ALLOWED_ENTITY_TYPES = {
@@ -28,42 +37,6 @@ ENTITY_NORMALIZATION = {
     "who": "world health organization"
 }
 
-SEMANTICALLY_WEAK_VERBS = {
-    "come",
-    "go",
-    "work",
-    "include",
-    "show",
-    "give",
-    "take",
-    "make",
-    "begin",
-    "continue",
-    "need",
-    "think",
-    "see",
-    "appear",
-    "become",
-    "put",
-    "add",
-    "call",
-    "say",
-    "use",
-    "ask"
-}
-
-GENERIC_VERBS = {
-                "be",
-                "have",
-                "do",
-                "say",
-                "make",
-                "go",
-                "take",
-                "use",
-                "tell",
-                "report"
-            }
 
 MIN_ENTITY_GLOBAL_FREQUENCY = 3
 MIN_VERB_COUNT = 5

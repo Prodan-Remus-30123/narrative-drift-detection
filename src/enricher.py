@@ -28,22 +28,19 @@ os.makedirs(
 
 
 def fetch_pending_articles():
-
     conn = get_connection()
-
     cursor = conn.cursor()
 
     cursor.execute("""
     SELECT id, url, extraction_attempts
     FROM articles
-    WHERE extraction_status='pending'
+    WHERE extraction_status IN ('pending', 'failed')
     AND extraction_attempts < ?
     """, (
         MAX_EXTRACTION_ATTEMPTS,
     ))
 
     rows = cursor.fetchall()
-
     conn.close()
 
     return rows
@@ -86,7 +83,7 @@ def extract_text(url):
 
     try:
 
-        article = Article(url)
+        article = Article(url, memoize_articles=False)
 
         article.download()
 

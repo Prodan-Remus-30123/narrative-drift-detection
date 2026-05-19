@@ -32,7 +32,7 @@ def plot_multiple_sources(source_results):
             label=source
         )
 
-    plt.title("Narrative Drift Comparison Across Sources")
+    plt.title("Semantic Drift Comparison Across Sources")
 
     plt.xlabel("Time Window")
     plt.ylabel("Drift Magnitude")

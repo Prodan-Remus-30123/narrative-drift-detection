@@ -10,9 +10,13 @@ from scipy.spatial.distance import cosine
 from database import (load_full_articles_with_dates)
 from temporal_entity_analysis import (group_articles_by_period)
 from entities import (analyze_entities)
+import math
 
 
 MIN_VERB_COUNT = 5
+TOP_K_VERBS = 15
+MIN_SHARED_VERBS = 2
+
 
 def build_entity_vectors(
     grouped_texts
@@ -45,6 +49,55 @@ def build_entity_vectors(
 
     return period_vectors
 
+def compute_verb_document_frequency(period_vectors):
+    verb_df = defaultdict(int)
+    total_entity_vectors = 0
+
+    for period, entity_vectors in period_vectors.items():
+
+        for entity, verb_vector in entity_vectors.items():
+
+            total_entity_vectors += 1
+
+            for verb in verb_vector.keys():
+                verb_df[verb] += 1
+
+    return verb_df, total_entity_vectors
+
+def weight_entity_vectors(
+    period_vectors,
+    verb_df,
+    total_entity_vectors
+):
+
+    weighted_vectors = {}
+
+    for period, entity_vectors in period_vectors.items():
+
+        weighted_vectors[period] = {}
+
+        for entity, verb_vector in entity_vectors.items():
+
+            weighted_verb_vector = {}
+
+            for verb, count in verb_vector.items():
+
+                idf = math.log(
+                    (1 + total_entity_vectors) /
+                    (1 + verb_df[verb])
+                ) + 1
+
+                weighted_verb_vector[verb] = count * idf
+
+            top_verbs = sorted(
+                weighted_verb_vector.items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[:TOP_K_VERBS]
+
+            weighted_vectors[period][entity] = dict(top_verbs)
+
+    return weighted_vectors
 
 def vector_similarity(
     vector_a,
@@ -138,17 +191,21 @@ def compare_periods(
             print(f"{period_b} verbs:")
             print(vectors_b[entity])
 
-def compute_entity_drift(
-    grouped_texts
-):
+def compute_entity_drift(grouped_texts):
 
-    period_vectors = build_entity_vectors(
-        grouped_texts
+    period_vectors = build_entity_vectors(grouped_texts)
+
+    verb_df, total_entity_vectors = compute_verb_document_frequency(
+        period_vectors
     )
 
-    periods = sorted(
-        period_vectors.keys()
+    period_vectors = weight_entity_vectors(
+        period_vectors,
+        verb_df,
+        total_entity_vectors
     )
+
+    periods = sorted(period_vectors.keys())
 
     drift_results = {}
 
@@ -195,7 +252,7 @@ def compute_entity_drift(
                 set(vectors_b[entity].keys())
             )
 
-            if len(shared_verbs) < 2:
+            if len(shared_verbs) < MIN_SHARED_VERBS:
                 continue
 
             similarity = vector_similarity(
@@ -225,11 +282,57 @@ def compute_entity_drift(
 
     return drift_results
 
+def compute_entity_importance(drift_results):
+
+    entity_scores = {}
+
+    for transition, entities in drift_results.items():
+
+        for entity, stats in entities.items():
+
+            drift = stats["drift"]
+
+            mention_count = (sum(stats["before"].values()) + sum(stats["after"].values()))
+
+            if entity not in entity_scores:
+
+                entity_scores[entity] = {
+
+                    "drifts": [],
+                    "mentions": 0,
+                    "periods": 0
+                }
+
+            entity_scores[entity]["drifts"].append(drift)
+            entity_scores[entity]["mentions"] += (mention_count)
+            entity_scores[entity]["periods"] += 1
+
+    importance_scores = {}
+
+    for entity, values in entity_scores.items():
+
+        avg_drift = (sum(values["drifts"]) / len(values["drifts"]))
+
+        mentions = values["mentions"]
+
+        periods = values["periods"]
+
+        importance = ( avg_drift * math.log(mentions + 1) * periods)
+
+        importance_scores[entity] = importance
+
+    return importance_scores
+
+
 def main():
     df = load_full_articles_with_dates()
     grouped = group_articles_by_period(df)
+
     period_vectors = build_entity_vectors(grouped)
-    compare_periods(period_vectors)
+    verb_df, total_entity_vectors = compute_verb_document_frequency(period_vectors)
+
+    period_vectors = weight_entity_vectors(period_vectors, verb_df, total_entity_vectors)
+    compare_periods(period_vectors) 
 
 if __name__ == "__main__":
 
