@@ -7,13 +7,24 @@ Fetch full article text and update DB.
 import time
 
 from newspaper import Article
-
 from database import get_connection
+import os
+import tempfile
 
 
 MIN_ARTICLE_LENGTH = 500
-
 MAX_EXTRACTION_ATTEMPTS = 3
+
+temp_dir = os.path.join(
+    tempfile.gettempdir(),
+    ".newspaper_scraper",
+    "article_resources"
+)
+
+os.makedirs(
+    temp_dir,
+    exist_ok=True
+)
 
 
 def fetch_pending_articles():

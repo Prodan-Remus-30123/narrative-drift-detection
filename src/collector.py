@@ -6,8 +6,9 @@ import os
 import time
 from dotenv import load_dotenv
 from database import (initialize_database, get_connection)
-from providers.gdelt_provider import (GDELTProvider)
+from providers.raw_gdelt_provider import (RawGDELTProvider)
 from providers.guardian_provider import (GuardianProvider)
+from providers.gdelt_query_builder import (build_boolean_query)
 from utils.deduplication import (deduplicate_articles)
 from utils.filtering import (filter_articles)
 from utils.date_utils import (generate_monthly_ranges)
@@ -17,101 +18,65 @@ load_dotenv()
 
 provider_configs = {
 
-    "GDELTProvider": {
+    "RawGDELTProvider": {
 
         "queries": [
 
-            # INSTITUTIONAL RESPONSE
+    {
+        "query":
+            "coronavirus AND China "
+            "AND theme:HEALTH_PANDEMIC "
+            "AND sourcelang:english",
 
-            {
-                "query":
-                    "WHO pandemic response",
-                "num_records": 15
-            },
+        "num_records": 30
+    },
 
-            {
-                "query":
-                    "CDC COVID response",
-                "num_records": 10
-            },
+    {
+        "query":
+            "coronavirus AND WHO "
+            "AND theme:HEALTH_PANDEMIC "
+            "AND sourcelang:english",
 
-            {
-                "query":
-                    "government lockdown measures",
-                "num_records": 10
-            },
+        "num_records": 30
+    },
 
-            # GEOPOLITICAL
+    {
+        "query":
+            "coronavirus AND outbreak "
+            "AND theme:HEALTH_PANDEMIC "
+            "AND sourcelang:english",
 
-            {
-                "query":
-                    "China COVID responsibility",
-                "num_records": 15
-            },
+        "num_records": 30
+    },
 
-            {
-                "query":
-                    "US China pandemic tensions",
-                "num_records": 10
-            },
+    {
+        "query":
+            "coronavirus AND Wuhan "
+            "AND theme:HEALTH_PANDEMIC "
+            "AND sourcelang:english",
 
-            {
-                "query":
-                    "Beijing coronavirus response",
-                "num_records": 10
-            },
+        "num_records": 30
+    },
 
-            # VACCINES
+    {
+        "query":
+            "COVID AND vaccine "
+            "AND theme:HEALTH_PANDEMIC "
+            "AND sourcelang:english",
 
-            {
-                "query":
-                    "COVID vaccine approval",
-                "num_records": 15
-            },
-
-            {
-                "query":
-                    "vaccine diplomacy China",
-                "num_records": 10
-            },
-
-            {
-                "query":
-                    "WHO vaccine guidance",
-                "num_records": 10
-            },
-
-            # PUBLIC HEALTH
-
-            {
-                "query":
-                    "COVID lockdown protests",
-                "num_records": 10
-            },
-
-            {
-                "query":
-                    "pandemic restrictions",
-                "num_records": 10
-            },
-
-            {
-                "query":
-                    "hospital system COVID",
-                "num_records": 10
-            }
-        ],
+        "num_records": 30
+    }
+],
 
         "domains": [
+
             "bbc.co.uk",
+
             "cnn.com",
+
             "nytimes.com",
-            "foxnews.com",
-            "washingtonpost.com",
-            "npr.org",
-            "politico.com",
-            "aljazeera.com",
-            "cnbc.com"
+
+            "washingtonpost.com"
         ]
     },
 
@@ -243,25 +208,12 @@ def run_collection():
 
     initialize_database()
 
-    providers = [
-
-        GDELTProvider(),
-
-        GuardianProvider(
-            api_key=os.getenv(
-                "GUARDIAN_API_KEY"
-            )
-        )
-    ]
+    providers = [RawGDELTProvider(), GuardianProvider( api_key=os.getenv("GUARDIAN_API_KEY"))]
 
     global_start_date = "2020-01-01"
-
     global_end_date = "2020-12-31"
 
-    monthly_ranges = generate_monthly_ranges(
-        global_start_date,
-        global_end_date
-    )
+    monthly_ranges = generate_monthly_ranges(global_start_date, global_end_date)
 
     minimum_articles = 10
 
