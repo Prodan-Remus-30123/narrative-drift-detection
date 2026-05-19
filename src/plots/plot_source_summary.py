@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def build_source_summary(source, semantic_values, framing_drift, entity_importance):
+def build_source_summary(source, semantic_values, framing_drift, entity_importance, num_periods, num_articles, avg_sentiment):
 
     avg_semantic = (
         sum(semantic_values)
@@ -37,13 +37,10 @@ def build_source_summary(source, semantic_values, framing_drift, entity_importan
     return {
 
         "source": source,
-
-        "avg_semantic_drift":
-            round(avg_semantic, 4),
-
-        "avg_framing_drift":
-            round(avg_framing, 4),
-
-        "top_actor":
-            top_actor
+        "avg_semantic_drift": round(avg_semantic, 4),
+        "avg_framing_drift": round(avg_framing, 4),
+        "top_actor": top_actor,
+        "num_periods": num_periods,
+        "num_articles": num_articles,
+        "avg_sentiment": avg_sentiment
     }

@@ -1,12 +1,16 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
+def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, source):
 
-def plot_semantic_vs_framing(
-    semantic_labels,
-    semantic_values,
-    framing_values,
-    source
-):
+    semantic_values = np.array(semantic_values)
+    framing_values = np.array(framing_values)
+
+    if semantic_values.max() > 0:
+        semantic_values = (semantic_values / semantic_values.max())
+
+    if framing_values.max() > 0:
+        framing_values = (framing_values / framing_values.max())
 
     plt.figure(figsize=(12, 6))
 
