@@ -10,6 +10,8 @@ from entities import analyze_entities
 from interpreter import interpret_shift
 from database import load_full_articles
 from agents.drift_agent import analyze_drift
+from entity_framing_drift import (compute_entity_drift)
+from plot_entity_drift import (plot_top_entity_drift)
 
 def group_by_source_and_month(df):
     df["date"] = pd.to_datetime(df["date"])
@@ -106,6 +108,50 @@ def main():
             "labels": drift_labels,
             "values": drift_values
         }
+
+        print(
+            "\n=== Entity Framing Drift ==="
+        )
+
+        framing_drift = compute_entity_drift(grouped[source])
+        plot_top_entity_drift(framing_drift)
+
+        for transition, entities in framing_drift.items():
+
+            print(
+                f"\n{transition}"
+            )
+
+            ranked_entities = sorted(
+
+                entities.items(),
+
+                key=lambda x:
+                    x[1]["drift"],
+
+                reverse=True
+            )
+
+            for entity, stats in ranked_entities[:5]:
+
+                print(
+                    f"\nEntity: {entity}"
+                )
+
+                print(
+                    f"Drift: "
+                    f"{stats['drift']:.3f}"
+                )
+
+                print(
+                    f"Before: "
+                    f"{list(stats['before'].keys())[:5]}"
+                )
+
+                print(
+                    f"After: "
+                    f"{list(stats['after'].keys())[:5]}"
+                )
 
         # 🔹 Entity analysis per month
 
