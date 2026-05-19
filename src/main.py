@@ -4,7 +4,7 @@ from datetime import datetime
 from preprocessing import preprocess_corpus
 from embeddings import EmbeddingModel
 from drift import (compute_cosine_drift, compute_dynamic_threshold, classify_drift)
-from visualization import plot_multiple_sources
+from plots.plot_semantic_comparison_across_sources import plot_multiple_sources
 from changepoints import detect_changepoints
 from entities import analyze_entities
 from interpreter import interpret_shift
@@ -15,6 +15,8 @@ from plots.plot_entity_drift import plot_top_entity_drift
 from plots.plot_entity_heatmap import plot_entity_heatmap
 from temporal_entity_analysis import group_articles_by_period
 from plots.plot_semantic_vs_framing import plot_semantic_vs_framing
+from plots.plot_source_summary import build_source_summary
+from plots.plot_actor_evolution import (plot_actor_evolution)
 
 
 # def group_by_source_and_month(df):
@@ -47,6 +49,8 @@ def main():
         grouped[source] = (group_articles_by_period(source_df))
 
     print("\n=== GROUPED DATA ===")
+
+    source_summaries = []
 
     for source in grouped:
         total_docs = sum(
@@ -135,6 +139,19 @@ def main():
         framing_drift = compute_entity_drift(grouped[source])
         entity_importance = compute_entity_importance(framing_drift)
 
+        summary = build_source_summary(
+
+            source=source,
+
+            semantic_values=drift_values,
+
+            framing_drift=framing_drift,
+
+            entity_importance=entity_importance
+        )
+
+        source_summaries.append(summary)
+
         print("\n=== Top Important Narrative Actors ===")
 
         ranked_importance = sorted(
@@ -177,6 +194,7 @@ def main():
 
         plot_top_entity_drift(framing_drift)
         plot_entity_heatmap(framing_drift)
+        plot_actor_evolution(framing_drift)
 
         for transition, entities in framing_drift.items():
 
@@ -274,6 +292,14 @@ def main():
 
     #  Plot drift signal
     plot_multiple_sources(source_results)
+
+    summary_df = pd.DataFrame(
+        source_summaries
+    )
+
+    print("\n=== SOURCE SUMMARY ===")
+
+    print(summary_df)
 
 
 if __name__ == "__main__":
