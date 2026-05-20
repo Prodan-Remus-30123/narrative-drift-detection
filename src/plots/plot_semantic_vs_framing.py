@@ -3,14 +3,8 @@ import numpy as np
 
 def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, source):
 
-    semantic_values = np.array(semantic_values)
-    framing_values = np.array(framing_values)
-
-    if semantic_values.max() > 0:
-        semantic_values = (semantic_values / semantic_values.max())
-
-    if framing_values.max() > 0:
-        framing_values = (framing_values / framing_values.max())
+    semantic_values = np.array(semantic_values, dtype=float)
+    framing_values = np.array(framing_values, dtype=float)
 
     plt.figure(figsize=(12, 6))
 
@@ -28,6 +22,12 @@ def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, s
         label="Framing Drift"
     )
 
+    max_y = max(
+        np.nanmax(semantic_values),
+        np.nanmax(framing_values)
+    )
+
+    plt.ylim(0, max_y * 1.1)
     plt.xticks(rotation=45)
 
     plt.ylabel("Drift")

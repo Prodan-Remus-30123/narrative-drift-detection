@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+from utils.period_sorting import (sort_period_key)
 
 
 def plot_actor_evolution(
@@ -13,12 +15,9 @@ def plot_actor_evolution(
         for entity, stats in entities.items():
 
             if entity not in actor_scores:
-
                 actor_scores[entity] = {}
 
-            actor_scores[entity][transition] = (
-                stats["drift"]
-            )
+            actor_scores[entity][transition] = stats["drift"]
 
     overall_scores = {}
 
@@ -29,26 +28,33 @@ def plot_actor_evolution(
         )
 
     top_entities = sorted(
-
         overall_scores.items(),
-
         key=lambda x: x[1],
-
         reverse=True
     )[:top_n]
+
+    all_transitions = sorted(
+        drift_results.keys(),
+        key=sort_period_key
+    )
 
     plt.figure(figsize=(12, 6))
 
     for entity, _ in top_entities:
 
-        transitions = actor_scores[entity]
+        y = []
 
-        x = list(transitions.keys())
+        for transition in all_transitions:
 
-        y = list(transitions.values())
+            if transition in actor_scores[entity]:
+                y.append(
+                    actor_scores[entity][transition]
+                )
+            else:
+                y.append(np.nan)
 
         plt.plot(
-            x,
+            all_transitions,
             y,
             marker="o",
             label=entity

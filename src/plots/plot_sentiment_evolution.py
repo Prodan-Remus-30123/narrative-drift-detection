@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
-
+from utils.period_sorting import (sort_period_key)
 
 def plot_sentiment_evolution(sentiment_results, source):
 
-    periods = list(sentiment_results.keys())
+    periods = sorted(sentiment_results.keys(), key=sort_period_key)
 
     compound = [sentiment_results[p]["compound"] for p in periods]
     positive = [sentiment_results[p]["positive"] for p in periods]

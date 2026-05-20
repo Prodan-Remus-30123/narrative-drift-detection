@@ -106,7 +106,7 @@ def analyze_entities(texts):
             if verb:
                 entity_data[entity]["verbs"][verb] += 1
 
-    MIN_LOCAL_VERB_FREQUENCY = 2
+    MIN_LOCAL_VERB_FREQUENCY = 1
 
     filtered_entity_data = {}
 

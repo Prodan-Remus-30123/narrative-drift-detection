@@ -12,6 +12,8 @@ from entities import (analyze_entities)
 
 def group_articles_by_period(df):
 
+    MIN_DOCS_PER_PERIOD = 20
+
     df["date"] = pd.to_datetime(
         df["date"],
         errors="coerce"
@@ -54,104 +56,59 @@ def group_articles_by_period(df):
             row["text"]
         )
 
-    return grouped
+    filtered_grouped = {}
 
-def print_top_entities(
-    entity_data,
-    top_n=10
-):
+    for period, texts in grouped.items():
 
+        if len(texts) < MIN_DOCS_PER_PERIOD:
+
+            print(
+                f"Skipping period "
+                f"{period}: "
+                f"{len(texts)} documents"
+            )
+
+            continue
+
+        filtered_grouped[period] = texts
+
+    return filtered_grouped
+
+def print_top_entities(entity_data, top_n=10):
     MIN_ENTITY_FREQUENCY = 3
-
     filtered_entities = {
-
     entity: stats
-
     for entity, stats in entity_data.items()
-
-    if (
-        stats["subject_count"]
-        +
-        stats["object_count"]
-        +
-        sum(stats["verbs"].values())
-    ) >= MIN_ENTITY_FREQUENCY
+    if (stats["subject_count"] + stats["object_count"] + sum(stats["verbs"].values())) >= MIN_ENTITY_FREQUENCY
 }
     ranked_entities = sorted(
-
         filtered_entities.items(),
-
-        key=lambda x:
-            (
-                x[1]["subject_count"]
-                +
-                x[1]["object_count"]
-                +
-                sum(
-                    x[1]["verbs"].values()
-                )
-            ),
-
+        key=lambda x:(x[1]["subject_count"] + x[1]["object_count"] + sum(x[1]["verbs"].values())),
         reverse=True
     )
 
     for entity, stats in ranked_entities[:top_n]:
-
         print("\n====================")
-
         print(f"Entity: {entity}")
-
-        print(
-            f"Subject count: "
-            f"{stats['subject_count']}"
-        )
-
-        print(
-            f"Object count: "
-            f"{stats['object_count']}"
-        )
-
-        print(
-            f"Top verbs: "
-            f"{stats['verbs'].most_common(5)}"
-        )
+        print(f"Subject count: " f"{stats['subject_count']}")
+        print(f"Object count: " f"{stats['object_count']}")
+        print(f"Top verbs: " f"{stats['verbs'].most_common(5)}")
 
 
 def main():
 
     df = load_full_articles_with_dates()
-
-    period_groups = (
-        group_articles_by_period(df)
-    )
+    period_groups = (group_articles_by_period(df))
 
     for period, texts in period_groups.items():
+        print(f"\n\n################################")
+        print(f"MONTH: {period}")
+        print(f"################################")
+        print(f"Documents: {len(texts)}")
 
-        print(
-            f"\n\n################################"
-        )
-
-        print(
-            f"MONTH: {period}"
-        )
-
-        print(
-            f"################################"
-        )
-
-        print(
-            f"Documents: {len(texts)}"
-        )
-
-        entity_data = analyze_entities(
-            texts
-        )
-
-        print_top_entities(
-            entity_data
-        )
+        entity_data = analyze_entities(texts)
+        print_top_entities(entity_data)
 
 
 if __name__ == "__main__":
-
     main()

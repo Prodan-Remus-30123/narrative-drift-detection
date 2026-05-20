@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+from utils.period_sorting import (sort_period_key)
 
 def plot_entity_heatmap(
     drift_results,
@@ -11,7 +11,9 @@ def plot_entity_heatmap(
     entity_scores = {}
 
     # Collect drift values
-    for transition, entities in drift_results.items():
+    for transition in sorted(drift_results.keys(),key=sort_period_key):
+
+        entities = drift_results[transition]
 
         for entity, stats in entities.items():
 

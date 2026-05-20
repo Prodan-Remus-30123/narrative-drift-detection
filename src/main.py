@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from datetime import datetime
 
 from preprocessing import preprocess_corpus
@@ -26,7 +27,11 @@ from plots.plot_sentiment_evolution import (plot_sentiment_evolution)
 from correlation_analysis import (compute_sentiment_deltas, compute_average_framing, compute_correlation)
 from editorial_behavior import (classify_editorial_behavior)
 from emotional_volatility import (compute_emotional_volatility)
+from plots.plot_source_dashboard import plot_source_dashboard
+from utils.period_sorting import (sort_period_key)
 
+from actor_salience import compute_actor_salience, compute_total_actor_salience
+from plots.plot_actor_salience import plot_actor_salience
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -70,16 +75,12 @@ def main():
 
         print(f"\nSource: {source}")
 
-        for month in grouped[source]:
-
-            print(
-                month,
-                len(grouped[source][month])
-            )
+        for month in sorted(grouped[source].keys(),key=sort_period_key):
+            print(month, len(grouped[source][month]))
 
     #  Preprocess
     for source in grouped:
-        for month in grouped[source]:
+        for month in sorted(grouped[source].keys(), key=sort_period_key):
             grouped[source][month] = preprocess_corpus(grouped[source][month])
 
     #  Embeddings
@@ -96,7 +97,7 @@ def main():
 
         aggregated_vectors = []
 
-        for month in sorted(grouped[source].keys()):
+        for month in sorted(grouped[source].keys(), key=sort_period_key):
             embeddings = model.encode_documents(grouped[source][month])
 
             vec = model.aggregate_embeddings(embeddings)
@@ -148,7 +149,7 @@ def main():
 
         sentiment_results = {}
 
-        for period in grouped[source]:
+        for period in sorted(grouped[source].keys(),key=sort_period_key):
 
             sentiment = analyze_sentiment(grouped[source][period])
             sentiment_results[str(period)] = sentiment
@@ -164,7 +165,13 @@ def main():
         print("\n=== Entity Framing Drift ===")
 
         framing_drift = compute_entity_drift(grouped[source])
-        entity_importance = compute_entity_importance(framing_drift)
+        salience_results = compute_actor_salience(grouped[source])
+
+        plot_actor_salience(salience_results, top_n=5)
+        salience_results = compute_actor_salience(grouped[source])
+
+        salience_totals = compute_total_actor_salience(salience_results)
+        entity_importance = compute_entity_importance(framing_drift, salience_totals)
 
         summary = build_source_summary(
             source= source,
@@ -208,10 +215,11 @@ def main():
 
         average_framing_values = []
 
-        for transition, entities in framing_drift.items():
+        for transition in sorted(framing_drift.keys(),key=sort_period_key):
 
+            entities = framing_drift[transition]
             if len(entities) == 0:
-                average_framing_values.append(0)
+                average_framing_values.append(np.nan)
                 continue
 
             avg = sum(stats["drift"] for stats in entities.values()) / len(entities)
@@ -246,10 +254,17 @@ def main():
                 print(f"Drift: " f"{stats['drift']:.3f}")
                 print(f"Before: " f"{list(stats['before'].keys())[:5]}")
                 print(f"After: " f"{list(stats['after'].keys())[:5]}")
+        
+        # plot_source_dashboard(
+        #     source=source,
+        #     semantic_labels=drift_labels,
+        #     semantic_values=drift_values,
+        #     sentiment_results=sentiment_results,
+        #     framing_drift=framing_drift
+        # )
 
         # Entity analysis per month
-
-        months_sorted = sorted(grouped[source].keys())
+        months_sorted = sorted(grouped[source].keys(), key=sort_period_key)
 
         # for month in months_sorted:
 

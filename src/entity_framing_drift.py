@@ -181,8 +181,8 @@ def compare_periods(
 
             drift = 1 - similarity
 
-            if drift < 0.4:
-                continue
+            # if drift < 0.4:
+            #     continue
 
             print(f"\nEntity: {entity}")
             print(f"Framing drift: " f"{drift:.3f}")
@@ -220,17 +220,10 @@ def compute_entity_drift(grouped_texts):
             f"{period_a}->{period_b}"
         )
 
-        drift_results[
-            transition
-        ] = {}
+        drift_results[transition] = {}
+        vectors_a = period_vectors[period_a]
 
-        vectors_a = period_vectors[
-            period_a
-        ]
-
-        vectors_b = period_vectors[
-            period_b
-        ]
+        vectors_b = period_vectors[period_b]
 
         shared_entities = set(
             vectors_a.keys()
@@ -264,64 +257,60 @@ def compute_entity_drift(grouped_texts):
 
             drift = 1 - similarity
 
-            drift_results[
-                transition
-            ][entity] = {
+            if drift >= 0.7:
+                drift_class = "major reframing"
+            elif drift >= 0.4:
+                drift_class = "moderate reframing"
+            else:
+                drift_class = "stable framing"
 
+            drift_results[transition][entity] = {
                 "drift": drift,
-
-                "before":
-                    vectors_a[entity],
-
-                "after":
-                    vectors_b[entity],
-
-                "shared_verbs":
-                    len(shared_verbs)
+                "drift_class": drift_class,
+                "before": vectors_a[entity],
+                "after": vectors_b[entity],
+                "shared_verbs": len(shared_verbs)
             }
 
     return drift_results
 
-def compute_entity_importance(drift_results):
-
-    entity_scores = {}
-
-    for transition, entities in drift_results.items():
-
-        for entity, stats in entities.items():
-
-            drift = stats["drift"]
-
-            mention_count = (sum(stats["before"].values()) + sum(stats["after"].values()))
-
-            if entity not in entity_scores:
-
-                entity_scores[entity] = {
-
-                    "drifts": [],
-                    "mentions": 0,
-                    "periods": 0
-                }
-
-            entity_scores[entity]["drifts"].append(drift)
-            entity_scores[entity]["mentions"] += (mention_count)
-            entity_scores[entity]["periods"] += 1
+def compute_entity_importance(
+    framing_drift,
+    salience_totals
+):
 
     importance_scores = {}
 
-    for entity, values in entity_scores.items():
+    for transition, entities in framing_drift.items():
 
-        avg_drift = (sum(values["drifts"]) / len(values["drifts"]))
+        for entity, stats in entities.items():
 
-        mentions = values["mentions"]
+            if entity not in importance_scores:
 
-        periods = values["periods"]
+                importance_scores[entity] = {
+                    "drifts": [],
+                    "transitions": 0
+                }
 
-        importance = ( avg_drift * math.log(mentions + 1) * periods)
+            importance_scores[entity]["drifts"].append(
+                stats["drift"]
+            )
 
-        importance_scores[entity] = importance
+            importance_scores[entity]["transitions"] += 1
 
-    return importance_scores
+    final_scores = {}
+
+    for entity, data in importance_scores.items():
+
+        avg_drift = (sum(data["drifts"])/len(data["drifts"]))
+
+        transition_count = data["transitions"]
+        salience = salience_totals.get(entity, 1)
+        importance = (avg_drift * math.log(salience + 1) * transition_count)
+
+        final_scores[entity] = importance
+
+    return final_scores
 
 
 def main():
