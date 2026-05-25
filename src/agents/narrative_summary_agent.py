@@ -47,14 +47,24 @@ class NarrativeSummaryAgent:
         # -----------------------------------
 
         if framing_result:
+            latent_frames = framing_result.get("latent_frames")
+            sections.append(framing_result["interpretation"])
+            latent_frames = framing_result.get("latent_frames")
 
-            sections.append(
-                framing_result["interpretation"]
-            )
+            if latent_frames:
+                latent_transitions = latent_frames.get("latent_frame_transitions", [])
 
-            confidence_scores.append(
-                framing_result["confidence"]
-            )
+                if len(latent_transitions) > 0:
+                    strongest = latent_transitions[0]
+                    sections.append("Latent narrative evolution: " f"{strongest['before_frame']} " "→ " f"{strongest['after_frame']}.")
+
+            if latent_frames:
+                latent_transitions = latent_frames["latent_frame_transitions"]
+                if len(latent_transitions) > 0:
+                    strongest = latent_transitions[0]
+                    sections.append("Latent narrative evolution: " f"{strongest['before_frame']} " "→ " f"{strongest['after_frame']}.")
+            confidence_scores.append(framing_result["confidence"])
+            
 
         # -----------------------------------
         # Affective Layer

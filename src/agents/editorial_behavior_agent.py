@@ -13,6 +13,13 @@ This agent profiles a news source by combining:
 from agentic_tools.editorial_behavior_tools import (
     get_editorial_behavior_profile
 )
+from entity_latent_frames import (
+    compute_entity_latent_frame_transitions
+)
+
+from actor_graph import (
+    compute_actor_graph_centrality
+)
 
 
 class EditorialBehaviorAgent:
@@ -22,8 +29,20 @@ class EditorialBehaviorAgent:
 
     def analyze(self, source):
         profile = get_editorial_behavior_profile(source)
+        actor_graph = compute_actor_graph_centrality(source)
 
-        interpretation = self._interpret(profile)
+        top_actors = [actor for actor, score in actor_graph["actor_centrality"][:3]]
+
+        latent_ecosystems = {}
+
+        for actor in top_actors:
+            try:
+                latent_ecosystems[actor] = (compute_entity_latent_frame_transitions(source=source, entity=actor))
+
+            except Exception as error:
+
+                print(f"Latent ecosystem error " f"for {actor}: {error}")
+        interpretation = self._interpret(profile, latent_ecosystems)
         label = self._classify_behavior(profile)
         confidence = self._estimate_confidence(profile)
 
@@ -34,7 +53,8 @@ class EditorialBehaviorAgent:
             "editorial_label": label,
             "interpretation": interpretation,
             "profile": profile,
-            "confidence": confidence
+            "confidence": confidence,
+            "latent_ecosystems": latent_ecosystems
         }
 
     def _classify_behavior(self, profile):
@@ -60,7 +80,7 @@ class EditorialBehaviorAgent:
 
         return "mixed editorial behavior"
 
-    def _interpret(self, profile):
+    def _interpret(self, profile, latent_ecosystems):
         source = profile["source"]
 
         interpretation = (
@@ -107,6 +127,26 @@ class EditorialBehaviorAgent:
             f"{profile['avg_trust_score']:.3f}."
         )
 
+        ecosystem_summaries = []
+
+        for actor, data in latent_ecosystems.items():
+            transitions = data["latent_frame_transitions"]
+
+            if len(transitions) == 0:
+                continue
+
+            strongest = transitions[0]
+
+            ecosystem_summaries.append(
+                f"{actor} evolves from "
+                f"{strongest['before_frame']} "
+                f"toward "
+                f"{strongest['after_frame']}"
+            )
+
+        if len(ecosystem_summaries) > 0:
+            interpretation += (" Dominant narrative ecosystems include: " + "; ".join(ecosystem_summaries[:3]) + ".")
+
         return interpretation
 
     def _estimate_confidence(self, profile):
@@ -116,10 +156,6 @@ class EditorialBehaviorAgent:
 
         conflict_periods = len(
             profile["conflict_data"]["conflict_trust_results"]
-        )
-
-        framing_events = len(
-            profile.get("semantic_data", {})
         )
 
         if semantic_periods >= 4 and conflict_periods >= 4:

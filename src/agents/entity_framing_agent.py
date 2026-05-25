@@ -18,6 +18,8 @@ from agentic_tools.salience_tools import (
 from agentic_tools.evidence_tools import (
     retrieve_entity_evidence
 )
+from entity_latent_frames import compute_entity_latent_frame_transitions
+
 
 
 class EntityFramingAgent:
@@ -52,9 +54,8 @@ class EntityFramingAgent:
             entity=entity
         )
 
-        framing_results = framing_data[
-            "framing_results"
-        ]
+        framing_results = framing_data["framing_results"]
+        latent_frames = compute_entity_latent_frame_transitions(source=source,entity=entity)
 
         if len(framing_results) == 0:
 
@@ -86,7 +87,8 @@ class EntityFramingAgent:
             source=source,
             entity=entity,
             framing_results=framing_results,
-            salience_data=salience_data
+            salience_data=salience_data,
+            latent_frames=latent_frames
         )
 
         confidence = self._estimate_confidence(
@@ -104,6 +106,7 @@ class EntityFramingAgent:
             "salience": salience_data,
             "evidence_verbs": evidence_verbs,
             "evidence": evidence_data,
+            "latent_frames": latent_frames,
             "confidence": confidence
         }
 
@@ -142,7 +145,8 @@ class EntityFramingAgent:
         source,
         entity,
         framing_results,
-        salience_data
+        salience_data,
+        latent_frames
     ):
         """
         Produce a grounded first-pass interpretation.
@@ -163,7 +167,9 @@ class EntityFramingAgent:
 
         first = framing_results[-1]
         strongest = framing_results[0]
+        latent_transitions = latent_frames["latent_frame_transitions"]
 
+        strongest_latent = latent_transitions[0]
         salience_items = salience_data.get(
             "actor_salience",
             []
@@ -204,9 +210,11 @@ class EntityFramingAgent:
 
         interpretation += (
             f"The strongest observed reframing occurs during "
-            f"{strongest['transition']}, where the associated "
-            f"verbs shift from {strongest['before_verbs'][:5]} "
-            f"to {strongest['after_verbs'][:5]}."
+            f"{strongest['transition']}, where the narrative "
+            f"shifts from "
+            f"{strongest_latent['before_frame']} "
+            f"toward "
+            f"{strongest_latent['after_frame']}."
         )
 
         return interpretation

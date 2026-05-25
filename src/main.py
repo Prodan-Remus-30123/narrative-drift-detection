@@ -32,6 +32,7 @@ from utils.period_sorting import (sort_period_key)
 
 from actor_salience import compute_actor_salience, compute_total_actor_salience
 from plots.plot_actor_salience import plot_actor_salience
+from embedding_model_registry import get_embedding_model
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -84,7 +85,7 @@ def main():
             grouped[source][month] = preprocess_corpus(grouped[source][month])
 
     #  Embeddings
-    model = EmbeddingModel()
+    model = get_embedding_model()
 
     source_results = {}
     print("\n=== Source-Aware Narrative Drift ===")

@@ -14,6 +14,8 @@ class EvidenceValidatorAgent:
     def validate(self, agent_output):
         status = agent_output.get("status", "unknown")
 
+        latent_frames = agent_output.get("latent_frames")
+
         if status != "ok":
             return {
                 "agent": self.name,
@@ -45,6 +47,36 @@ class EvidenceValidatorAgent:
             verdict = "weakly_supported"
             confidence = "low"
 
+        latent_consistency = True
+
+        latent_flags = []
+
+        if latent_frames:
+
+            transitions = latent_frames.get(
+                "latent_frame_transitions",
+                []
+            )
+
+            for transition in transitions:
+
+                before_frame = transition[
+                    "before_frame"
+                ]
+
+                after_frame = transition[
+                    "after_frame"
+                ]
+
+                if before_frame == after_frame:
+
+                    latent_consistency = False
+
+                    latent_flags.append(
+                        f"Potential redundant frame transition "
+                        f"in {transition['transition']}"
+                    )
+
         return {
             "agent": self.name,
             "validated_agent": agent_output.get("agent"),
@@ -54,7 +86,9 @@ class EvidenceValidatorAgent:
             "flags": flags,
             "numeric_support": numeric_support,
             "evidence_support": evidence_support,
-            "original_interpretation": agent_output.get("interpretation", "")
+            "original_interpretation": agent_output.get("interpretation", ""),
+            "latent_frame_consistency": latent_consistency,
+            "latent_frame_flags": latent_flags
         }
 
     def _has_numeric_support(self, agent_output):

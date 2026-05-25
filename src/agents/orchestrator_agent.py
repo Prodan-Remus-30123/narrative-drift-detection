@@ -50,10 +50,13 @@ class NarrativeOrchestratorAgent:
             )
 
         if plan["framing"] and entity is not None:
-            outputs["framing"] = self.framing_agent.analyze(
-                source=source,
-                entity=entity
-            )
+            outputs["framing"] = self.framing_agent.analyze(source=source,entity=entity)
+            if "latent_frames" in outputs["framing"]:
+                outputs["latent_narrative_frames"] = (
+                    outputs["framing"][
+                        "latent_frames"
+                    ]
+                )
 
         if plan["affective"]:
             outputs["affective"] = self.affective_agent.analyze(

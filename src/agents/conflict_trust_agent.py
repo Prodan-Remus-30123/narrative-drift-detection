@@ -10,6 +10,13 @@ and political polarization signals.
 from agentic_tools.conflict_trust_tools import (
     get_conflict_trust_signals
 )
+from entity_latent_frames import (
+    compute_entity_latent_frame_transitions
+)
+
+from actor_graph import (
+    compute_actor_graph_centrality
+)
 
 
 class ConflictTrustAgent:
@@ -19,13 +26,12 @@ class ConflictTrustAgent:
 
     def analyze(self, source):
 
-        signal_data = get_conflict_trust_signals(
-            source=source
-        )
+        signal_data = get_conflict_trust_signals(source=source)
 
-        results = signal_data[
-            "conflict_trust_results"
-        ]
+        results = signal_data["conflict_trust_results"]
+        actor_graph = compute_actor_graph_centrality(source)
+
+        top_actors = [actor for actor, score in actor_graph["actor_centrality"][:5]]
 
         if len(results) == 0:
             return {
@@ -37,15 +43,24 @@ class ConflictTrustAgent:
                 ),
                 "confidence": "low"
             }
+        
+        latent_conflict_frames = {}
 
-        interpretation = self._interpret(
-            source=source,
-            results=results
-        )
+        for actor in top_actors:
+            try:
 
-        confidence = self._estimate_confidence(
-            results
-        )
+                latent_conflict_frames[actor] = (compute_entity_latent_frame_transitions(source=source,entity=actor))
+
+            except Exception as error:
+
+                print(
+                    f"Conflict frame error for "
+                    f"{actor}: {error}"
+                )
+
+        interpretation = self._interpret(source=source, results=results, latent_conflict_frames=latent_conflict_frames)
+
+        confidence = self._estimate_confidence(results)
 
         return {
             "agent": self.name,
@@ -53,10 +68,11 @@ class ConflictTrustAgent:
             "status": "ok",
             "interpretation": interpretation,
             "conflict_trust_results": results,
-            "confidence": confidence
+            "confidence": confidence,
+            "latent_conflict_frames": latent_conflict_frames
         }
 
-    def _interpret(self, source, results):
+    def _interpret(self, source, results, latent_conflict_frames):
 
         periods = list(results.keys())
 
@@ -122,6 +138,32 @@ class ConflictTrustAgent:
             f"{lowest_trust_period[0]} "
             f"with trust score {lowest_trust_period[1]['trust_score']:.3f}."
         )
+
+        frame_summaries = []
+        ecosystem_types = []
+
+        for actor, data in latent_conflict_frames.items():
+            transitions = data["latent_frame_transitions"]
+
+            if len(transitions) == 0:
+                continue
+
+            strongest = transitions[0]
+
+            after_frame = strongest["after_frame"]
+            if after_frame not in ecosystem_types:
+                ecosystem_types.append(after_frame)
+
+            frame_summaries.append(f"{actor}: {after_frame}")
+
+        if len(ecosystem_types) > 0:
+            interpretation += (
+                " Dominant conflict ecosystems include: "
+                + "; ".join(
+                    list(ecosystem_types)[:5]
+                )
+                + "."
+            )
 
         return interpretation
 

@@ -13,6 +13,7 @@ from drift import (
 
 from utils.period_sorting import sort_period_key
 from agentic_tools.context_registry import get_context
+from embedding_model_registry import get_embedding_model
 
 
 def get_semantic_drift(source):
@@ -24,7 +25,7 @@ def get_semantic_drift(source):
 
     grouped = context.get_preprocessed_grouped()
 
-    model = EmbeddingModel()
+    model = get_embedding_model()
 
     aggregated_vectors = []
 
