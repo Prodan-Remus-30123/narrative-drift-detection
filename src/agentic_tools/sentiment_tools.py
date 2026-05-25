@@ -24,6 +24,8 @@ from utils.period_sorting import (
     sort_period_key
 )
 
+from agentic_tools.context_registry import get_context
+
 
 def get_sentiment_evolution(source):
     """
@@ -37,21 +39,12 @@ def get_sentiment_evolution(source):
         dict
     """
 
-    df = load_full_articles()
+    context = get_context(source)
 
-    source_df = df[
-        df["source"] == source
-    ]
+    if context.sentiment_results is not None:
+        return context.sentiment_results
 
-    grouped = group_articles_by_period(
-        source_df
-    )
-
-    for period in grouped:
-
-        grouped[period] = preprocess_corpus(
-            grouped[period]
-        )
+    grouped = context.get_preprocessed_grouped()
 
     sentiment_results = {}
 
@@ -120,7 +113,7 @@ def get_sentiment_evolution(source):
     
     intensity = (sentiment["positive"] + sentiment["negative"])
 
-    return {
+    context.sentiment_results = {
 
         "source":
             source,
@@ -139,3 +132,5 @@ def get_sentiment_evolution(source):
         "intensity":
             float(intensity)
     }
+
+    return context.sentiment_results

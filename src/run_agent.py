@@ -1,64 +1,105 @@
-from agentic_tools.semantic_tools import get_semantic_drift
-from agentic_tools.framing_tools import (
-    get_entity_framing
-)
-from agentic_tools.sentiment_tools import (
-    get_sentiment_evolution
-)
-from agentic_tools.salience_tools import (
-    get_actor_salience
-)
-
-from agentic_tools.evidence_tools import (
-    retrieve_entity_evidence
+from agents.semantic_drift_agent import (
+    SemanticDriftAgent
 )
 
 from agents.entity_framing_agent import (
     EntityFramingAgent
 )
 
+from agents.affective_dynamics_agent import (
+    AffectiveDynamicsAgent
+)
 
-agent = EntityFramingAgent()
+from agents.conflict_trust_agent import (
+    ConflictTrustAgent
+)
 
-result = agent.analyze(
+from agents.editorial_behavior_agent import (
+    EditorialBehaviorAgent
+)
+
+from agents.evidence_validator_agent import (
+    EvidenceValidatorAgent
+)
+
+from agents.narrative_summary_agent import (
+    NarrativeSummaryAgent
+)
+
+from agents.orchestrator_agent import NarrativeOrchestratorAgent
+from agentic_tools.context_registry import (
+    clear_context
+)
+
+clear_context()
+
+orchestrator = NarrativeOrchestratorAgent()
+
+result = orchestrator.answer(
+    query="How did CNN portray China during COVID?",
     source="cnn.com",
     entity="china"
 )
 
-print(result["interpretation"])
-print("Confidence:", result["confidence"])
+print(result["plan"])
+print(result["final_answer"]["summary"])
+print("Overall confidence:", result["final_answer"]["overall_confidence"])
 
-# result = retrieve_entity_evidence(
-#     source="cnn.com",
-#     entity="china",
-#     verbs=[
-#         "accuse",
-#         "criticize",
-#         "restrict"
-#     ],
-#     max_snippets_per_period=2
+# source = "cnn.com"
+# entity = "china"
+
+# semantic_agent = SemanticDriftAgent()
+# framing_agent = EntityFramingAgent()
+# affective_agent = AffectiveDynamicsAgent()
+# conflict_agent = ConflictTrustAgent()
+# editorial_agent = EditorialBehaviorAgent()
+
+# validator = EvidenceValidatorAgent()
+
+# summary_agent = NarrativeSummaryAgent()
+
+
+# semantic_result = semantic_agent.analyze(
+#     source
 # )
 
-# print(result)
-
-# result = get_actor_salience(
-#     source="cnn.com",
-#     entity="china"
+# framing_result = framing_agent.analyze(
+#     source,
+#     entity
 # )
 
-# print(result)
-
-# result = get_sentiment_evolution(
-#     "cnn.com"
+# affective_result = affective_agent.analyze(
+#     source
 # )
 
-# print(result)
-
-# result = get_entity_framing(
-#     source="cnn.com",
-#     entity="china"
+# conflict_result = conflict_agent.analyze(
+#     source
 # )
 
-# print(result)
+# editorial_result = editorial_agent.analyze(
+#     source
+# )
 
-# print(get_semantic_drift("cnn.com"))
+# validation_result = validator.validate(
+#     framing_result
+# )
+
+# summary = summary_agent.summarize(
+
+#     source=source,
+
+#     semantic_result=semantic_result,
+
+#     framing_result=framing_result,
+
+#     affective_result=affective_result,
+
+#     conflict_result=conflict_result,
+
+#     editorial_result=editorial_result,
+
+#     validation_result=validation_result
+# )
+
+# print(summary["summary"])
+# print("\nOverall confidence:", summary["overall_confidence"])

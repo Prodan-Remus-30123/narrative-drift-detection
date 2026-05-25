@@ -1,43 +1,68 @@
+"""
+semantic_tools.py
+
+Agentic semantic drift tools.
+"""
+
 from embeddings import EmbeddingModel
-from drift import compute_cosine_drift, compute_dynamic_threshold, classify_drift
-from database import load_full_articles
-from preprocessing import preprocess_corpus
-from temporal_entity_analysis import group_articles_by_period
+from drift import (
+    compute_cosine_drift,
+    compute_dynamic_threshold,
+    classify_drift
+)
+
 from utils.period_sorting import sort_period_key
+from agentic_tools.context_registry import get_context
 
 
 def get_semantic_drift(source):
 
-    df = load_full_articles()
-    source_df = df[df["source"] == source]
+    context = get_context(source)
 
-    grouped = group_articles_by_period(source_df)
+    if context.semantic_drift is not None:
+        return context.semantic_drift
 
-    for period in grouped:
-        grouped[period] = preprocess_corpus(grouped[period])
+    grouped = context.get_preprocessed_grouped()
 
     model = EmbeddingModel()
 
     aggregated_vectors = []
 
-    for period in sorted(grouped.keys(), key=sort_period_key):
+    for period in sorted(
+        grouped.keys(),
+        key=sort_period_key
+    ):
 
-        embeddings = model.encode_documents(grouped[period])
-        vector = model.aggregate_embeddings(embeddings)
+        embeddings = model.encode_documents(
+            grouped[period]
+        )
 
-        aggregated_vectors.append((period, vector))
+        vector = model.aggregate_embeddings(
+            embeddings
+        )
+
+        aggregated_vectors.append(
+            (period, vector)
+        )
 
     results = []
-
     drift_values = []
 
-    for i in range(len(aggregated_vectors) - 1):
+    for i in range(
+        len(aggregated_vectors) - 1
+    ):
 
         p1, v1 = aggregated_vectors[i]
         p2, v2 = aggregated_vectors[i + 1]
 
-        drift = compute_cosine_drift(v1, v2)
-        drift_values.append(drift)
+        drift = compute_cosine_drift(
+            v1,
+            v2
+        )
+
+        drift_values.append(
+            drift
+        )
 
         results.append({
             "transition": f"{p1}->{p2}",
@@ -50,13 +75,19 @@ def get_semantic_drift(source):
     )
 
     for item in results:
-        item["threshold"] = float(threshold)
+
+        item["threshold"] = float(
+            threshold
+        )
+
         item["classification"] = classify_drift(
             item["drift"],
             threshold
         )
 
-    return {
+    context.semantic_drift = {
         "source": source,
         "semantic_drift": results
     }
+
+    return context.semantic_drift

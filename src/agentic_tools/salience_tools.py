@@ -21,6 +21,9 @@ from utils.period_sorting import (
     sort_period_key
 )
 
+from agentic_tools.context_registry import (
+    get_context
+)
 
 def get_actor_salience(
     source,
@@ -40,29 +43,25 @@ def get_actor_salience(
         dict
     """
 
-    df = load_full_articles()
+    context = get_context(source)
 
-    source_df = df[
-        df["source"] == source
-    ]
+    grouped = context.get_preprocessed_grouped()
 
-    grouped = group_articles_by_period(
-        source_df
-    )
+    if context.salience_results is None:
 
-    for period in grouped:
-
-        grouped[period] = preprocess_corpus(
-            grouped[period]
+        context.salience_results = compute_actor_salience(
+            grouped
         )
 
-    salience_results = compute_actor_salience(
-        grouped
-    )
+    if context.salience_totals is None:
 
-    salience_totals = compute_total_actor_salience(
-        salience_results
-    )
+        context.salience_totals = compute_total_actor_salience(
+            context.salience_results
+        )
+
+    salience_results = context.salience_results
+
+    salience_totals = context.salience_totals
 
     periods_sorted = sorted(
         salience_results.keys(),

@@ -21,6 +21,9 @@ from actor_salience import (
     compute_total_actor_salience
 )
 
+from agentic_tools.context_registry import (
+    get_context
+)
 
 def get_entity_framing(
     source,
@@ -42,38 +45,40 @@ def get_entity_framing(
         dict
     """
 
-    df = load_full_articles()
+    context = get_context(source)
 
-    source_df = df[
-        df["source"] == source
-    ]
+    grouped = context.get_preprocessed_grouped()
 
-    grouped = group_articles_by_period(
-        source_df
-    )
+    if context.framing_drift is None:
 
-    for period in grouped:
-
-        grouped[period] = preprocess_corpus(
-            grouped[period]
+        context.framing_drift = compute_entity_drift(
+            grouped
         )
 
-    framing_drift = compute_entity_drift(
-        grouped
-    )
+    if context.salience_results is None:
 
-    salience_results = compute_actor_salience(
-        grouped
-    )
+        context.salience_results = compute_actor_salience(
+            grouped
+        )
 
-    salience_totals = compute_total_actor_salience(
-        salience_results
-    )
+    if context.salience_totals is None:
 
-    entity_importance = compute_entity_importance(
-        framing_drift,
-        salience_totals
-    )
+        context.salience_totals = compute_total_actor_salience(
+            context.salience_results
+        )
+
+    framing_drift = context.framing_drift
+
+    salience_totals = context.salience_totals
+
+    if context.entity_importance is None:
+
+        context.entity_importance = compute_entity_importance(
+            framing_drift,
+            salience_totals
+        )
+
+    entity_importance = context.entity_importance
 
     results = []
 
