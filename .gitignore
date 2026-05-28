@@ -36,6 +36,7 @@ Thumbs.db
 # Data files (optional)
 # Uncomment if datasets become large/private
 database
+frame_cache.db
 
 # Matplotlib cache
 .matplotlib/
@@ -49,3 +50,7 @@ idei.txt
 
 #Linter
 settings.json
+
+#Zips
+*.rar
+*.zip

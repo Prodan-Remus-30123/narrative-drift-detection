@@ -21,14 +21,14 @@ from preprocessing import preprocess_corpus
 from database import load_full_articles
 import math
 from embedding_model_registry import get_embedding_model
-
+from filters.verb_filters import GENERIC_VERBS, SEMANTICALLY_WEAK_VERBS
 
 
 
 MIN_VERB_COUNT = 3
-DISTANCE_THRESHOLD = 0.45
+DISTANCE_THRESHOLD = 0.6
 MIN_NARRATIVE_CENTRALITY = 2.5
-
+MIN_FRAME_CLUSTER_SIZE = 3
 
 def collect_verbs_by_period(grouped_texts):
     period_verbs = {}
@@ -167,15 +167,58 @@ def compute_temporal_variance(period_verbs):
 
     return temporal_scores
 
+def compute_narrative_idf(period_verbs):
+    """
+    Narrative IDF.
+
+    Penalizes verbs that appear in many periods.
+    Rewards temporally distinctive narrative verbs.
+    """
+
+    total_periods = len(period_verbs)
+
+    document_frequency = Counter()
+
+    for period, verbs in period_verbs.items():
+
+        unique_verbs = set(
+            verbs.keys()
+        )
+
+        for verb in unique_verbs:
+
+            document_frequency[
+                verb
+            ] += 1
+
+    narrative_idf = {}
+
+    for verb, df in document_frequency.items():
+
+        narrative_idf[verb] = math.log(
+            total_periods / (1 + df)
+        ) + 1
+
+    return narrative_idf
+
 def compute_narrative_centrality(
     specificity_scores,
-    temporal_scores
+    temporal_scores,
+    narrative_idf
 ):
     """
-    Combines specificity and temporal movement.
+    Combines:
+    - narrative specificity
+    - temporal movement
+    - narrative rarity
     """
 
     centrality = {}
+
+    ALL_FILTERED_VERBS = (
+        GENERIC_VERBS |
+        SEMANTICALLY_WEAK_VERBS
+    )
 
     for verb, specificity in specificity_scores.items():
 
@@ -184,7 +227,25 @@ def compute_narrative_centrality(
             0
         )
 
-        centrality[verb] = specificity * (1 + temporal)
+        idf = narrative_idf.get(
+            verb,
+            1
+        )
+
+        penalty = 1.0
+
+        if verb in SEMANTICALLY_WEAK_VERBS:
+            penalty = 0.7
+
+        if verb in GENERIC_VERBS:
+            penalty = 0.4
+
+        centrality[verb] = (
+            specificity *
+            (1 + temporal) *
+            idf *
+            penalty
+        )
 
     return centrality
 
@@ -276,6 +337,8 @@ def label_clusters(clusters):
     labels = {}
 
     for cluster_id, verbs in clusters.items():
+        if len(verbs) < MIN_FRAME_CLUSTER_SIZE:
+            continue
         labels[cluster_id] = {
             "label": label_cluster_placeholder(verbs),
             "verbs": verbs
@@ -284,36 +347,29 @@ def label_clusters(clusters):
     return labels
 
 
-def compute_frame_evolution(source):
-    df = load_full_articles()
-    source_df = df[df["source"] == source]
-    grouped = group_articles_by_period(source_df)
-
-    for period in grouped:
-        grouped[period] = preprocess_corpus(grouped[period])
-
+def compute_frame_evolution_from_grouped(source,grouped):
     period_verbs = collect_verbs_by_period(grouped)
-    global_verbs = collect_global_verbs(period_verbs)
     specificity_scores = compute_narrative_specificity(period_verbs)
     temporal_scores = compute_temporal_variance(period_verbs)
-    centrality_scores = compute_narrative_centrality(specificity_scores, temporal_scores)
-    filtered_verbs = {verb: score for verb, score in centrality_scores.items() if score >= MIN_NARRATIVE_CENTRALITY}
+    narrative_idf = compute_narrative_idf(
+    period_verbs
+)
+    centrality_scores = compute_narrative_centrality(specificity_scores, temporal_scores, narrative_idf)
 
-    print("\n=== NARRATIVE CENTRALITY FILTERING ===")
+    filtered_verbs = {
+        verb: score
+        for verb, score in centrality_scores.items()
+        if score >= MIN_NARRATIVE_CENTRALITY
+    }
 
-    ranked_centrality = sorted(
-        centrality_scores.items(),
-        key=lambda x: x[1],
-        reverse=True
-    )
+    # print("\n=== NARRATIVE CENTRALITY FILTERING ===")
+    # print("\nTop narrative-central verbs:")
 
-    print("\nTop narrative-central verbs:")
+    # for verb, score in ranked_centrality[:50]:
 
-    for verb, score in ranked_centrality[:50]:
-
-        print(
-            f"{verb}: {score:.2f}"
-        )
+    #     print(
+    #         f"{verb}: {score:.2f}"
+    #     )
 
     print(
         f"\nSelected verbs: {len(filtered_verbs)} "
@@ -335,40 +391,24 @@ def compute_frame_evolution(source):
 
 
 def main():
-    result = compute_frame_evolution(
-        "cnn.com"
+    df = load_full_articles()
+    source = "cnn.com"
+    source_df = df[df["source"] == source]
+
+    grouped = group_articles_by_period(source_df)
+
+    for period in grouped:
+        grouped[period] = preprocess_corpus(grouped[period])
+
+    result = compute_frame_evolution_from_grouped(
+        source,
+        grouped
     )
 
     print("\n=== LATENT FRAME DISCOVERY ===")
     print("Source:", result["source"])
     print("Number of verbs:", result["num_verbs"])
     print("Number of frames:", result["num_frames"])
-
-    print("\n=== DISCOVERED FRAMES ===")
-
-    for cluster_id, data in result["clusters"].items():
-        print(f"\nFrame {cluster_id}: {data['label']}")
-        print(data["verbs"][:20])
-
-    print("\n=== FRAME EVOLUTION ===")
-
-    for period, frames in result["period_frames"].items():
-        print(f"\n{period}")
-
-        ranked = sorted(
-            frames.items(),
-            key=lambda x: x[1]["share"],
-            reverse=True
-        )
-
-        for frame_id, stats in ranked[:5]:
-            label = result["clusters"][frame_id]["label"]
-
-            print(
-                f"Frame {frame_id} | {label} | "
-                f"count={stats['count']} | "
-                f"share={stats['share']:.3f}"
-            )
 
 
 if __name__ == "__main__":

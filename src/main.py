@@ -19,20 +19,42 @@ from plots.plot_entity_heatmap import plot_entity_heatmap
 from temporal_entity_analysis import group_articles_by_period
 from plots.plot_semantic_vs_framing import plot_semantic_vs_framing
 from plots.plot_source_summary import build_source_summary
-from plots.plot_actor_evolution import (plot_actor_evolution)
+from plots.plot_actor_evolution import plot_actor_evolution
 
-from sentiment_analysis import (analyze_sentiment)
-from plots.plot_sentiment_evolution import (plot_sentiment_evolution)
+from sentiment_analysis import analyze_sentiment
+from plots.plot_sentiment_evolution import plot_sentiment_evolution
 
 from correlation_analysis import (compute_sentiment_deltas, compute_average_framing, compute_correlation)
-from editorial_behavior import (classify_editorial_behavior)
-from emotional_volatility import (compute_emotional_volatility)
+from editorial_behavior import classify_editorial_behavior
+from emotional_volatility import compute_emotional_volatility
 from plots.plot_source_dashboard import plot_source_dashboard
-from utils.period_sorting import (sort_period_key)
+from utils.period_sorting import sort_period_key
 
 from actor_salience import compute_actor_salience, compute_total_actor_salience
 from plots.plot_actor_salience import plot_actor_salience
 from embedding_model_registry import get_embedding_model
+from latent_frames import compute_frame_evolution_from_grouped
+from temporal_frame_evolution import build_frame_trajectories
+from dynamic_entity_ecosystem import (
+    build_dynamic_entity_ecosystem,
+    summarize_dynamic_entity_ecosystem,
+    print_top_dynamic_entities
+)
+
+from entity_frame_alignment import (
+    build_entity_frame_alignment,
+    summarize_entity_frame_migrations,
+    print_top_entity_frame_migrations
+)
+from semantic_frame_labeling import (
+    label_all_latent_frames,
+    print_labeled_frames
+)
+
+from narrative_signatures import (
+    build_all_narrative_signatures,
+    print_narrative_signature
+)
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -84,10 +106,20 @@ def main():
         for month in sorted(grouped[source].keys(), key=sort_period_key):
             grouped[source][month] = preprocess_corpus(grouped[source][month])
 
+
+            # for point in trajectory["values"]:
+            #     print(
+            #         f"  {point['period']}: "
+            #         f"share={point['share']:.3f}, "
+            #         f"count={point['count']:.2f}"
+            #     )
+
     #  Embeddings
     model = get_embedding_model()
 
     source_results = {}
+    analysis_results = {}
+    latent_results_by_source = {}
     print("\n=== Source-Aware Narrative Drift ===")
 
     for source in grouped:
@@ -109,8 +141,56 @@ def main():
         drift_labels = []
 
         print(f"\nSource: {source}")
+        analysis_results[source] = {}
 
-        print("\n=== Entity-Level Evidence ===")
+        print("\n=== Temporal Frame Evolution ===")
+
+        latent_result = compute_frame_evolution_from_grouped(source, grouped[source])
+        latent_results_by_source[source] = latent_result
+        trajectories = build_frame_trajectories(latent_result)
+
+        analysis_results[source]["latent_frames"] = trajectories
+
+        ranked_trajectories = sorted(trajectories.items(), key=lambda x: x[1]["volatility"], reverse=True)
+
+        for frame_id, trajectory in ranked_trajectories[:5]:
+            print(f"\nFrame {frame_id}: {trajectory['label']}")
+            print(f"Peak period: " f"{trajectory['peak_period']}")
+            print(f"Peak share: " f"{trajectory['peak_share']:.3f}")
+            print(f"Volatility: " f"{trajectory['volatility']:.3f}")
+            print(f"Net change: " f"{trajectory['net_change']:.3f}")
+
+        print("\n=== Semantic Frame Labeling ===")
+
+        important_frame_ids = [
+            frame_id
+            for frame_id, trajectory
+            in ranked_trajectories[:10]
+        ]
+
+        filtered_clusters = {
+            frame_id: latent_result["clusters"][frame_id]
+            for frame_id in important_frame_ids
+        }
+
+        filtered_latent_result = {
+            **latent_result,
+            "clusters": filtered_clusters
+        }
+
+        labeled_frames = label_all_latent_frames(
+            filtered_latent_result
+        )
+
+        analysis_results[source][
+            "semantic_frames"
+        ] = labeled_frames
+
+        print_labeled_frames(
+            labeled_frames,
+            top_n=3
+        )
+        print("\n=== Semantic Drift Evolution ===")
 
         for i in range(len(aggregated_vectors) - 1):
 
@@ -134,6 +214,12 @@ def main():
         
         dynamic_threshold = compute_dynamic_threshold(drift_values,method="median_mad")
 
+        analysis_results[source]["semantic_drift"] = {
+            "labels": drift_labels,
+            "values": drift_values,
+            "threshold": dynamic_threshold
+        }
+
         print(f"\nDynamic semantic threshold: " f"{dynamic_threshold:.4f}" if dynamic_threshold is not None else "\nDynamic semantic threshold: insufficient data")
 
         for label, drift in zip(drift_labels, drift_values):
@@ -144,6 +230,14 @@ def main():
         source_results[source] = {
             "labels": drift_labels,
             "values": drift_values
+        }
+
+        analysis_results[source][
+            "semantic_drift"
+        ] = {
+            "labels": drift_labels,
+            "values": drift_values,
+            "threshold": dynamic_threshold
         }
 
         print("\n=== Sentiment Evolution ===")
@@ -162,6 +256,7 @@ def main():
             print(f"Neutral: " f"{sentiment['neutral']:.4f}")
         
         plot_sentiment_evolution(sentiment_results, source)
+        analysis_results[source]["sentiment"] = sentiment_results
 
         print("\n=== Entity Framing Drift ===")
 
@@ -169,10 +264,53 @@ def main():
         salience_results = compute_actor_salience(grouped[source])
 
         plot_actor_salience(salience_results, top_n=5)
-        salience_results = compute_actor_salience(grouped[source])
 
         salience_totals = compute_total_actor_salience(salience_results)
         entity_importance = compute_entity_importance(framing_drift, salience_totals)
+
+        print("\n=== Dynamic Entity Ecosystem ===")
+
+        entity_ecosystem = build_dynamic_entity_ecosystem(
+            framing_drift=framing_drift,
+            entity_importance=entity_importance
+        )
+
+        analysis_results[source]["entity_ecosystem"] = entity_ecosystem
+
+        ecosystem_summary = summarize_dynamic_entity_ecosystem(
+            entity_ecosystem
+        )
+
+        print(ecosystem_summary)
+
+        print_top_dynamic_entities(
+            entity_ecosystem,
+            top_n=3,
+            sort_by="importance"
+        )
+
+        print("\n=== Entity → Latent Frame Alignment ===")
+
+        latent_result = latent_results_by_source.get(source)
+
+        if latent_result is not None:
+            entity_frame_alignment = build_entity_frame_alignment(
+                framing_drift=framing_drift,
+                latent_result=latent_result,
+                semantic_frames=
+                analysis_results[source]["semantic_frames"],
+                top_k=3
+            )
+
+            migration_summary = summarize_entity_frame_migrations(entity_frame_alignment)
+            print_top_entity_frame_migrations(migration_summary, top_n=3)
+            analysis_results[source]["frame_migrations"] = migration_summary
+
+        else:
+            print(
+                f"No latent frame result available for {source}; "
+                "skipping entity-frame alignment."
+            )
 
         summary = build_source_summary(
             source= source,
@@ -197,22 +335,6 @@ def main():
         volatility = compute_emotional_volatility(sentiment_results)
         print(f"\nEmotional volatility: "f"{volatility:.4f}")
 
-        print("\n=== Top Important Narrative Actors ===")
-
-        ranked_importance = sorted(
-
-            entity_importance.items(),
-
-            key=lambda x: x[1],
-
-            reverse=True
-        )
-
-        for entity, score in ranked_importance[:10]:
-
-            print(
-                f"{entity}: {score:.3f}"
-            )
 
         average_framing_values = []
 
@@ -235,8 +357,8 @@ def main():
         )
 
         plot_top_entity_drift(framing_drift)
-        plot_entity_heatmap(framing_drift)
-        plot_actor_evolution(framing_drift)
+        # plot_entity_heatmap(framing_drift)
+        # plot_actor_evolution(framing_drift)
 
         print("\n=== Cross-Layer Correlation ===")
 
@@ -246,15 +368,15 @@ def main():
 
         print(f"Sentiment ↔ Framing correlation: " f"{correlation}")
 
-        for transition, entities in framing_drift.items():
-            print(f"\n{transition}")
-            ranked_entities = sorted(entities.items(), key=lambda x: x[1]["drift"], reverse=True)
+        # for transition, entities in framing_drift.items():
+        #     print(f"\n{transition}")
+        #     ranked_entities = sorted(entities.items(), key=lambda x: x[1]["drift"], reverse=True)
 
-            for entity, stats in ranked_entities[:5]:
-                print(f"\nEntity: {entity}")
-                print(f"Drift: " f"{stats['drift']:.3f}")
-                print(f"Before: " f"{list(stats['before'].keys())[:5]}")
-                print(f"After: " f"{list(stats['after'].keys())[:5]}")
+        #     for entity, stats in ranked_entities[:5]:
+        #         print(f"\nEntity: {entity}")
+        #         print(f"Drift: " f"{stats['drift']:.3f}")
+        #         print(f"Before: " f"{list(stats['before'].keys())[:5]}")
+        #         print(f"After: " f"{list(stats['after'].keys())[:5]}")
         
         # plot_source_dashboard(
         #     source=source,
@@ -322,6 +444,19 @@ def main():
 
     #  Plot drift signal
     plot_multiple_sources(source_results)
+
+    print("\n=== NARRATIVE SIGNATURES ===")
+    narrative_signatures = build_all_narrative_signatures(
+        analysis_results
+    )
+
+    for signature in narrative_signatures:
+        print_narrative_signature(signature)
+
+    signature_df = pd.DataFrame(narrative_signatures)
+
+    print("\n=== NARRATIVE SIGNATURE TABLE ===")
+    print(signature_df)
 
     summary_df = pd.DataFrame(
         source_summaries
