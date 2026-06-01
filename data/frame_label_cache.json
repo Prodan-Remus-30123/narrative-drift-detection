@@ -162,5 +162,69 @@
   "explore|journey|resort|tour|transit|transport|travel|visit": {
     "frame_label": "Geographic Exploration",
     "frame_description": "A story about moving through or experiencing different places, often with a sense of adventure and discovery."
+  },
+  "author|blog|write|writer": {
+    "frame_label": "Creative Expression Frames",
+    "frame_description": "The act of writing, authoring, or blogging represents a creative outlet for individuals to express themselves and share their ideas with others."
+  },
+  "answer|ask|assume|check|comment|confirm|hint|question|reply|respond|speculate|verify": {
+    "frame_label": "Investigation Protocol",
+    "frame_description": "A frame that represents the investigative process, involving questioning, verification, and validation of information."
+  },
+  "chat|communicate|discuss|speak|talk|transmit": {
+    "frame_label": "Verbal Information Exchange",
+    "frame_description": "The frame represents the exchange of information through verbal communication, emphasizing the importance of speaking, transmitting, and discussing ideas."
+  },
+  "bind|hold|retain|seal|withhold": {
+    "frame_label": "Secrecy and Control",
+    "frame_description": "A narrative of concealment and restriction, where information is withheld or sealed to maintain power or control over others."
+  },
+  "assign|constitute|declare|designate": {
+    "frame_label": "Establish Authority",
+    "frame_description": "The frame captures instances where a source or entity establishes its authority by declaring, designating, assigning, or constituting something, conveying a sense of legitimacy and power."
+  },
+  "embrace|hug|smile|soothe": {
+    "frame_label": "Emotional Comfort Framework",
+    "frame_description": "A narrative frame that portrays situations where emotional comfort and reassurance are paramount, highlighting the importance of human connection and affection in times of stress or uncertainty."
+  },
+  "explore|journey|navigate|resort|stroll|tour|transport|travel|visit|voyage|walk|wander": {
+    "frame_label": "Exploration and Movement",
+    "frame_description": "A narrative frame that captures the idea of moving through a physical or metaphorical space, often accompanied by a sense of discovery or exploration."
+  },
+  "close|come|don|get|give|knock|let|put|shut|wait": {
+    "frame_label": "Control and Access",
+    "frame_description": "The struggle for control over resources, information, or power, with varying degrees of access and restriction."
+  },
+  "premiere|preview|replay|view|watch": {
+    "frame_label": "Media Consumption Frame",
+    "frame_description": "A narrative frame that captures the attention-grabbing and interactive nature of consuming media, emphasizing the role of visual engagement and audience participation."
+  },
+  "alarm|alert|announce|inform|notify|trigger": {
+    "frame_label": "Warning or Alert Cycle",
+    "frame_description": "A narrative frame that involves announcing or informing about a threat or danger, which triggers an alarm or alert response."
+  },
+  "chant|discuss|hear|listen|mute|overhear|overheard|roar|scream|silence|sing|speak|talk|voice|whisper": {
+    "frame_label": "Expressive Communication",
+    "frame_description": "Verbs related to vocalizing thoughts, opinions, or emotions."
+  },
+  "answer|ask|comment|edit|fix|help|issue|question|reply|respond|update": {
+    "frame_label": "Information Seeking/Providing",
+    "frame_description": "A frame surrounding interactions involving seeking and providing information through questioning, answering, and commenting."
+  },
+  "hang|hold|open|reopen": {
+    "frame_label": "Emotional Closure Frame",
+    "frame_description": "This frame represents the emotional resolution or closure of a situation, with actions focusing on opening, holding, reopening, or hanging up the past."
+  },
+  "assure|caution|concern|ensure|fear|guarantee|protect|reassure|rely|risk|safeguard|secure|trust|unprotecte|warn": {
+    "frame_label": "Security Concerns",
+    "frame_description": "A narrative emphasizing the need to protect oneself or others from potential threats or risks, often accompanied by feelings of fear and concern."
+  },
+  "admit|clarify|elaborate|explain|know|mention|point|refer|reference|relate|see|seep|surprise|understand": {
+    "frame_label": "Clarify Understanding Process",
+    "frame_description": "The frame captures the process of gaining insight or clarity through a series of interactions or explanations."
+  },
+  "drain|drink|fill|leak|piss|pour|sink|spill|splash|water": {
+    "frame_label": "Water Flow Control",
+    "frame_description": "A story about managing the flow of water, often involving conflict or disruption in its natural or controlled state."
   }
 }

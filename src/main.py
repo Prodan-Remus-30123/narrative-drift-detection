@@ -56,6 +56,15 @@ from narrative_signatures import (
     print_narrative_signature
 )
 
+from signature_comparison import (
+    compute_signature_similarity,
+    cluster_signatures,
+    compute_signature_pca,
+    print_signature_similarity,
+    print_signature_clusters,
+    print_signature_pca
+)
+
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
 #     df["date"] = df["date"].dt.tz_localize(None)
@@ -457,10 +466,14 @@ def main():
 
     print("\n=== NARRATIVE SIGNATURE TABLE ===")
     print(signature_df)
+    similarity_df = compute_signature_similarity(narrative_signatures)
+    print_signature_similarity(similarity_df)
+    cluster_df = cluster_signatures(narrative_signatures,n_clusters=2)
+    print_signature_clusters(cluster_df)
+    pca_df = compute_signature_pca(narrative_signatures)
+    print_signature_pca(pca_df)
 
-    summary_df = pd.DataFrame(
-        source_summaries
-    )
+    summary_df = pd.DataFrame(source_summaries)
 
     print("\n=== SOURCE SUMMARY ===")
 
