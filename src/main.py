@@ -80,6 +80,38 @@ from signature_comparison import (
 
 #     return grouped
 
+def make_json_serializable(obj):
+    if isinstance(obj, dict):
+        return {
+            str(key): make_json_serializable(value)
+            for key, value in obj.items()
+        }
+
+    if isinstance(obj, list):
+        return [
+            make_json_serializable(item)
+            for item in obj
+        ]
+
+    if isinstance(obj, tuple):
+        return [
+            make_json_serializable(item)
+            for item in obj
+        ]
+
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+
+    if isinstance(obj, np.integer):
+        return int(obj)
+
+    if isinstance(obj, np.floating):
+        return float(obj)
+
+    if isinstance(obj, np.bool_):
+        return bool(obj)
+
+    return obj
 
 def main():
     #  Load CSV
@@ -478,8 +510,63 @@ def main():
     print("\n=== SOURCE SUMMARY ===")
 
     print(summary_df)
+    import json
 
+    with open(
+        "analysis_results.json",
+        "w",
+        encoding="utf-8"
+    ) as f:
+        json.dump(
+            make_json_serializable(analysis_results),
+            f,
+            indent=2,
+            ensure_ascii=False
+        )
+
+    print("\nSaved analysis_results.json")
+
+
+
+
+def debug_signature_comparison():
+    import json
+
+    with open(
+        "analysis_results.json",
+        "r",
+        encoding="utf-8"
+    ) as f:
+        analysis_results = json.load(f)
+
+    narrative_signatures = build_all_narrative_signatures(
+        analysis_results
+    )
+
+    for weight in [0.0, 0.5, 1.0, 2.0, 4.0]:
+        print(
+            f"\n=== SIGNATURE COMPARISON | semantic_weight={weight} ==="
+        )
+
+        similarity_df = compute_signature_similarity(
+            narrative_signatures,
+            include_semantic=(weight > 0),
+            semantic_weight=weight,
+            debug=(weight == 1.0)
+        )
+
+        print_signature_similarity(similarity_df)
+
+        cluster_df = cluster_signatures(
+            narrative_signatures,
+            n_clusters=2,
+            include_semantic=(weight > 0),
+            semantic_weight=weight
+        )
+
+        print_signature_clusters(cluster_df)
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    debug_signature_comparison()

@@ -226,5 +226,17 @@
   "drain|drink|fill|leak|piss|pour|sink|spill|splash|water": {
     "frame_label": "Water Flow Control",
     "frame_description": "A story about managing the flow of water, often involving conflict or disruption in its natural or controlled state."
+  },
+  "adapt|alter|change|compensate|edit|fixate|modify|overhaul|rebuild|reform|remake|repair|replace|substitute|update": {
+    "frame_label": "Transformation and Renewal",
+    "frame_description": "The frame suggests a focus on significant changes or upgrades, implying a desire for improvement or innovation."
+  },
+  "accept|add|approve|arrive|complete|deal|deliver|enter|invite|need|offer|receive|request|send|ship|trade|want": {
+    "frame_label": "Negotiation and Exchange",
+    "frame_description": "A frame about negotiating and exchanging goods, services, or information, involving offers, requests, and acceptance."
+  },
+  "blend|combine|comprise|consist|contain|divide|include|merge|mix|separate|split": {
+    "frame_label": "Composition/Reorganization",
+    "frame_description": "A narrative frame that focuses on the processes of combining, separating, or rearranging elements to create a new whole, highlighting the dynamics of inclusion, exclusion, and redefinition."
   }
 }

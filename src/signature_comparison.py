@@ -16,6 +16,10 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
+from semantic_signature_embedding import (
+    build_semantic_signature_embeddings
+)
+from sklearn.preprocessing import StandardScaler, normalize
 
 
 SIGNATURE_FEATURES = [
@@ -81,82 +85,98 @@ def signature_to_vector(signature):
     return np.array(vector)
 
 
-def build_signature_matrix(signatures):
-    """
-    Returns:
-    - sources
-    - matrix
-    """
+def build_signature_matrix(
+    signatures,
+    include_semantic=True,
+    semantic_weight=1.0,
+    debug=False
+):
+    semantic_embeddings = build_semantic_signature_embeddings(signatures)
 
     sources = []
-    vectors = []
+    numeric_vectors = []
+    semantic_vectors = []
 
     for signature in signatures:
-
         source = signature["source"]
 
-        vector = signature_to_vector(
-            signature
-        )
+        numeric_vector = signature_to_vector(signature)
+        semantic_vector = semantic_embeddings.get(source)
+
+        if semantic_vector is None:
+            semantic_vector = np.zeros(384)
 
         sources.append(source)
-        vectors.append(vector)
+        numeric_vectors.append(numeric_vector)
+        semantic_vectors.append(semantic_vector)
 
-    return (
-        sources,
-        np.array(vectors)
-    )
+        if debug:
+            print(source)
+            print("numeric norm:", np.linalg.norm(numeric_vector))
+            print("semantic norm:", np.linalg.norm(semantic_vector))
 
+    numeric_matrix = np.array(numeric_vectors)
+    semantic_matrix = np.array(semantic_vectors)
 
-def compute_signature_similarity(signatures):
-    """
-    Computes cosine similarity
-    between source signatures.
-    """
+    numeric_matrix = StandardScaler().fit_transform(numeric_matrix)
+    semantic_matrix = normalize(semantic_matrix, norm="l2")
 
+    if include_semantic:
+        matrix = np.concatenate(
+            [
+                numeric_matrix,
+                semantic_matrix * semantic_weight
+            ],
+            axis=1
+        )
+    else:
+        matrix = numeric_matrix
+
+    return sources, matrix
+
+def compute_signature_similarity(
+    signatures,
+    include_semantic=True,
+    semantic_weight=1.0,
+    debug=False
+):
     sources, matrix = build_signature_matrix(
-        signatures
+        signatures,
+        include_semantic=include_semantic,
+        semantic_weight=semantic_weight,
+        debug=debug
     )
 
-    similarity_matrix = cosine_similarity(
-        matrix
-    )
+    similarity_matrix = cosine_similarity(matrix)
 
-    similarity_df = pd.DataFrame(
+    return pd.DataFrame(
         similarity_matrix,
         index=sources,
         columns=sources
     )
 
-    return similarity_df
-
 
 def cluster_signatures(
     signatures,
-    n_clusters=2
+    n_clusters=2,
+    include_semantic=True,
+    semantic_weight=1.0
 ):
-    """
-    Clusters outlets by
-    narrative behavior.
-    """
-
     sources, matrix = build_signature_matrix(
-        signatures
+        signatures,
+        include_semantic=include_semantic,
+        semantic_weight=semantic_weight
     )
 
     clustering = AgglomerativeClustering(
         n_clusters=n_clusters
     )
 
-    labels = clustering.fit_predict(
-        matrix
-    )
+    labels = clustering.fit_predict(matrix)
 
     return pd.DataFrame({
-
         "source": sources,
         "cluster": labels
-
     })
 
 
@@ -224,3 +244,5 @@ def print_signature_pca(
     print(
         pca_df.round(3)
     )
+
+
