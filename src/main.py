@@ -65,6 +65,23 @@ from signature_comparison import (
     print_signature_pca
 )
 
+# ==========================================
+# DEBUG / EXECUTION MODES
+# ==========================================
+
+FAST_MODE = False
+
+DEBUG_SOURCES = None
+# DEBUG_SOURCES = {"bbc.co.uk"}
+# DEBUG_SOURCES = {"cnn.com"}
+# DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
+
+SKIP_PLOTS = True
+SKIP_FRAME_LABELING = True
+SKIP_SIGNATURE_COMPARISON = False
+SAVE_ANALYSIS_RESULTS = False
+VERBOSE_ENTITY_DEBUG = False
+
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
 #     df["date"] = df["date"].dt.tz_localize(None)
@@ -131,6 +148,9 @@ def main():
     source_summaries = []
 
     for source in grouped:
+        if (DEBUG_SOURCES is not None and source not in DEBUG_SOURCES):
+            continue
+
         total_docs = sum( len(grouped[source][period]) for period in grouped[source])
 
         if total_docs < 50:
@@ -144,6 +164,9 @@ def main():
 
     #  Preprocess
     for source in grouped:
+        if (DEBUG_SOURCES is not None and source not in DEBUG_SOURCES):
+            continue
+
         for month in sorted(grouped[source].keys(), key=sort_period_key):
             grouped[source][month] = preprocess_corpus(grouped[source][month])
 
@@ -164,6 +187,8 @@ def main():
     print("\n=== Source-Aware Narrative Drift ===")
 
     for source in grouped:
+        if (DEBUG_SOURCES is not None and source not in DEBUG_SOURCES):
+            continue
         total_docs = sum(len(grouped[source][period]) for period in grouped[source])
         if total_docs < 50:
             print(f"\nSkipping {source}: insufficient documents ({total_docs})")
@@ -203,6 +228,7 @@ def main():
 
         print("\n=== Semantic Frame Labeling ===")
 
+        top_frames = 3 if FAST_MODE else 10
         important_frame_ids = [
             frame_id
             for frame_id, trajectory
@@ -219,18 +245,21 @@ def main():
             "clusters": filtered_clusters
         }
 
-        labeled_frames = label_all_latent_frames(
-            filtered_latent_result
-        )
+        if SKIP_FRAME_LABELING:
+            labeled_frames = {}
+        else:
+            labeled_frames = label_all_latent_frames(filtered_latent_result)
+
+        if not SKIP_FRAME_LABELING:
+            print_labeled_frames(
+                labeled_frames,
+                top_n=3
+            )
 
         analysis_results[source][
             "semantic_frames"
         ] = labeled_frames
 
-        print_labeled_frames(
-            labeled_frames,
-            top_n=3
-        )
         print("\n=== Semantic Drift Evolution ===")
 
         for i in range(len(aggregated_vectors) - 1):
@@ -296,7 +325,8 @@ def main():
 
             print(f"Neutral: " f"{sentiment['neutral']:.4f}")
         
-        plot_sentiment_evolution(sentiment_results, source)
+        if not SKIP_PLOTS:
+            plot_sentiment_evolution(sentiment_results, source)
         analysis_results[source]["sentiment"] = sentiment_results
 
         print("\n=== Entity Framing Drift ===")
@@ -304,7 +334,8 @@ def main():
         framing_drift = compute_entity_drift(grouped[source])
         salience_results = compute_actor_salience(grouped[source])
 
-        plot_actor_salience(salience_results, top_n=5)
+        if not SKIP_PLOTS:
+            plot_actor_salience(salience_results, top_n=5)
 
         salience_totals = compute_total_actor_salience(salience_results)
         entity_importance = compute_entity_importance(framing_drift, salience_totals)
@@ -317,6 +348,19 @@ def main():
         )
 
         analysis_results[source]["entity_ecosystem"] = entity_ecosystem
+
+        if VERBOSE_ENTITY_DEBUG:
+            print("\nENTITY DRIFT DEBUG")
+
+            all_drifts = [
+                stats["mean_drift"]
+                for stats in entity_ecosystem.values()
+            ]
+
+            print(
+                "mean ecosystem drift:",
+                np.mean(all_drifts)
+            )
 
         ecosystem_summary = summarize_dynamic_entity_ecosystem(
             entity_ecosystem
@@ -389,15 +433,16 @@ def main():
             avg = sum(stats["drift"] for stats in entities.values()) / len(entities)
 
             average_framing_values.append(avg)
+        if not SKIP_PLOTS:
+            plot_semantic_vs_framing(
+                semantic_labels=drift_labels,
+                semantic_values=drift_values,
+                framing_values=average_framing_values,
+                source=source
+            )
 
-        plot_semantic_vs_framing(
-            semantic_labels=drift_labels,
-            semantic_values=drift_values,
-            framing_values=average_framing_values,
-            source=source
-        )
-
-        plot_top_entity_drift(framing_drift)
+        if not SKIP_PLOTS:
+            plot_top_entity_drift(framing_drift)
         # plot_entity_heatmap(framing_drift)
         # plot_actor_evolution(framing_drift)
 
@@ -484,7 +529,8 @@ def main():
 
 
     #  Plot drift signal
-    plot_multiple_sources(source_results)
+    if not SKIP_PLOTS:
+        plot_multiple_sources(source_results)
 
     print("\n=== NARRATIVE SIGNATURES ===")
     narrative_signatures = build_all_narrative_signatures(
@@ -498,34 +544,46 @@ def main():
 
     print("\n=== NARRATIVE SIGNATURE TABLE ===")
     print(signature_df)
-    similarity_df = compute_signature_similarity(narrative_signatures)
-    print_signature_similarity(similarity_df)
-    cluster_df = cluster_signatures(narrative_signatures,n_clusters=2)
-    print_signature_clusters(cluster_df)
-    pca_df = compute_signature_pca(narrative_signatures)
-    print_signature_pca(pca_df)
+
+    if not SKIP_SIGNATURE_COMPARISON:
+        similarity_matrix, sources = compute_signature_similarity(
+            narrative_signatures
+        )
+
+        similarity_df = pd.DataFrame(
+            similarity_matrix,
+            index=sources,
+            columns=sources
+        )
+
+        print_signature_similarity(similarity_df)
+        cluster_df = cluster_signatures(narrative_signatures,n_clusters=2)
+        print_signature_clusters(cluster_df)
+        pca_df = compute_signature_pca(narrative_signatures)
+        print_signature_pca(pca_df)
 
     summary_df = pd.DataFrame(source_summaries)
 
     print("\n=== SOURCE SUMMARY ===")
 
     print(summary_df)
-    import json
 
-    with open(
-        "analysis_results.json",
-        "w",
-        encoding="utf-8"
-    ) as f:
-        json.dump(
-            make_json_serializable(analysis_results),
-            f,
-            indent=2,
-            ensure_ascii=False
-        )
+    if SAVE_ANALYSIS_RESULTS:
+        import json
 
-    print("\nSaved analysis_results.json")
+        with open(
+            "analysis_results.json",
+            "w",
+            encoding="utf-8"
+        ) as f:
+            json.dump(
+                make_json_serializable(analysis_results),
+                f,
+                indent=2,
+                ensure_ascii=False
+            )
 
+        print("\nSaved analysis_results.json")
 
 
 
@@ -543,16 +601,34 @@ def debug_signature_comparison():
         analysis_results
     )
 
-    for weight in [0.0, 0.5, 1.0, 2.0, 4.0]:
+
+    signatures = build_all_narrative_signatures(
+        analysis_results
+    )
+
+    for s in signatures:
+        print("\n")
+        print(s["source"])
+
+        for k, v in s.items():
+
+            if isinstance(v, (int, float)):
+                print(f"{k}: {v}")
+
+    for weight in [0.0, 1.0, 4.0, 10.0, 20.0]:
         print(
             f"\n=== SIGNATURE COMPARISON | semantic_weight={weight} ==="
         )
 
-        similarity_df = compute_signature_similarity(
+        similarity_matrix, sources = compute_signature_similarity(
             narrative_signatures,
-            include_semantic=(weight > 0),
-            semantic_weight=weight,
-            debug=(weight == 1.0)
+            semantic_weight=weight
+        )
+
+        similarity_df = pd.DataFrame(
+            similarity_matrix,
+            index=sources,
+            columns=sources
         )
 
         print_signature_similarity(similarity_df)

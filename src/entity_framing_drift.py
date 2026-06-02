@@ -13,7 +13,7 @@ from entities import (analyze_entities)
 import math
 
 
-MIN_VERB_COUNT = 5
+MIN_VERB_COUNT = 3
 TOP_K_VERBS = 15
 MIN_SHARED_VERBS = 2
 
@@ -106,9 +106,12 @@ def vector_similarity(
 
     all_keys = set(
         vector_a.keys()
-    ).union(
+    ).intersection(
         vector_b.keys()
     )
+
+    if len(all_keys) < MIN_SHARED_VERBS:
+        return 0
 
     a = []
     b = []

@@ -39,7 +39,7 @@ def _safe_max(values):
     return float(np.max(values))
 
 
-def compute_frame_signature(latent_frames):
+def compute_frame_signature(latent_frames, semantic_frames=None):
     """
     latent_frames = output from build_frame_trajectories()
     """
@@ -93,8 +93,39 @@ def compute_frame_signature(latent_frames):
         reverse=True
     )
 
-    top_frame_labels = [
-        frame.get("label", "unknown_frame")
+    top_frame_labels = []
+    top_frame_descriptions = []
+
+    for frame_id, frame in ranked_frames[:5]:
+
+        if (
+            semantic_frames
+            and frame_id in semantic_frames
+        ):
+
+            top_frame_labels.append(
+                semantic_frames[frame_id][
+                    "frame_label"
+                ]
+            )
+
+            top_frame_descriptions.append(
+                semantic_frames[frame_id][
+                    "frame_description"
+                ]
+            )
+
+        else:
+
+            top_frame_labels.append(
+                frame.get(
+                    "label",
+                    "unknown_frame"
+                )
+            )
+
+    top_frame_descriptions = [
+        frame.get("description", "")
         for _, frame in ranked_frames[:5]
     ]
 
@@ -104,7 +135,8 @@ def compute_frame_signature(latent_frames):
         "max_frame_volatility": _safe_max(volatilities),
         "mean_frame_persistence": _safe_mean(persistence_values),
         "mean_frame_peak_share": _safe_mean(peak_shares),
-        "top_frame_labels": top_frame_labels
+        "top_frame_labels": top_frame_labels,
+        "top_frame_descriptions": top_frame_descriptions
     }
 
 
@@ -179,16 +211,42 @@ def compute_ecosystem_signature(entity_ecosystem):
             stats.get("persistence_ratio", 0.0)
         )
 
+    total_entities = max(1, len(entity_ecosystem))
+    volatile_core_actor_count = role_counts.get("volatile_core_actor", 0)
+    stable_core_actor_count = role_counts.get("stable_core_actor", 0)
+    episodic_disruptor_count = role_counts.get("episodic_disruptor", 0)
+    high_impact_shifting_actor_count = role_counts.get("high_impact_shifting_actor", 0)
+    peripheral_actor_count = role_counts.get("peripheral_actor", 0)
+
     return {
         "num_ecosystem_entities": len(entity_ecosystem),
+
         "mean_entity_drift": _safe_mean(mean_drifts),
         "max_entity_drift": _safe_max(max_drifts),
         "mean_entity_persistence": _safe_mean(persistence_values),
-        "volatile_core_actor_count": role_counts.get("volatile_core_actor", 0),
-        "stable_core_actor_count": role_counts.get("stable_core_actor", 0),
-        "episodic_disruptor_count": role_counts.get("episodic_disruptor", 0),
-        "high_impact_shifting_actor_count": role_counts.get("high_impact_shifting_actor", 0),
-        "peripheral_actor_count": role_counts.get("peripheral_actor", 0)
+
+        # raw counts
+        "volatile_core_actor_count": volatile_core_actor_count,
+        "stable_core_actor_count": stable_core_actor_count,
+        "episodic_disruptor_count": episodic_disruptor_count,
+        "high_impact_shifting_actor_count": high_impact_shifting_actor_count,
+        "peripheral_actor_count": peripheral_actor_count,
+
+        # normalized ratios
+        "volatile_core_actor_ratio":
+            volatile_core_actor_count / total_entities,
+
+        "stable_core_actor_ratio":
+            stable_core_actor_count / total_entities,
+
+        "episodic_disruptor_ratio":
+            episodic_disruptor_count / total_entities,
+
+        "high_impact_shifting_actor_ratio":
+            high_impact_shifting_actor_count / total_entities,
+
+        "peripheral_actor_ratio":
+            peripheral_actor_count / total_entities
     }
 
 
@@ -198,13 +256,29 @@ def compute_migration_signature(frame_migrations):
             "mean_migration_ratio": 0.0,
             "max_migration_ratio": 0.0,
             "mean_unique_frames_visited": 0.0,
-            "max_unique_frames_visited": 0.0
+            "max_unique_frames_visited": 0.0,
+            "reliable_migration_entity_count": 0
+        }
+
+    reliable_migrations = {
+        entity: stats
+        for entity, stats in frame_migrations.items()
+        if stats.get("num_transitions", 0) >= 2
+    }
+
+    if not reliable_migrations:
+        return {
+            "mean_migration_ratio": 0.0,
+            "max_migration_ratio": 0.0,
+            "mean_unique_frames_visited": 0.0,
+            "max_unique_frames_visited": 0.0,
+            "reliable_migration_entity_count": 0
         }
 
     migration_ratios = []
     unique_frames = []
 
-    for entity, stats in frame_migrations.items():
+    for entity, stats in reliable_migrations.items():
         migration_ratios.append(
             stats.get("migration_ratio", 0.0)
         )
@@ -217,7 +291,8 @@ def compute_migration_signature(frame_migrations):
         "mean_migration_ratio": _safe_mean(migration_ratios),
         "max_migration_ratio": _safe_max(migration_ratios),
         "mean_unique_frames_visited": _safe_mean(unique_frames),
-        "max_unique_frames_visited": _safe_max(unique_frames)
+        "max_unique_frames_visited": _safe_max(unique_frames),
+        "reliable_migration_entity_count": len(reliable_migrations)
     }
 
 
@@ -239,7 +314,13 @@ def build_narrative_signature(source, analysis_result):
     signature.update(
         compute_frame_signature(
             analysis_result.get("latent_frames", {})
-        )
+        ,
+
+        analysis_result.get(
+            "semantic_frames",
+            {}
+        ))
+
     )
 
     signature.update(

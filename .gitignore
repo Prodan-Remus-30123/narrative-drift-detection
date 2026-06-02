@@ -54,3 +54,6 @@ settings.json
 #Zips
 *.rar
 *.zip
+
+#cache json
+analysis_results.json

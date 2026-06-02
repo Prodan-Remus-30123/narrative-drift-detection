@@ -13,7 +13,6 @@ Each entity-period/transition is ranked against all latent frames using:
 
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-
 from embedding_model_registry import get_embedding_model
 
 
@@ -94,6 +93,23 @@ def _lexical_overlap(entity_verbs, frame_verbs):
 
     return len(intersection) / len(union)
 
+def semantic_frame_similarity(
+    frame_a,
+    frame_b
+):
+    model = get_embedding_model()
+
+    emb = model.encode_documents([
+        frame_a,
+        frame_b
+    ])
+
+    return float(
+        cosine_similarity(
+            [emb[0]],
+            [emb[1]]
+        )[0][0]
+    )
 
 def _rank_scores(scores, key):
     ranked = sorted(
@@ -252,13 +268,24 @@ def build_entity_frame_alignment(framing_drift, latent_result, semantic_frames, 
 
             frame_migration = None
 
+            frame_similarity = semantic_frame_similarity(
+                before_top["frame_label"],
+                after_top["frame_label"]
+            )
+
+            changed = frame_similarity < 0.75
+
             if before_top and after_top:
                 frame_migration = {
                     "from_frame_id": before_top["frame_id"],
                     "from_frame": before_top["frame_label"],
+
                     "to_frame_id": after_top["frame_id"],
                     "to_frame": after_top["frame_label"],
-                    "changed": before_top["frame_id"] != after_top["frame_id"]
+
+                    "frame_similarity": frame_similarity,
+
+                    "changed": changed
                 }
 
             if entity not in alignment:
@@ -328,7 +355,6 @@ def print_top_entity_frame_migrations(
 
     for entity, stats in ranked[:top_n]:
         latest = stats["latest_migration"]
-
         print(f"\nEntity: {entity}")
         print(f"Migration ratio: {stats['migration_ratio']:.3f}")
         print(f"Unique frames visited: {stats['unique_frames_visited']}")

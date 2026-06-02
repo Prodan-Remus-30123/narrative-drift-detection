@@ -12,9 +12,7 @@ from embedding_model_registry import (
 )
 
 
-def build_frame_semantic_embedding(
-    signature
-):
+def build_frame_semantic_embedding(signature):
     """
     Builds one embedding
     from the signature's
@@ -26,22 +24,26 @@ def build_frame_semantic_embedding(
         []
     )
 
+    frame_descriptions = signature.get(
+        "top_frame_descriptions",
+        []
+    )
+
+    semantic_document = "\n".join(
+        frame_labels + frame_descriptions
+    )
+
     if not frame_labels:
         return None
 
     model = get_embedding_model()
 
-    embeddings = model.encode_documents(
-        frame_labels
-    )
+    embeddings = model.encode_documents([semantic_document])
 
     if len(embeddings) == 0:
         return None
 
-    return np.mean(
-        np.array(embeddings),
-        axis=0
-    )
+    return embeddings[0]
 
 
 def build_semantic_signature_embeddings(

@@ -20,7 +20,7 @@ from semantic_signature_embedding import (
     build_semantic_signature_embeddings
 )
 from sklearn.preprocessing import StandardScaler, normalize
-
+from sklearn.metrics import pairwise_distances
 
 SIGNATURE_FEATURES = [
 
@@ -43,10 +43,10 @@ SIGNATURE_FEATURES = [
     "max_entity_drift",
     "mean_entity_persistence",
 
-    "volatile_core_actor_count",
-    "stable_core_actor_count",
-    "episodic_disruptor_count",
-    "high_impact_shifting_actor_count",
+    "volatile_core_actor_ratio",
+    "stable_core_actor_ratio",
+    "episodic_disruptor_ratio",
+    "high_impact_shifting_actor_ratio",
 
     # migrations
 
@@ -91,7 +91,7 @@ def build_signature_matrix(
     semantic_weight=1.0,
     debug=False
 ):
-    semantic_embeddings = build_semantic_signature_embeddings(signatures)
+    semantic_embeddings = (build_semantic_signature_embeddings(signatures) if include_semantic else {})
 
     sources = []
     numeric_vectors = []
@@ -119,7 +119,7 @@ def build_signature_matrix(
     semantic_matrix = np.array(semantic_vectors)
 
     numeric_matrix = StandardScaler().fit_transform(numeric_matrix)
-    semantic_matrix = normalize(semantic_matrix, norm="l2")
+    semantic_matrix = normalize(semantic_matrix)
 
     if include_semantic:
         matrix = np.concatenate(
@@ -134,27 +134,28 @@ def build_signature_matrix(
 
     return sources, matrix
 
-def compute_signature_similarity(
-    signatures,
-    include_semantic=True,
-    semantic_weight=1.0,
-    debug=False
-):
+
+def compute_signature_similarity(signatures, semantic_weight=0.0):
     sources, matrix = build_signature_matrix(
         signatures,
-        include_semantic=include_semantic,
+        include_semantic=semantic_weight > 0,
         semantic_weight=semantic_weight,
-        debug=debug
     )
 
-    similarity_matrix = cosine_similarity(matrix)
+    distances = pairwise_distances(matrix, metric="euclidean")
+    similarity = 1 / (1 + distances)
 
-    return pd.DataFrame(
-        similarity_matrix,
-        index=sources,
-        columns=sources
+    return similarity, sources
+
+
+def compute_semantic_signature_similarity(signatures):
+    sources, matrix = build_signature_matrix(
+        signatures,
+        include_semantic=True,
+        semantic_weight=1.0
     )
 
+    return cosine_similarity(matrix), sources
 
 def cluster_signatures(
     signatures,
