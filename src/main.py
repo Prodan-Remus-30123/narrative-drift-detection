@@ -75,16 +75,22 @@ from narrative_change_profile import (
     print_narrative_change_profile
 )
 
+from narrative_archetypes import (
+    build_transition_archetype_table,
+    discover_narrative_archetypes,
+    print_archetype_summaries
+)
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
 
 FAST_MODE = False
 
-# DEBUG_SOURCES = None
+DEBUG_SOURCES = None
 # DEBUG_SOURCES = {"bbc.co.uk"}
 # DEBUG_SOURCES = {"cnn.com"}
-DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
+# DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
 
 SKIP_PLOTS = True
 SKIP_FRAME_LABELING = True
@@ -577,6 +583,32 @@ def main():
 
     print("\n=== NARRATIVE SIGNATURE TABLE ===")
     print(signature_df)
+
+    print("\n=== NARRATIVE ARCHETYPES ===")
+
+    archetype_table = build_transition_archetype_table(
+        analysis_results
+    )
+
+    archetype_table, archetype_summaries, silhouette_scores = (
+        discover_narrative_archetypes(
+            archetype_table,
+            n_clusters=None
+        )
+    )
+
+    print("\nSilhouette scores by k:")
+    print(silhouette_scores)
+
+    print_archetype_summaries(
+        archetype_summaries
+    )
+
+    analysis_results["__archetypes__"] = {
+        "table": archetype_table.to_dict("records"),
+        "summaries": archetype_summaries,
+        "silhouette_scores": silhouette_scores
+    }
 
     if not SKIP_SIGNATURE_COMPARISON:
         similarity_matrix, sources = compute_signature_similarity(
