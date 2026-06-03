@@ -65,20 +65,30 @@ from signature_comparison import (
     print_signature_pca
 )
 
+from affective_dynamics import (
+    compute_affective_dynamics,
+    print_affective_dynamics
+)
+
+from narrative_change_profile import (
+    build_narrative_change_profile,
+    print_narrative_change_profile
+)
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
 
 FAST_MODE = False
 
-DEBUG_SOURCES = None
+# DEBUG_SOURCES = None
 # DEBUG_SOURCES = {"bbc.co.uk"}
 # DEBUG_SOURCES = {"cnn.com"}
-# DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
+DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
 
 SKIP_PLOTS = True
 SKIP_FRAME_LABELING = True
-SKIP_SIGNATURE_COMPARISON = False
+SKIP_SIGNATURE_COMPARISON = True
 SAVE_ANALYSIS_RESULTS = False
 VERBOSE_ENTITY_DEBUG = False
 
@@ -232,7 +242,7 @@ def main():
         important_frame_ids = [
             frame_id
             for frame_id, trajectory
-            in ranked_trajectories[:10]
+            in ranked_trajectories[:top_frames]
         ]
 
         filtered_clusters = {
@@ -329,9 +339,20 @@ def main():
             plot_sentiment_evolution(sentiment_results, source)
         analysis_results[source]["sentiment"] = sentiment_results
 
+        affective_result = compute_affective_dynamics(
+            sentiment_results
+        )
+
+        analysis_results[source]["affective_dynamics"] = affective_result
+
+        print_affective_dynamics(
+            affective_result
+        )
+
         print("\n=== Entity Framing Drift ===")
 
         framing_drift = compute_entity_drift(grouped[source])
+        analysis_results[source]["framing_drift"] = framing_drift
         salience_results = compute_actor_salience(grouped[source])
 
         if not SKIP_PLOTS:
@@ -396,6 +417,18 @@ def main():
                 f"No latent frame result available for {source}; "
                 "skipping entity-frame alignment."
             )
+
+        change_profile = build_narrative_change_profile(
+            analysis_results[source],
+            top_n=5
+        )
+
+        analysis_results[source]["change_profile"] = change_profile
+
+        print_narrative_change_profile(
+            change_profile,
+            top_n=3
+        )
 
         summary = build_source_summary(
             source= source,
@@ -644,5 +677,5 @@ def debug_signature_comparison():
 
 
 if __name__ == "__main__":
-    #main()
-    debug_signature_comparison()
+    main()
+    #debug_signature_comparison()

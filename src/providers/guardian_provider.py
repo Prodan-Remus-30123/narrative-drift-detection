@@ -24,64 +24,55 @@ class GuardianProvider(BaseProvider):
         num_records=30
     ):
 
-        params = {
-
-            "q": query,
-            "from-date": start_date,
-            "to-date": end_date,
-            "page": 1,
-            "page-size": num_records,
-            "api-key": self.api_key
-        }
-
-        response = requests.get(
-            self.BASE_URL,
-            params=params
-        )
-
-        if response.status_code == 429:
-
-            return {
-                "status": "rate_limited",
-                "articles": []
-            }
-
-        if response.status_code != 200:
-
-            return {
-                "status": "failed",
-                "articles": []
-            }
-
-        data = response.json()
-
-        results = data["response"]["results"]
-
         articles = []
 
-        for row in results:
+        for page in range(1, 6):
 
-            articles.append({
+            params = {
+                "q": query,
+                "from-date": start_date,
+                "to-date": end_date,
+                "page": page,
+                "page-size": min(num_records, 50),
+                "api-key": self.api_key
+            }
 
-                "provider": "guardian",
+            response = requests.get(
+                self.BASE_URL,
+                params=params
+            )
 
-                "source": "theguardian.com",
+            if response.status_code == 429:
+                break
 
-                "date": row.get(
-                    "webPublicationDate",
-                    ""
-                ),
+            if response.status_code != 200:
+                continue
 
-                "title": row.get(
-                    "webTitle",
-                    ""
-                ),
+            data = response.json()
 
-                "url": row.get(
-                    "webUrl",
-                    ""
-                )
-            })
+            results = data["response"]["results"]
+
+            for row in results:
+
+                articles.append({
+                    "provider": "guardian",
+                    "source": "theguardian.com",
+                    "date": row.get(
+                        "webPublicationDate",
+                        ""
+                    ),
+                    "title": row.get(
+                        "webTitle",
+                        ""
+                    ),
+                    "url": row.get(
+                        "webUrl",
+                        ""
+                    )
+                })
+
+            if len(results) == 0:
+                break
 
         return {
             "status": "success",

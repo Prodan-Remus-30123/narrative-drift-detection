@@ -174,6 +174,69 @@ def compute_sentiment_signature(sentiment_results):
         "mean_negative": _safe_mean(negatives)
     }
 
+def compute_affective_signature(affective_dynamics):
+    if not affective_dynamics:
+        return {
+            "sentiment_shift": 0.0,
+            "mean_narrative_intensity": 0.0,
+            "intensity_volatility": 0.0,
+            "intensity_shift": 0.0,
+            "mean_polarization": 0.0,
+            "polarization_volatility": 0.0,
+            "polarization_shift": 0.0,
+            "emotional_escalation": 0.0
+        }
+
+    return {
+        "sentiment_shift":
+            affective_dynamics.get(
+                "sentiment_shift",
+                0.0
+            ),
+
+        "mean_narrative_intensity":
+            affective_dynamics.get(
+                "mean_narrative_intensity",
+                0.0
+            ),
+
+        "intensity_volatility":
+            affective_dynamics.get(
+                "intensity_volatility",
+                0.0
+            ),
+
+        "intensity_shift":
+            affective_dynamics.get(
+                "intensity_shift",
+                0.0
+            ),
+
+        "mean_polarization":
+            affective_dynamics.get(
+                "mean_polarization",
+                0.0
+            ),
+
+        "polarization_volatility":
+            affective_dynamics.get(
+                "polarization_volatility",
+                0.0
+            ),
+
+        "polarization_shift":
+            affective_dynamics.get(
+                "polarization_shift",
+                0.0
+            ),
+
+        "emotional_escalation":
+            affective_dynamics.get(
+                "emotional_escalation",
+                0.0
+            )
+    }
+
 
 def compute_ecosystem_signature(entity_ecosystem):
     if not entity_ecosystem:
@@ -326,6 +389,12 @@ def build_narrative_signature(source, analysis_result):
     signature.update(
         compute_sentiment_signature(
             analysis_result.get("sentiment", {})
+        )
+    )
+
+    signature.update(
+        compute_affective_signature(
+            analysis_result.get("affective_dynamics", {})
         )
     )
 

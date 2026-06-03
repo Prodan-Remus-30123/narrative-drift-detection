@@ -58,7 +58,18 @@ SIGNATURE_FEATURES = [
     "mean_sentiment",
     "sentiment_volatility",
     "mean_positive",
-    "mean_negative"
+    "mean_negative",
+    "sentiment_shift",
+
+    "mean_narrative_intensity",
+    "intensity_volatility",
+    "intensity_shift",
+
+    "mean_polarization",
+    "polarization_volatility",
+    "polarization_shift",
+
+    "emotional_escalation"
 ]
 
 

@@ -1,109 +1,95 @@
+import numpy as np
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
-from utils.period_sorting import (sort_period_key)
+
 
 def plot_entity_heatmap(
-    drift_results,
-    top_n=10
+    framing_drift,
+    top_n=15,
+    min_transitions=1,
+    title="Entity Framing Drift Heatmap"
 ):
+    """
+    Plots entity-level framing drift across temporal transitions.
+
+    Missing entity-transition pairs are stored as NaN, not 0.
+    This prevents missing evidence from being interpreted as stable framing.
+    """
 
     entity_scores = {}
 
-    # Collect drift values
-    for transition in sorted(drift_results.keys(),key=sort_period_key):
-
-        entities = drift_results[transition]
-
+    for transition, entities in framing_drift.items():
         for entity, stats in entities.items():
-
             if entity not in entity_scores:
-                entity_scores[entity] = []
+                entity_scores[entity] = {
+                    "values": [],
+                    "count": 0
+                }
 
-            entity_scores[entity].append(
-                stats["drift"]
+            entity_scores[entity]["values"].append(
+                stats.get("drift", np.nan)
             )
+            entity_scores[entity]["count"] += 1
 
-    # SAFETY CHECK
-    if len(entity_scores) == 0:
-
-        print(
-            "No entity drift data available "
-            "for heatmap."
-        )
-
-        return
-
-    # Rank entities
     ranked_entities = sorted(
-
         entity_scores.items(),
-
-        key=lambda x: (
-            sum(x[1]) / len(x[1])
-        ),
-
+        key=lambda x: np.nanmean(x[1]["values"]),
         reverse=True
-    )[:top_n]
+    )
 
-    top_entities = [
-        entity[0]
-        for entity in ranked_entities
-    ]
+    selected_entities = [
+        entity
+        for entity, stats in ranked_entities
+        if stats["count"] >= min_transitions
+    ][:top_n]
 
-    # Build matrix
-    matrix = {}
+    transitions = list(framing_drift.keys())
 
-    for transition, entities in drift_results.items():
+    matrix = pd.DataFrame(
+        np.nan,
+        index=selected_entities,
+        columns=transitions
+    )
 
-        matrix[transition] = {}
-
-        for entity in top_entities:
-
+    for transition, entities in framing_drift.items():
+        for entity in selected_entities:
             if entity in entities:
-
-                matrix[transition][entity] = (
-                    entities[entity]["drift"]
+                matrix.loc[entity, transition] = entities[entity].get(
+                    "drift",
+                    np.nan
                 )
 
-            else:
+    if matrix.empty:
+        print("No data available for entity heatmap.")
+        return matrix
 
-                matrix[transition][entity] = 0
+    plt.figure(figsize=(14, max(6, len(selected_entities) * 0.45)))
 
-    # Convert to DataFrame
-    df = pd.DataFrame(matrix).T
-
-    # SECOND SAFETY CHECK
-    if df.empty:
-
-        print(
-            "Heatmap dataframe is empty."
-        )
-
-        return
-
-    # Plot
-    plt.figure(figsize=(14, 8))
-
-    sns.heatmap(
-        df,
-        annot=True,
-        cmap="Reds",
-        linewidths=0.5
+    plt.imshow(
+        matrix.values,
+        aspect="auto",
+        interpolation="nearest"
     )
 
-    plt.title(
-        "Entity Framing Drift Heatmap"
+    plt.colorbar(label="Framing drift")
+
+    plt.xticks(
+        ticks=np.arange(len(matrix.columns)),
+        labels=matrix.columns,
+        rotation=45,
+        ha="right"
     )
 
-    plt.xlabel(
-        "Entities"
+    plt.yticks(
+        ticks=np.arange(len(matrix.index)),
+        labels=matrix.index
     )
 
-    plt.ylabel(
-        "Temporal Transitions"
-    )
+    plt.title(title)
+    plt.xlabel("Transition")
+    plt.ylabel("Entity")
 
     plt.tight_layout()
-
     plt.show()
+
+    return matrix

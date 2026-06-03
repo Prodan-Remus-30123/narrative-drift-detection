@@ -242,6 +242,7 @@ def compute_entity_drift(grouped_texts):
 
         for entity in shared_entities:
 
+
             shared_verbs = set(
                 vectors_a[entity].keys()
             ).intersection(
@@ -250,6 +251,10 @@ def compute_entity_drift(grouped_texts):
 
             if len(shared_verbs) < MIN_SHARED_VERBS:
                 continue
+
+            shared_verbs_list = sorted(list(shared_verbs))
+            before_only = sorted(list(set(vectors_a[entity].keys()) - shared_verbs))
+            after_only = sorted(list(set(vectors_b[entity].keys()) - shared_verbs))
 
             similarity = vector_similarity(
 
@@ -270,9 +275,17 @@ def compute_entity_drift(grouped_texts):
             drift_results[transition][entity] = {
                 "drift": drift,
                 "drift_class": drift_class,
+
                 "before": vectors_a[entity],
                 "after": vectors_b[entity],
-                "shared_verbs": len(shared_verbs)
+
+                "shared_verbs": len(shared_verbs),
+
+                "shared_verbs_list": shared_verbs_list,
+
+                "before_only_verbs": before_only,
+
+                "after_only_verbs": after_only
             }
 
     return drift_results

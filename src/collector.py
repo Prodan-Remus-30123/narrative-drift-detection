@@ -28,7 +28,7 @@ provider_configs = {
             "AND theme:HEALTH_PANDEMIC "
             "AND sourcelang:english",
 
-        "num_records": 30
+        "num_records": 100
     },
 
     {
@@ -37,7 +37,7 @@ provider_configs = {
             "AND theme:HEALTH_PANDEMIC "
             "AND sourcelang:english",
 
-        "num_records": 30
+        "num_records": 100
     },
 
     {
@@ -46,7 +46,7 @@ provider_configs = {
             "AND theme:HEALTH_PANDEMIC "
             "AND sourcelang:english",
 
-        "num_records": 30
+        "num_records": 100
     },
 
     {
@@ -55,7 +55,7 @@ provider_configs = {
             "AND theme:HEALTH_PANDEMIC "
             "AND sourcelang:english",
 
-        "num_records": 30
+        "num_records": 100
     },
 
     {
@@ -64,8 +64,49 @@ provider_configs = {
             "AND theme:HEALTH_PANDEMIC "
             "AND sourcelang:english",
 
-        "num_records": 30
-    }
+        "num_records": 100
+    },
+
+    {
+    "query":
+        "COVID AND lockdown "
+        "AND theme:HEALTH_PANDEMIC "
+        "AND sourcelang:english",
+
+    "num_records": 100
+},
+{
+    "query":
+        "COVID AND vaccination "
+        "AND theme:HEALTH_PANDEMIC "
+        "AND sourcelang:english",
+
+    "num_records": 100
+},
+{
+    "query":
+        "COVID AND omicron "
+        "AND theme:HEALTH_PANDEMIC "
+        "AND sourcelang:english",
+
+    "num_records": 100
+},
+{
+    "query":
+        "COVID AND delta variant "
+        "AND theme:HEALTH_PANDEMIC "
+        "AND sourcelang:english",
+
+    "num_records": 100
+},
+{
+    "query":
+        "COVID AND reopening "
+        "AND theme:HEALTH_PANDEMIC "
+        "AND sourcelang:english",
+
+    "num_records": 100
+}
 ],
 
         "domains": [
@@ -211,7 +252,7 @@ def run_collection():
     providers = [RawGDELTProvider(), GuardianProvider( api_key=os.getenv("GUARDIAN_API_KEY"))]
 
     global_start_date = "2020-01-01"
-    global_end_date = "2020-12-31"
+    global_end_date = "2022-12-31"
 
     monthly_ranges = generate_monthly_ranges(global_start_date, global_end_date)
 

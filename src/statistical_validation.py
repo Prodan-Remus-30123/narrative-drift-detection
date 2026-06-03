@@ -203,8 +203,14 @@ def jackknife_feature_robustness(
             np.triu_indices_from(delta, k=1)
         ]
 
+        feature_name = (
+            SIGNATURE_FEATURES[removed_index]
+            if removed_index < len(SIGNATURE_FEATURES)
+            else f"semantic_embedding_{removed_index}"
+        )
+
         results.append({
-            "removed_feature_index": removed_index,
+            "removed_feature_index": feature_name,
             "mean_similarity_change": float(
                 np.mean(upper_triangle)
             ),

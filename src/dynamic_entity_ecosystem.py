@@ -85,6 +85,9 @@ def build_dynamic_entity_ecosystem(
                 "transition": transition,
                 "drift": stats.get("drift", 0),
                 "before_top_verbs": _top_verbs(before),
+                "before_only_verbs":stats.get("before_only_verbs",[]),
+                "shared_verbs": stats.get("shared_verbs_list", []),
+                "after_only_verbs": stats.get("after_only_verbs", []),
                 "after_top_verbs": _top_verbs(after),
                 "before_dominant_verb": _dominant_verb(before),
                 "after_dominant_verb": _dominant_verb(after)
@@ -194,11 +197,7 @@ def summarize_dynamic_entity_ecosystem(ecosystem):
     }
 
 
-def print_top_dynamic_entities(
-    ecosystem,
-    top_n=10,
-    sort_by="importance"
-):
+def print_top_dynamic_entities(ecosystem, top_n=10, sort_by="importance"):
     """
     Compact debug printer.
     """
@@ -224,4 +223,17 @@ def print_top_dynamic_entities(
             "Latest framing: "
             f"{last_transition['before_top_verbs']} -> "
             f"{last_transition['after_top_verbs']}"
+        )
+        print(
+            "Shared verbs: "
+            f"{last_transition.get('shared_verbs', [])}"
+        )
+        print(
+            "Removed verbs: "
+            f"{last_transition.get('before_only_verbs', [])[:10]}"
+        )
+
+        print(
+            "Added verbs: "
+            f"{last_transition.get('after_only_verbs', [])[:10]}"
         )
