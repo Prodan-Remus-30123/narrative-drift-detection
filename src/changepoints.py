@@ -8,11 +8,7 @@ import ruptures as rpt
 import numpy as np
 
 
-def detect_changepoints(
-    drift_signal,
-    model="l2",
-    penalty=0.01
-):
+def detect_changepoints(drift_signal, model="l2", penalty=0.01):
     """
     Detect structural breaks in drift signal.
 
@@ -26,15 +22,10 @@ def detect_changepoints(
     """
 
     signal = np.array(drift_signal).reshape(-1, 1)
-
     algo = rpt.Pelt(model=model).fit(signal)
-
     breakpoints = algo.predict(pen=penalty)
 
     # Remove final endpoint
-    breakpoints = [
-        bp for bp in breakpoints
-        if bp < len(drift_signal)
-    ]
+    breakpoints = [bp for bp in breakpoints if bp < len(drift_signal)]
 
     return breakpoints

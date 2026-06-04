@@ -32,14 +32,12 @@ def build_actor_frame_graph(source, top_n=TOP_ACTORS):
             continue
 
         actor_frame_results[actor] = frame_data
-
         actor_node = f"ACTOR::{actor}"
 
         graph.add_node(actor_node, node_type="actor", label=actor)
         
 
         for transition in frame_data["latent_frame_transitions"]:
-
             frame_labels = []
 
             frame_labels.extend(transition["before_frame"].split(" / "))
@@ -88,11 +86,7 @@ def build_actor_frame_graph(source, top_n=TOP_ACTORS):
 
 
 def detect_actor_frame_communities(graph):
-    communities = nx.algorithms.community.greedy_modularity_communities(
-        graph,
-        weight="weight"
-    )
-
+    communities = nx.algorithms.community.greedy_modularity_communities(graph, weight="weight")
     output = []
 
     for index, community in enumerate(communities):
@@ -139,10 +133,7 @@ def summarize_actor_frame_graph(graph):
 
 
 def main():
-    result = build_actor_frame_graph(
-        source="cnn.com",
-        top_n=5
-    )
+    result = build_actor_frame_graph(source="cnn.com", top_n=5)
 
     graph = result["graph"]
 

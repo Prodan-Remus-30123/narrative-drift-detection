@@ -112,10 +112,7 @@ def compute_affective_dynamics(sentiment_results):
 
     if len(intensities) >= 2:
         emotional_escalation = float(
-            np.mean(
-                np.diff(intensities)
-            )
-        )
+            np.mean(np.diff(intensities)))
 
     return {
         "mean_compound": _safe_mean(compounds),

@@ -1,10 +1,10 @@
-class FramingAgent:
+class FramingExplainer:
     def explain(self, packet):
         entities = packet.get("who", {}).get("top_entities", [])
 
         lines = []
         lines.append(
-            f"FramingAgent analysis for {packet['source']} | {packet['transition']}"
+            f"FramingExplainer analysis for {packet['source']} | {packet['transition']}"
         )
         lines.append("")
         lines.append("Actor-level reframing:")
@@ -41,5 +41,5 @@ class FramingAgent:
 
 
 def explain_framing(packet):
-    agent = FramingAgent()
+    agent = FramingExplainer()
     return agent.explain(packet)

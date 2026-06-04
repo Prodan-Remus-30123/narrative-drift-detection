@@ -1,5 +1,5 @@
 """
-Semantic explanation agent.
+Semantic explanation.
 
 Explains WHAT changed semantically in one narrative transition.
 Consumes evidence packets only. Does not recompute analytics.
@@ -19,12 +19,12 @@ def _format_frame(frame):
     return f"- {frame}"
 
 
-class SemanticAgent:
+class SemanticExplainer:
     """
     Evidence-grounded semantic explanation agent.
     """
 
-    name = "SemanticAgent"
+    name = "SemanticExplainer"
 
     def explain(self, packet):
         what_how = packet.get("what_how", {})
@@ -52,7 +52,7 @@ class SemanticAgent:
         lines = []
 
         lines.append(
-            f"SemanticAgent analysis for {source} | {transition}"
+            f"SemanticExplainer analysis for {source} | {transition}"
         )
 
         lines.append("")
@@ -110,5 +110,5 @@ class SemanticAgent:
         return "\n".join(lines)
     
 def explain_semantics(packet):
-    agent = SemanticAgent()
+    agent = SemanticExplainer()
     return agent.explain(packet)

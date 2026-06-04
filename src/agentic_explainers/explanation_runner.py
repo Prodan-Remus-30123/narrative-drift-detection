@@ -1,6 +1,6 @@
-from agentic_explainers.semantic_agent import explain_semantics
-from agentic_explainers.framing_agent import explain_framing
-
+from agentic_explainers.semantic_explainer import explain_semantics
+from agentic_explainers.framing_explainer import explain_framing
+from agentic_explainers.synthesis_explainer import explain_synthesis
 
 def explain_packet(packet):
     explanations = []
@@ -13,10 +13,14 @@ def explain_packet(packet):
         explain_framing(packet)
     )
 
+    synthesis_text = explain_synthesis(packet)
+
+
     return {
         "source": packet["source"],
         "transition": packet["transition"],
-        "explanations": explanations
+        "explanations": explanations,
+        "synthesis": synthesis_text
     }
 
 
@@ -46,3 +50,6 @@ def print_explanations(results):
         for explanation in result["explanations"]:
             print()
             print(explanation)
+
+        print()
+        print(result["synthesis"])
