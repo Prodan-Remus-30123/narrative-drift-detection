@@ -5,25 +5,11 @@ import matplotlib.pyplot as plt
 from utils.period_sorting import sort_period_key
 
 
-def plot_source_dashboard(
-    source,
-    semantic_labels,
-    semantic_values,
-    sentiment_results,
-    framing_drift,
-    top_n_entities=8
-):
+def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_results, framing_drift, top_n_entities=8):
 
-    fig, axs = plt.subplots(
-        2,
-        2,
-        figsize=(18, 12)
-    )
+    fig, axs = plt.subplots(2, 2, figsize=(18, 12))
 
-    fig.suptitle(
-        f"{source} Narrative Evolution Dashboard",
-        fontsize=16
-    )
+    fig.suptitle(f"{source} Narrative Evolution Dashboard", fontsize=16)
 
     # 1. Semantic drift
     axs[0, 0].plot(
@@ -37,25 +23,10 @@ def plot_source_dashboard(
     axs[0, 0].tick_params(axis="x", rotation=45)
 
     # 2. Sentiment evolution
-    periods = sorted(
-        sentiment_results.keys(),
-        key=sort_period_key
-    )
-
-    compound = [
-        sentiment_results[p]["compound"]
-        for p in periods
-    ]
-
-    positive = [
-        sentiment_results[p]["positive"]
-        for p in periods
-    ]
-
-    negative = [
-        sentiment_results[p]["negative"]
-        for p in periods
-    ]
+    periods = sorted(sentiment_results.keys(), key=sort_period_key)
+    compound = [sentiment_results[p]["compound"] for p in periods]
+    positive = [sentiment_results[p]["positive"] for p in periods]
+    negative = [sentiment_results[p]["negative"] for p in periods]
 
     axs[0, 1].plot(
         periods,
@@ -83,25 +54,16 @@ def plot_source_dashboard(
     axs[0, 1].legend()
 
     # 3. Average framing drift
-    framing_labels = sorted(
-        framing_drift.keys(),
-        key=sort_period_key
-    )
+    framing_labels = sorted(framing_drift.keys(), key=sort_period_key)
 
     avg_framing = []
 
     for transition in framing_labels:
-
         entities = framing_drift[transition]
-
         if len(entities) == 0:
             avg_framing.append(np.nan)
         else:
-            avg = sum(
-                stats["drift"]
-                for stats in entities.values()
-            ) / len(entities)
-
+            avg = sum(stats["drift"] for stats in entities.values()) / len(entities)
             avg_framing.append(avg)
 
     axs[1, 0].plot(
@@ -118,37 +80,21 @@ def plot_source_dashboard(
     entity_scores = {}
 
     for transition, entities in framing_drift.items():
-
         for entity, stats in entities.items():
-
             if entity not in entity_scores:
                 entity_scores[entity] = []
 
-            entity_scores[entity].append(
-                stats["drift"]
-            )
+            entity_scores[entity].append(stats["drift"])
 
-    ranked_entities = sorted(
-        entity_scores.items(),
-        key=lambda x: sum(x[1]) / len(x[1]),
-        reverse=True
-    )[:top_n_entities]
-
-    selected_entities = [
-        entity
-        for entity, _ in ranked_entities
-    ]
-
+    ranked_entities = sorted(entity_scores.items(), key=lambda x: sum(x[1]) / len(x[1]), reverse=True)[:top_n_entities]
+    selected_entities = [entity for entity, _ in ranked_entities]
     heatmap_data = []
 
     for entity in selected_entities:
-
         row = []
 
         for transition in framing_labels:
-
             value = np.nan
-
             if entity in framing_drift[transition]:
                 value = framing_drift[transition][entity]["drift"]
 
@@ -157,21 +103,15 @@ def plot_source_dashboard(
         heatmap_data.append(row)
 
     if len(heatmap_data) > 0:
-
         heatmap_df = pd.DataFrame(
             heatmap_data,
             index=selected_entities,
             columns=framing_labels
         )
 
-        im = axs[1, 1].imshow(
-            heatmap_df,
-            aspect="auto"
-        )
+        im = axs[1, 1].imshow(heatmap_df, aspect="auto")
 
-        axs[1, 1].set_xticks(
-            range(len(framing_labels))
-        )
+        axs[1, 1].set_xticks(range(len(framing_labels)))
 
         axs[1, 1].set_xticklabels(
             framing_labels,
@@ -179,26 +119,15 @@ def plot_source_dashboard(
             ha="right"
         )
 
-        axs[1, 1].set_yticks(
-            range(len(selected_entities))
-        )
-
-        axs[1, 1].set_yticklabels(
-            selected_entities
-        )
-
+        axs[1, 1].set_yticks(range(len(selected_entities)))
+        axs[1, 1].set_yticklabels(selected_entities)
         axs[1, 1].set_title("Top Entity Framing Drift")
 
-        fig.colorbar(
-            im,
-            ax=axs[1, 1]
-        )
+        fig.colorbar(im, ax=axs[1, 1])
 
     else:
 
-        axs[1, 1].set_title(
-            "Top Entity Framing Drift"
-        )
+        axs[1, 1].set_title("Top Entity Framing Drift")
 
         axs[1, 1].text(
             0.5,

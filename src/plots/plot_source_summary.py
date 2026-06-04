@@ -3,36 +3,19 @@ import pandas as pd
 
 def build_source_summary(source, semantic_values, framing_drift, entity_importance, num_periods, num_articles, avg_sentiment):
 
-    avg_semantic = (
-        sum(semantic_values)
-        /
-        len(semantic_values)
-    )
+    avg_semantic = (sum(semantic_values) / len(semantic_values))
 
     framing_values = []
-
     for transition, entities in framing_drift.items():
-
         for entity, stats in entities.items():
+            framing_values.append(stats["drift"])
 
-            framing_values.append(
-                stats["drift"]
-            )
-
-    avg_framing = (
-        sum(framing_values)
-        /
-        len(framing_values)
-    ) if framing_values else 0
+    avg_framing = (sum(framing_values) / len(framing_values)) if framing_values else 0
 
     top_actor = None
 
     if entity_importance:
-
-        top_actor = max(
-            entity_importance.items(),
-            key=lambda x: x[1]
-        )[0]
+        top_actor = max(entity_importance.items(), key=lambda x: x[1])[0]
 
     return {
 

@@ -81,14 +81,24 @@ from narrative_archetypes import (
     print_archetype_summaries
 )
 
+from evidence_packet_builder import (
+    build_all_evidence_packets,
+    print_evidence_packet_summary
+)
+
+from agentic_explainers.explanation_runner import (
+    explain_packets,
+    print_explanations
+)
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
 
 FAST_MODE = False
 
-DEBUG_SOURCES = None
-# DEBUG_SOURCES = {"bbc.co.uk"}
+# DEBUG_SOURCES = None
+DEBUG_SOURCES = {"bbc.co.uk"}
 # DEBUG_SOURCES = {"cnn.com"}
 # DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
 
@@ -431,6 +441,12 @@ def main():
 
         analysis_results[source]["change_profile"] = change_profile
 
+        print("\n=== CHANGE PROFILE DEBUG ===")
+        print(type(change_profile))
+
+        if isinstance(change_profile, dict):
+            print(change_profile.keys())
+
         print_narrative_change_profile(
             change_profile,
             top_n=3
@@ -584,6 +600,26 @@ def main():
     print("\n=== NARRATIVE SIGNATURE TABLE ===")
     print(signature_df)
 
+    evidence_packets = build_all_evidence_packets(
+        analysis_results,
+        top_n=3
+    )
+
+    print_evidence_packet_summary(
+        evidence_packets,
+        max_packets=5
+    )
+
+    agentic_explanations = explain_packets(
+        evidence_packets,
+        max_packets=5
+    )
+
+    print_explanations(
+        agentic_explanations
+    )
+
+
     print("\n=== NARRATIVE ARCHETYPES ===")
 
     archetype_table = build_transition_archetype_table(
@@ -604,7 +640,7 @@ def main():
         archetype_summaries
     )
 
-    analysis_results["__archetypes__"] = {
+    archetype_results = {
         "table": archetype_table.to_dict("records"),
         "summaries": archetype_summaries,
         "silhouette_scores": silhouette_scores

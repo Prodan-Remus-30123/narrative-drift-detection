@@ -32,9 +32,7 @@ def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, s
 
     plt.ylabel("Drift")
 
-    plt.title(
-        f"{source} Semantic vs Framing Drift"
-    )
+    plt.title(f"{source} Semantic vs Framing Drift")
 
     plt.legend()
 

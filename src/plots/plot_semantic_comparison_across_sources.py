@@ -24,7 +24,6 @@ def plot_multiple_sources(source_results):
     plt.figure(figsize=(10, 6))
 
     for source, data in source_results.items():
-
         plt.plot(
             data["labels"],
             data["values"],
