@@ -1,6 +1,7 @@
 from agentic_explainers.semantic_explainer import explain_semantics
 from agentic_explainers.framing_explainer import explain_framing
 from agentic_explainers.synthesis_explainer import explain_synthesis
+from agentic_explainers.affective_explainer import explain_affective
 
 def explain_packet(packet):
     explanations = []
@@ -13,7 +14,12 @@ def explain_packet(packet):
         explain_framing(packet)
     )
 
+    explanations.append(
+        explain_affective(packet)
+    )
+
     synthesis_text = explain_synthesis(packet)
+
 
 
     return {

@@ -95,20 +95,14 @@ def load_full_articles_with_dates():
     WHERE extraction_status='success'
     """
 
-    df = pd.read_sql_query(
-        query,
-        conn
-    )
+    df = pd.read_sql_query(query, conn)
 
     conn.close()
 
     return df
 
 
-def get_latest_article_date(
-    provider,
-    source
-):
+def get_latest_article_date(provider, source):
     """
     Get latest collected article date
     for provider/source pair.

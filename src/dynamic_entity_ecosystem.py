@@ -18,14 +18,7 @@ def _top_verbs(verb_dict, top_n=5):
     if not verb_dict:
         return []
 
-    return [
-        verb
-        for verb, _ in sorted(
-            verb_dict.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )[:top_n]
-    ]
+    return [verb for verb, _ in sorted(verb_dict.items(), key=lambda x: x[1], reverse=True)[:top_n]]
 
 
 def _dominant_verb(verb_dict):
@@ -33,11 +26,7 @@ def _dominant_verb(verb_dict):
     return verbs[0] if verbs else None
 
 
-def build_dynamic_entity_ecosystem(
-    framing_drift,
-    entity_importance=None,
-    min_presence=1
-):
+def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_presence=1):
     """
     Builds temporal ecosystem statistics for entities.
 
@@ -101,22 +90,10 @@ def build_dynamic_entity_ecosystem(
         if len(timeline) < min_presence:
             continue
 
-        drift_values = [
-            item["drift"]
-            for item in timeline
-        ]
+        drift_values = [item["drift"] for item in timeline]
+        dominant_shift_count = sum(1 for item in timeline if item["before_dominant_verb"] != item["after_dominant_verb"])
 
-        dominant_shift_count = sum(
-            1
-            for item in timeline
-            if item["before_dominant_verb"] != item["after_dominant_verb"]
-        )
-
-        persistence_ratio = (
-            len(timeline) / total_transitions
-            if total_transitions > 0
-            else 0
-        )
+        persistence_ratio = (len(timeline) / total_transitions if total_transitions > 0 else 0)
 
         importance = 0
 
@@ -149,12 +126,7 @@ def build_dynamic_entity_ecosystem(
     return ecosystem
 
 
-def classify_entity_ecosystem_role(
-    persistence_ratio,
-    mean_drift,
-    max_drift,
-    importance
-):
+def classify_entity_ecosystem_role(persistence_ratio, mean_drift, max_drift, importance):
     """
     Classifies an entity's temporal ecosystem role.
     """
@@ -202,11 +174,7 @@ def print_top_dynamic_entities(ecosystem, top_n=10, sort_by="importance"):
     Compact debug printer.
     """
 
-    ranked = sorted(
-        ecosystem.items(),
-        key=lambda x: x[1].get(sort_by, 0),
-        reverse=True
-    )
+    ranked = sorted(ecosystem.items(), key=lambda x: x[1].get(sort_by, 0), reverse=True)
 
     for entity, stats in ranked[:top_n]:
         print(f"\nEntity: {entity}")

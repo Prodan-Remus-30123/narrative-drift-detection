@@ -12,9 +12,7 @@ from typing import List
 
 
 def compute_cosine_drift(vector_a, vector_b):
-    similarity = np.dot(vector_a, vector_b) / (
-        np.linalg.norm(vector_a) * np.linalg.norm(vector_b)
-    )
+    similarity = np.dot(vector_a, vector_b) / (np.linalg.norm(vector_a) * np.linalg.norm(vector_b))
 
     return 1 - similarity
 
@@ -31,10 +29,7 @@ def build_drift_signal(aggregated_vectors: List[np.ndarray]) -> List[float]:
     """
     drift_values = []
     for i in range(len(aggregated_vectors) - 1):
-        drift = compute_cosine_drift(
-            aggregated_vectors[i],
-            aggregated_vectors[i + 1]
-        )
+        drift = compute_cosine_drift(aggregated_vectors[i], aggregated_vectors[i + 1])
         drift_values.append(drift)
 
     return drift_values
