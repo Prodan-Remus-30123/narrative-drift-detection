@@ -14,7 +14,6 @@ def sort_period_key(period):
         period = period.split("->")[0]
 
     year = int(period[:4])
-
     block = period[5:]
 
     return (

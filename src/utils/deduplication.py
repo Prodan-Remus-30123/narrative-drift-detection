@@ -4,34 +4,18 @@ deduplication.py
 Article deduplication utilities.
 """
 
-from utils.text_normalization import (
-    normalize_title
-)
+from utils.text_normalization import normalize_title
 
 
 def deduplicate_articles(articles):
-
     seen_urls = set()
-
     seen_titles = set()
-
     unique_articles = []
 
     for article in articles:
-
-        url = article.get(
-            "url",
-            ""
-        )
-
-        title = article.get(
-            "title",
-            ""
-        )
-
-        normalized_title = normalize_title(
-            title
-        )
+        url = article.get("url", "")
+        title = article.get("title", "")
+        normalized_title = normalize_title(title)
 
         if not url:
             continue
@@ -44,10 +28,7 @@ def deduplicate_articles(articles):
 
         seen_urls.add(url)
 
-        seen_titles.add(
-            normalized_title
-        )
-
+        seen_titles.add(normalized_title)
         unique_articles.append(article)
 
     return unique_articles

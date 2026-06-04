@@ -108,3 +108,7 @@ class SemanticAgent:
         )
 
         return "\n".join(lines)
+    
+def explain_semantics(packet):
+    agent = SemanticAgent()
+    return agent.explain(packet)

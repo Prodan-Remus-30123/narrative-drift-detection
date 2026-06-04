@@ -1,43 +1,48 @@
-"""
-Runs explanation agents over evidence packets.
-"""
-
-from agentic_explainers.semantic_agent import SemanticAgent
+from agentic_explainers.semantic_agent import explain_semantics
+from agentic_explainers.framing_agent import explain_framing
 
 
 def explain_packet(packet):
-    semantic_agent = SemanticAgent()
+    explanations = []
+
+    explanations.append(
+        explain_semantics(packet)
+    )
+
+    explanations.append(
+        explain_framing(packet)
+    )
 
     return {
-        "source": packet.get("source"),
-        "transition": packet.get("transition"),
-        "semantic_explanation": semantic_agent.explain(packet)
+        "source": packet["source"],
+        "transition": packet["transition"],
+        "explanations": explanations
     }
 
 
 def explain_packets(packets, max_packets=None):
-    explanations = []
-
     selected_packets = packets
 
     if max_packets is not None:
         selected_packets = packets[:max_packets]
 
-    for packet in selected_packets:
-        explanations.append(
-            explain_packet(packet)
-        )
-
-    return explanations
+    return [
+        explain_packet(packet)
+        for packet in selected_packets
+    ]
 
 
-def print_explanations(explanations):
+def print_explanations(results):
     print("\n=== AGENTIC NARRATIVE EXPLANATIONS ===")
 
-    for item in explanations:
+    for result in results:
         print("\n" + "=" * 60)
         print(
-            f"{item['source']} | {item['transition']}"
+            f"{result['source']} | "
+            f"{result['transition']}"
         )
         print("=" * 60)
-        print(item["semantic_explanation"])
+
+        for explanation in result["explanations"]:
+            print()
+            print(explanation)

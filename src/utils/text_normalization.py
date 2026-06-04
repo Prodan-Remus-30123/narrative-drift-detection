@@ -8,17 +8,8 @@ import re
 
 
 def normalize_title(title):
-
     title = title.lower()
-
-    title = re.sub(
-        r"[^a-z0-9 ]",
-        "",
-        title
-    )
-
-    title = " ".join(
-        title.split()
-    )
+    title = re.sub(r"[^a-z0-9 ]", "",title)
+    title = " ".join(title.split())
 
     return title
