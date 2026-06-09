@@ -57,3 +57,6 @@ settings.json
 
 #cache json
 analysis_results.json
+
+*.doc
+*.md

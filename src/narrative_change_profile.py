@@ -160,6 +160,40 @@ def build_affective_transitions(sentiment_results):
     return results
 
 
+def entity_change_score(item):
+    stats = item[1]
+
+    turnover = stats.get(
+        "vocabulary_turnover",
+        0.0
+    )
+
+    similarity = stats.get(
+        "shared_similarity"
+    )
+
+    shared_count = stats.get(
+        "shared_verbs",
+        0
+    )
+
+    similarity_signal = (
+        0.0
+        if similarity is None
+        else (1.0 - similarity)
+    )
+
+    overlap_bonus = min(
+        shared_count / 5.0,
+        1.0
+    )
+
+    return (
+        0.5 * turnover
+        + 0.3 * similarity_signal
+        + 0.2 * overlap_bonus
+    )
+
 def build_entity_transition_evidence(
     framing_drift,
     top_n=5
@@ -168,18 +202,26 @@ def build_entity_transition_evidence(
 
     for transition, entities in framing_drift.items():
         ranked_entities = sorted(
-            entities.items(),
-            key=lambda x: x[1].get("drift", 0.0),
-            reverse=True
-        )
+        entities.items(),
+        key=entity_change_score,
+        reverse=True
+    )
 
         transition_entities = []
 
         for entity, stats in ranked_entities[:top_n]:
             transition_entities.append({
                 "entity": entity,
-                "drift": stats.get("drift", 0.0),
-                "drift_class": stats.get("drift_class", ""),
+                 "vocabulary_turnover":
+                    stats.get("vocabulary_turnover"),
+
+                "shared_similarity":
+                    stats.get("shared_similarity"),
+
+                "framing_drift_js": stats.get("framing_drift_js"),
+
+                "drift_class":
+                    stats.get("drift_class"),
 
                 "before_top_verbs": list(
                     stats.get("before", {}).keys()
@@ -336,9 +378,34 @@ def print_narrative_change_profile(
             for item in entity_data[
                 "top_entity_changes"
             ][:top_n]:
+                turnover = item.get("vocabulary_turnover")
+                similarity = item.get("shared_similarity")
+
+                js = item.get("framing_drift_js")
+
+                turnover_text = (
+                    f"{turnover:.3f}"
+                    if turnover is not None
+                    else "N/A"
+                )
+
+                similarity_text = (
+                    f"{similarity:.3f}"
+                    if similarity is not None
+                    else "N/A"
+                )
+
+                js_text = (
+                    f"{js:.3f}"
+                    if js is not None
+                    else "N/A"
+                )
+
                 print(
                     f"- {item['entity']} "
-                    f"(drift={item['drift']:.3f}): "
+                    f"(turnover={turnover_text}, "
+                    f"js={js_text}, "
+                    f"shared_similarity={similarity_text}): "
                     f"{item['before_top_verbs'][:5]} -> "
                     f"{item['after_top_verbs'][:5]}"
                 )

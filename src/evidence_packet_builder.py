@@ -38,6 +38,41 @@ def _rank_transition(value, all_values):
     return sorted_values.index(value) + 1
 
 
+def entity_change_score(item):
+    stats = item[1]
+
+    turnover = stats.get(
+        "vocabulary_turnover",
+        0.0
+    )
+
+    similarity = stats.get(
+        "shared_similarity"
+    )
+
+    shared_count = stats.get(
+        "shared_verbs",
+        0
+    )
+
+    similarity_signal = (
+        0.0
+        if similarity is None
+        else (1.0 - similarity)
+    )
+
+    overlap_bonus = min(
+        shared_count / 5.0,
+        1.0
+    )
+
+    return (
+        0.5 * turnover
+        + 0.3 * similarity_signal
+        + 0.2 * overlap_bonus
+    )
+
+
 def build_evidence_packets_for_source(
     source,
     source_result,
@@ -139,7 +174,7 @@ def build_evidence_packets_for_source(
 
         top_entity_reframings = sorted(
             transition_framing.items(),
-            key=lambda item: item[1].get("drift", 0),
+            key=entity_change_score,
             reverse=True
         )[:top_n]
 
@@ -153,11 +188,18 @@ def build_evidence_packets_for_source(
 
             entity_items.append({
                 "entity": entity,
-                "drift": _safe_float(
-                    stats.get("drift")
+                "drift": None,
+                "drift_class": None,
+
+                "shared_similarity": stats.get("shared_similarity"),
+                "vocabulary_turnover": _safe_float(
+                    stats.get("vocabulary_turnover")
                 ),
-                "drift_class": stats.get(
-                    "drift_class"
+                "framing_drift_js": _safe_float(
+                    stats.get("framing_drift_js")
+                ),
+                "framing_drift_js": _safe_float(
+                    stats.get("framing_drift_js")
                 ),
                 "before_verbs": list(
                     stats.get("before", {}).keys()
@@ -334,11 +376,26 @@ def print_evidence_packet_summary(
 
         print("Top entities:")
         for entity in packet["who"]["top_entities"]:
+
+            turnover = entity.get(
+                "vocabulary_turnover"
+            )
+
+            similarity = entity.get(
+                "shared_similarity"
+            )
+
             print(
                 "-",
                 entity["entity"],
-                "drift=",
-                round(entity["drift"], 3),
+                "turnover=",
+                round(entity["vocabulary_turnover"], 3),
+                "js=",
+                round(entity["framing_drift_js"], 3),
+                "shared_similarity=",
+                round(entity["shared_similarity"], 3)
+                if entity["shared_similarity"] is not None
+                else "N/A",
                 "role=",
                 entity["ecosystem_role"]
             )

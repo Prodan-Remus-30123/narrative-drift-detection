@@ -242,8 +242,8 @@ def compute_ecosystem_signature(entity_ecosystem):
     if not entity_ecosystem:
         return {
             "num_ecosystem_entities": 0,
-            "mean_entity_drift": 0.0,
-            "max_entity_drift": 0.0,
+            "mean_entity_turnover": 0.0,
+            "max_entity_turnover": 0.0,
             "mean_entity_persistence": 0.0,
             "volatile_core_actor_count": 0,
             "stable_core_actor_count": 0,
@@ -254,20 +254,31 @@ def compute_ecosystem_signature(entity_ecosystem):
 
     role_counts = Counter()
 
-    mean_drifts = []
-    max_drifts = []
+    mean_turnovers = []
+    max_turnovers = []
+
+    mean_js_values = []
+    max_js_values = []
     persistence_values = []
 
     for entity, stats in entity_ecosystem.items():
         role = stats.get("ecosystem_type", "unknown")
         role_counts[role] += 1
 
-        mean_drifts.append(
-            stats.get("mean_drift", 0.0)
+        mean_turnovers.append(
+            stats.get("mean_turnover", 0.0)
         )
 
-        max_drifts.append(
-            stats.get("max_drift", 0.0)
+        max_turnovers.append(
+            stats.get("max_turnover", 0.0)
+        )
+
+        mean_js_values.append(
+            stats.get("mean_js", 0.0)
+        )
+
+        max_js_values.append(
+            stats.get("max_js", 0.0)
         )
 
         persistence_values.append(
@@ -284,8 +295,17 @@ def compute_ecosystem_signature(entity_ecosystem):
     return {
         "num_ecosystem_entities": len(entity_ecosystem),
 
-        "mean_entity_drift": _safe_mean(mean_drifts),
-        "max_entity_drift": _safe_max(max_drifts),
+        "mean_entity_turnover":
+            _safe_mean(mean_turnovers),
+
+        "max_entity_turnover":
+            _safe_max(max_turnovers),
+
+        "mean_entity_js":
+            _safe_mean(mean_js_values),
+
+        "max_entity_js":
+            _safe_max(max_js_values),
         "mean_entity_persistence": _safe_mean(persistence_values),
 
         # raw counts
@@ -443,9 +463,15 @@ def print_narrative_signature(signature):
     )
 
     print(
-        f"Entity drift mean/max: "
-        f"{signature['mean_entity_drift']:.4f} / "
-        f"{signature['max_entity_drift']:.4f}"
+        f"Entity turnover mean/max: "
+        f"{signature['mean_entity_turnover']:.4f} / "
+        f"{signature['max_entity_turnover']:.4f}"
+    )
+
+    print(
+        f"Entity JS mean/max: "
+        f"{signature['mean_entity_js']:.4f} / "
+        f"{signature['max_entity_js']:.4f}"
     )
 
     print(

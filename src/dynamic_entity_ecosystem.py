@@ -72,7 +72,9 @@ def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_pr
 
             entity_timelines[entity].append({
                 "transition": transition,
-                "drift": stats.get("drift", 0),
+                "vocabulary_turnover": stats.get("vocabulary_turnover", 0),
+                "framing_drift_js":stats.get("framing_drift_js"),
+                "shared_similarity": stats.get("shared_similarity"),
                 "before_top_verbs": _top_verbs(before),
                 "before_only_verbs":stats.get("before_only_verbs",[]),
                 "shared_verbs": stats.get("shared_verbs_list", []),
@@ -82,6 +84,8 @@ def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_pr
                 "after_dominant_verb": _dominant_verb(after)
             })
 
+    
+
     ecosystem = {}
 
     total_transitions = len(transitions)
@@ -90,7 +94,18 @@ def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_pr
         if len(timeline) < min_presence:
             continue
 
-        drift_values = [item["drift"] for item in timeline]
+        drift_values = [
+            item["vocabulary_turnover"]
+            for item in timeline
+            if item["vocabulary_turnover"] is not None
+        ]
+
+        js_values = [
+            item["framing_drift_js"]
+            for item in timeline
+            if item["framing_drift_js"] is not None
+        ]
+
         dominant_shift_count = sum(1 for item in timeline if item["before_dominant_verb"] != item["after_dominant_verb"])
 
         persistence_ratio = (len(timeline) / total_transitions if total_transitions > 0 else 0)
@@ -100,23 +115,31 @@ def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_pr
         if entity_importance:
             importance = entity_importance.get(entity, 0)
 
-        mean_drift = float(np.mean(drift_values)) if drift_values else 0
-        max_drift = float(np.max(drift_values)) if drift_values else 0
-        drift_volatility = float(np.std(drift_values)) if drift_values else 0
+        mean_turnover = float(np.mean(drift_values)) if drift_values else 0
+        max_turnover = float(np.max(drift_values)) if drift_values else 0
+        turnover_volatility = float(np.std(drift_values)) if drift_values else 0
+
+        mean_js = float(np.mean(js_values)) if js_values else 0
+        max_js = float(np.max(js_values)) if js_values else 0
+        js_volatility = float(np.std(js_values)) if js_values else 0
 
         ecosystem_type = classify_entity_ecosystem_role(
             persistence_ratio=persistence_ratio,
-            mean_drift=mean_drift,
-            max_drift=max_drift,
+            mean_turnover=mean_turnover,
+            mean_js=mean_js,
+            max_js=max_js,
             importance=importance
         )
 
         ecosystem[entity] = {
             "appearances": len(timeline),
             "persistence_ratio": persistence_ratio,
-            "mean_drift": mean_drift,
-            "max_drift": max_drift,
-            "drift_volatility": drift_volatility,
+            "mean_turnover": mean_turnover,
+            "max_turnover": max_turnover,
+            "turnover_volatility": turnover_volatility,
+            "mean_js": mean_js,
+            "max_js": max_js,
+            "js_volatility": js_volatility,
             "dominant_shift_count": dominant_shift_count,
             "importance": importance,
             "ecosystem_type": ecosystem_type,
@@ -126,21 +149,23 @@ def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_pr
     return ecosystem
 
 
-def classify_entity_ecosystem_role(persistence_ratio, mean_drift, max_drift, importance):
-    """
-    Classifies an entity's temporal ecosystem role.
-    """
-
-    if persistence_ratio >= 0.7 and mean_drift < 0.35:
+def classify_entity_ecosystem_role(
+    persistence_ratio,
+    mean_turnover,
+    mean_js,
+    max_js,
+    importance
+):
+    if persistence_ratio >= 0.7 and mean_js < 0.35:
         return "stable_core_actor"
 
-    if persistence_ratio >= 0.7 and mean_drift >= 0.35:
+    if persistence_ratio >= 0.7 and mean_js >= 0.35:
         return "volatile_core_actor"
 
-    if persistence_ratio < 0.5 and max_drift >= 0.45:
+    if persistence_ratio < 0.5 and max_js >= 0.45:
         return "episodic_disruptor"
 
-    if importance >= 0.5 and mean_drift >= 0.35:
+    if importance >= 0.5 and mean_js >= 0.35:
         return "high_impact_shifting_actor"
 
     return "peripheral_actor"
@@ -158,13 +183,13 @@ def summarize_dynamic_entity_ecosystem(ecosystem):
 
     for entity, stats in ecosystem.items():
         role_counts[stats["ecosystem_type"]] += 1
-        drift_values.append(stats["mean_drift"])
+        drift_values.append(stats["mean_js"])
         persistence_values.append(stats["persistence_ratio"])
 
     return {
         "num_entities": len(ecosystem),
         "role_counts": dict(role_counts),
-        "mean_entity_drift": float(np.mean(drift_values)) if drift_values else 0,
+        "mean_entity_js": float(np.mean(drift_values)) if drift_values else 0,
         "mean_persistence": float(np.mean(persistence_values)) if persistence_values else 0
     }
 
@@ -181,9 +206,11 @@ def print_top_dynamic_entities(ecosystem, top_n=10, sort_by="importance"):
         print(f"Role: {stats['ecosystem_type']}")
         print(f"Importance: {stats['importance']:.3f}")
         print(f"Persistence: {stats['persistence_ratio']:.3f}")
-        print(f"Mean drift: {stats['mean_drift']:.3f}")
-        print(f"Max drift: {stats['max_drift']:.3f}")
-        print(f"Volatility: {stats['drift_volatility']:.3f}")
+        print(f"Mean turnover: {stats['mean_turnover']:.3f}")
+        print(f"Mean JS: {stats['mean_js']:.3f}")
+        print(f"Max JS: {stats['max_js']:.3f}")
+        print(f"Turnover volatility: {stats['turnover_volatility']:.3f}")
+        print(f"JS volatility: {stats['js_volatility']:.3f}")
 
         last_transition = stats["timeline"][-1]
 

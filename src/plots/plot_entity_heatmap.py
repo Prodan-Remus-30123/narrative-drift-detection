@@ -18,7 +18,7 @@ def plot_entity_heatmap(framing_drift, top_n=15, min_transitions=1, title="Entit
             if entity not in entity_scores:
                 entity_scores[entity] = {"values": [], "count": 0}
 
-            entity_scores[entity]["values"].append(stats.get("drift", np.nan))
+            entity_scores[entity]["values"].append(stats.get("vocabulary_turnover", np.nan))
             entity_scores[entity]["count"] += 1
 
     ranked_entities = sorted(entity_scores.items(), key=lambda x: np.nanmean(x[1]["values"]), reverse=True)
@@ -34,7 +34,7 @@ def plot_entity_heatmap(framing_drift, top_n=15, min_transitions=1, title="Entit
     for transition, entities in framing_drift.items():
         for entity in selected_entities:
             if entity in entities:
-                matrix.loc[entity, transition] = entities[entity].get("drift", np.nan)
+                matrix.loc[entity, transition] = entities[entity].get("vocabulary_turnover", np.nan)
 
     if matrix.empty:
         print("No data available for entity heatmap.")

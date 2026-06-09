@@ -148,15 +148,37 @@ class NarrativeSynthesisExplainer:
 
         for entity in entities[:3]:
             name = entity.get("entity", "unknown entity")
-            drift = entity.get("drift", 0.0)
+            turnover = entity.get("vocabulary_turnover")
+            similarity = entity.get("shared_similarity")
+            js = entity.get("framing_drift_js")
             role = entity.get("ecosystem_role", "unknown role")
 
             added = entity.get("added_verbs", [])
             removed = entity.get("removed_verbs", [])
 
+            turnover_text = (
+                f"{turnover:.4f}"
+                if turnover is not None
+                else "N/A"
+            )
+
+            similarity_text = (
+                f"{similarity:.4f}"
+                if similarity is not None
+                else "N/A"
+            )
+
+            js_text = (
+                f"{js:.4f}"
+                if js is not None
+                else "N/A"
+            )
+
             lines.append(
-                f"- {name} appears as a {role} with "
-                f"framing drift={drift:.4f}."
+                f"- {name} appears as a {role} "
+                f"js={js_text}, "
+                f"(turnover={turnover_text}, "
+                f"shared_similarity={similarity_text})."
             )
 
             if removed and added:

@@ -39,7 +39,7 @@ SIGNATURE_FEATURES = [
 
     # ecosystem
 
-    "mean_entity_drift",
+    "mean_entity_turnover",
     "max_entity_drift",
     "mean_entity_persistence",
 

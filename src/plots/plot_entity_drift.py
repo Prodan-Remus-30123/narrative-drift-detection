@@ -9,7 +9,7 @@ def plot_top_entity_drift(drift_results, top_n=10):
             if entity not in averaged:
                 averaged[entity] = []
 
-            averaged[entity].append(stats["drift"])
+            averaged[entity].append(stats.get("vocabulary_turnover", 0))
 
     averaged_scores = {}
 

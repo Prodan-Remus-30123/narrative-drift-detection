@@ -12,7 +12,7 @@ def plot_actor_evolution(drift_results, top_n=5):
             if entity not in actor_scores:
                 actor_scores[entity] = {}
 
-            actor_scores[entity][transition] = stats["drift"]
+            actor_scores[entity][transition] = stats.get("vocabulary_turnover", 0)
 
     overall_scores = {}
 

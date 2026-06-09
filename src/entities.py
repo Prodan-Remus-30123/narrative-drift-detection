@@ -12,6 +12,31 @@ from filters.verb_filters import (SEMANTICALLY_WEAK_VERBS, GENERIC_VERBS)
 
 nlp = spacy.load("en_core_web_sm")
 
+MIN_VERB_LENGTH = 3
+
+
+def is_valid_framing_verb(token):
+    lemma = token.lemma_.lower().strip()
+
+    if token.pos_ != "VERB":
+        return False
+
+    if token.tag_ in {"MD"}:
+        return False
+
+    if not lemma.isalpha():
+        return False
+
+    if len(lemma) < MIN_VERB_LENGTH:
+        return False
+
+    if lemma in GENERIC_VERBS:
+        return False
+
+    if lemma in SEMANTICALLY_WEAK_VERBS:
+        return False
+
+    return True
 
 def analyze_entities(texts):
     """
@@ -89,19 +114,18 @@ def analyze_entities(texts):
 
                 if current.pos_ == "VERB":
 
-                    verb = current.lemma_.lower()
-
-                    if not verb.isalpha():
+                    if not is_valid_framing_verb(current):
                         verb = None
                         break
 
+                    verb = current.lemma_.lower().strip()
                     break
 
             if verb in GENERIC_VERBS:
                 continue
 
-            # if verb in SEMANTICALLY_WEAK_VERBS:
-            #     continue
+            if verb in SEMANTICALLY_WEAK_VERBS:
+                continue
 
             if verb:
                 entity_data[entity]["verbs"][verb] += 1

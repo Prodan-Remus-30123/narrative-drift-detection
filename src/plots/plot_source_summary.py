@@ -8,7 +8,9 @@ def build_source_summary(source, semantic_values, framing_drift, entity_importan
     framing_values = []
     for transition, entities in framing_drift.items():
         for entity, stats in entities.items():
-            framing_values.append(stats["drift"])
+            turnover = stats.get("vocabulary_turnover")
+            if turnover is not None:
+                framing_values.append(turnover)
 
     avg_framing = (sum(framing_values) / len(framing_values)) if framing_values else 0
 
@@ -21,7 +23,7 @@ def build_source_summary(source, semantic_values, framing_drift, entity_importan
 
         "source": source,
         "avg_semantic_drift": round(avg_semantic, 4),
-        "avg_framing_drift": round(avg_framing, 4),
+        "avg_framing_turnover": round(avg_framing, 4),
         "top_actor": top_actor,
         "num_periods": num_periods,
         "num_articles": num_articles,

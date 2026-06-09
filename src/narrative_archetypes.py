@@ -47,27 +47,52 @@ def _mean_abs_delta(frames):
     )
 
 
-def _top_entity_drift(entity_changes):
+def _top_entity_turnover(entity_changes):
     if not entity_changes:
         return 0.0
 
     return max(
-        _safe_float(entity.get("drift", 0.0))
+        _safe_float(
+            entity.get(
+                "vocabulary_turnover",
+                0.0
+            )
+        )
         for entity in entity_changes
     )
 
 
-def _mean_entity_drift(entity_changes):
+def _mean_entity_turnover(entity_changes):
     if not entity_changes:
         return 0.0
 
     return float(
         np.mean([
-            _safe_float(entity.get("drift", 0.0))
+            _safe_float(
+                entity.get(
+                    "vocabulary_turnover",
+                    0.0
+                )
+            )
             for entity in entity_changes
         ])
     )
 
+def _mean_entity_js(entity_changes):
+    if not entity_changes:
+        return 0.0
+
+    values = [
+        _safe_float(
+            entity.get("framing_drift_js", 0.0)
+        )
+        for entity in entity_changes
+    ]
+
+    if not values:
+        return 0.0
+
+    return float(np.mean(values))
 
 def _count_entity_changes(entity_changes):
     return len(entity_changes or [])
@@ -232,11 +257,13 @@ def build_transition_archetype_table(
                         )
                     ),
 
-                "top_entity_drift":
-                    _top_entity_drift(entity_changes),
+                "top_entity_turnover":
+                    _top_entity_turnover(entity_changes),
 
-                "mean_entity_drift":
-                    _mean_entity_drift(entity_changes),
+                "mean_entity_turnover":
+                    _mean_entity_turnover(entity_changes),
+                
+                "mean_entity_js": _mean_entity_js(entity_changes),
 
                 "num_entity_changes":
                     _count_entity_changes(entity_changes),
@@ -274,8 +301,9 @@ ARCHETYPE_FEATURES = [
     "compound_delta",
     "intensity_delta",
     "polarization_delta",
-    "top_entity_drift",
-    "mean_entity_drift",
+    "top_entity_turnover",
+    "mean_entity_turnover",
+    "mean_entity_js",
     "num_entity_changes"
 ]
 
@@ -423,8 +451,10 @@ def summarize_archetypes(
             "mean_frame_movement":
                 float(group["mean_frame_movement"].mean()),
 
-            "mean_entity_drift":
-                float(group["mean_entity_drift"].mean()),
+            "mean_entity_turnover":
+                float(group["mean_entity_turnover"].mean()),
+
+            "mean_entity_js": float(group["mean_entity_js"].mean()),
 
             "mean_compound_delta":
                 float(group["compound_delta"].mean()),
@@ -485,7 +515,8 @@ def print_archetype_summaries(
             "Mean signals: "
             f"semantic={summary['mean_semantic_drift']:.4f}, "
             f"frame_move={summary['mean_frame_movement']:.4f}, "
-            f"entity_drift={summary['mean_entity_drift']:.4f}, "
+            f"entity_turnover={summary['mean_entity_turnover']:.4f}, "
+            f"entity_js={summary['mean_entity_js']:.4f}, "
             f"compound_delta={summary['mean_compound_delta']:.4f}, "
             f"intensity_delta={summary['mean_intensity_delta']:.4f}, "
             f"polarization_delta={summary['mean_polarization_delta']:.4f}"

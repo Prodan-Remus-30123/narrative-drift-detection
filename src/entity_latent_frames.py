@@ -147,7 +147,8 @@ def compute_entity_latent_frame_transitions(source, entity):
             {
                 "transition": result["transition"],
                 "entity": result["entity"],
-                "drift": result["drift"],
+                "vocabulary_turnover": result["vocabulary_turnover"],
+                "shared_similarity": result["shared_similarity"],
                 "drift_class": result["drift_class"],
                 "before_verbs": before_verbs,
                 "after_verbs": after_verbs,
@@ -181,7 +182,17 @@ def main():
     for item in result["latent_frame_transitions"]:
 
         print("\nTransition:", item["transition"])
-        print("Drift:", round(item["drift"], 3))
+        print(
+            "Vocabulary turnover:",
+            round(item["vocabulary_turnover"], 3)
+        )
+
+        print(
+            "Shared similarity:",
+            round(item["shared_similarity"], 3)
+            if item["shared_similarity"] is not None
+            else "N/A"
+        )
         print("Class:", item["drift_class"])
 
         print("\nBefore verbs:")

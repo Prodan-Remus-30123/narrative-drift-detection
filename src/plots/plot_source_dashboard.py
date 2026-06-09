@@ -63,7 +63,8 @@ def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_re
         if len(entities) == 0:
             avg_framing.append(np.nan)
         else:
-            avg = sum(stats["drift"] for stats in entities.values()) / len(entities)
+            turnover_values = [stats.get("vocabulary_turnover") for stats in entities.values() if stats.get("vocabulary_turnover") is not None]
+            avg = sum(turnover_values) / len(turnover_values) if turnover_values else np.nan
             avg_framing.append(avg)
 
     axs[1, 0].plot(
@@ -84,7 +85,7 @@ def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_re
             if entity not in entity_scores:
                 entity_scores[entity] = []
 
-            entity_scores[entity].append(stats["drift"])
+            entity_scores[entity].append(stats.get("vocabulary_turnover", 0))
 
     ranked_entities = sorted(entity_scores.items(), key=lambda x: sum(x[1]) / len(x[1]), reverse=True)[:top_n_entities]
     selected_entities = [entity for entity, _ in ranked_entities]
@@ -96,7 +97,7 @@ def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_re
         for transition in framing_labels:
             value = np.nan
             if entity in framing_drift[transition]:
-                value = framing_drift[transition][entity]["drift"]
+                value = framing_drift[transition][entity].get("vocabulary_turnover", np.nan)
 
             row.append(value)
 

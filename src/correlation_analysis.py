@@ -27,7 +27,8 @@ def compute_average_framing(framing_drift):
             averages.append(None)
             continue
 
-        avg = np.mean([stats["drift"] for stats in entities.values()])
+        turnover_values = [stats.get("vocabulary_turnover") for stats in entities.values() if stats.get("vocabulary_turnover") is not None]
+        avg = np.mean(turnover_values) if turnover_values else None
         averages.append(avg)
 
     return averages

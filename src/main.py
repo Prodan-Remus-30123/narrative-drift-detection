@@ -10,7 +10,6 @@ from changepoints import detect_changepoints
 from entities import analyze_entities
 from interpreter import interpret_shift
 from database import load_full_articles
-from agents.drift_agent import analyze_drift
 
 from entity_framing_drift import compute_entity_drift, compute_entity_importance
 from plots.plot_entity_drift import plot_top_entity_drift
@@ -107,6 +106,8 @@ SKIP_FRAME_LABELING = True
 SKIP_SIGNATURE_COMPARISON = True
 SAVE_ANALYSIS_RESULTS = False
 VERBOSE_ENTITY_DEBUG = False
+SKIP_ENTITY_FRAME_ALIGNMENT = True
+PRINT_SENTIMENT_PERIODS = False
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -344,12 +345,13 @@ def main():
 
             sentiment = analyze_sentiment(grouped[source][period])
             sentiment_results[str(period)] = sentiment
-            print(f"\n{period}")
-            print(f"Compound: " f"{sentiment['compound']:.4f}")
-            print(f"Positive: " f"{sentiment['positive']:.4f}")
-            print(f"Negative: " f"{sentiment['negative']:.4f}")
+            if PRINT_SENTIMENT_PERIODS:
+                print(f"\n{period}")
+                print(f"Compound: " f"{sentiment['compound']:.4f}")
+                print(f"Positive: " f"{sentiment['positive']:.4f}")
+                print(f"Negative: " f"{sentiment['negative']:.4f}")
 
-            print(f"Neutral: " f"{sentiment['neutral']:.4f}")
+                print(f"Neutral: " f"{sentiment['neutral']:.4f}")
         
         if not SKIP_PLOTS:
             plot_sentiment_evolution(sentiment_results, source)
@@ -410,29 +412,42 @@ def main():
             top_n=3,
             sort_by="importance"
         )
-
-        print("\n=== Entity → Latent Frame Alignment ===")
-
-        latent_result = latent_results_by_source.get(source)
-
-        if latent_result is not None:
-            entity_frame_alignment = build_entity_frame_alignment(
-                framing_drift=framing_drift,
-                latent_result=latent_result,
-                semantic_frames=
-                analysis_results[source]["semantic_frames"],
-                top_k=3
-            )
-
-            migration_summary = summarize_entity_frame_migrations(entity_frame_alignment)
-            print_top_entity_frame_migrations(migration_summary, top_n=3)
-            analysis_results[source]["frame_migrations"] = migration_summary
+        if SKIP_ENTITY_FRAME_ALIGNMENT:
+            print("\n=== Entity → Latent Frame Alignment ===")
+            print("Skipped entity-frame alignment.")
+            analysis_results[source]["frame_migrations"] = {}
 
         else:
-            print(
-                f"No latent frame result available for {source}; "
-                "skipping entity-frame alignment."
-            )
+            print("\n=== Entity → Latent Frame Alignment ===")
+
+            latent_result = latent_results_by_source.get(source)
+
+            if latent_result is not None:
+                entity_frame_alignment = build_entity_frame_alignment(
+                    framing_drift=framing_drift,
+                    latent_result=latent_result,
+                    semantic_frames=analysis_results[source]["semantic_frames"],
+                    top_k=3
+                )
+
+                migration_summary = summarize_entity_frame_migrations(
+                    entity_frame_alignment
+                )
+
+                print_top_entity_frame_migrations(
+                    migration_summary,
+                    top_n=3
+                )
+
+                analysis_results[source]["frame_migrations"] = migration_summary
+
+            else:
+                print(
+                    f"No latent frame result available for {source}; "
+                    "skipping entity-frame alignment."
+                )
+
+                analysis_results[source]["frame_migrations"] = {}
 
         change_profile = build_narrative_change_profile(
             analysis_results[source],
@@ -440,12 +455,6 @@ def main():
         )
 
         analysis_results[source]["change_profile"] = change_profile
-
-        print("\n=== CHANGE PROFILE DEBUG ===")
-        print(type(change_profile))
-
-        if isinstance(change_profile, dict):
-            print(change_profile.keys())
 
         print_narrative_change_profile(
             change_profile,
@@ -466,7 +475,7 @@ def main():
 
         behavior = classify_editorial_behavior(
             semantic=summary["avg_semantic_drift"],
-            framing=summary["avg_framing_drift"],
+            framing=summary["avg_framing_turnover"],
             sentiment=summary["avg_sentiment"]
         )
 
@@ -485,7 +494,8 @@ def main():
                 average_framing_values.append(np.nan)
                 continue
 
-            avg = sum(stats["drift"] for stats in entities.values()) / len(entities)
+            turnover_values = [stats.get("vocabulary_turnover") for stats in entities.values() if stats.get("vocabulary_turnover") is not None]
+            avg = sum(turnover_values) / len(turnover_values) if turnover_values else np.nan
 
             average_framing_values.append(avg)
         if not SKIP_PLOTS:
@@ -668,6 +678,10 @@ def main():
     print("\n=== SOURCE SUMMARY ===")
 
     print(summary_df)
+    analysis_results["__evidence_packets__"] = (evidence_packets)
+    analysis_results["__narrative_signatures__"] = (narrative_signatures)
+    analysis_results["__source_summary__"] = (summary_df.to_dict("records"))
+    analysis_results["__archetypes__"] = archetype_results
 
     if SAVE_ANALYSIS_RESULTS:
         import json
