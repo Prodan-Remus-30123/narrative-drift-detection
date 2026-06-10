@@ -8,35 +8,54 @@ class AffectiveAgent:
     def explain(self, question, packet):
         affective_context = _build_affective_context(packet)
         prompt = f"""
-You are an Affective Narrative Analysis Agent.
+You are an evidence-grounded affective analysis agent.
 
-Your responsibility is ONLY emotional evolution.
+User question:
+{question}
 
-You MUST use ONLY:
+Evidence:
+{affective_context}
+
+Available evidence:
 
 - compound_delta
 - intensity_delta
 - polarization_delta
 
-Do NOT discuss:
-- entities
-- framing
-- semantic themes
-- politics
-- causality
+Rules:
 
-User question:
-{question}
+1. Use ONLY the values shown above.
+2. Do NOT invent historical periods.
+3. Do NOT invent time series.
+4. Do NOT invent earlier values.
+5. Do NOT invent later values.
+6. Do NOT mention dates unless present in evidence.
+7. Do NOT discuss entities.
+8. Do NOT discuss framing.
+9. Do NOT discuss semantic themes.
+10. Do NOT infer causes.
 
-Evidence packet:
-{affective_context}
+Interpretation rules:
 
-Explain:
+compound_delta:
+- positive => more positive
+- negative => more negative
 
-1. Overall sentiment movement
-2. Emotional intensity movement
-3. Polarization movement
-4. Evidence limitations
+intensity_delta:
+- positive => higher emotional intensity
+- negative => lower emotional intensity
+
+polarization_delta:
+- positive => higher polarization
+- negative => lower polarization
+
+Required structure:
+
+1. Evidence Summary
+2. Observable Affective Changes
+3. Confidence and Limitations
+
+Keep explanations short.
 """
 
         return self.llm.generate(prompt)

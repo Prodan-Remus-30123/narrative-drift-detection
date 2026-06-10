@@ -18,7 +18,7 @@ MIN_VERB_COUNT = 3
 TOP_K_VERBS = 30
 MIN_SHARED_VERBS = 2
 MIN_VERB_LENGTH = 3
-MIN_GLOBAL_VERB_DF = 2
+MIN_GLOBAL_VERB_COUNT = 10
 
 def is_valid_verb(verb):
     if not isinstance(verb, str):
@@ -67,8 +67,8 @@ def build_entity_vectors(grouped_texts):
 
 def compute_verb_document_frequency(period_vectors):
     verb_df = defaultdict(int)
+    verb_global_count = defaultdict(int)
     total_entity_vectors = 0
-    
 
     for period, entity_vectors in period_vectors.items():
 
@@ -76,14 +76,16 @@ def compute_verb_document_frequency(period_vectors):
 
             total_entity_vectors += 1
 
-            for verb in verb_vector.keys():
+            for verb, count in verb_vector.items():
                 verb_df[verb] += 1
+                verb_global_count[verb] += count
 
-    return verb_df, total_entity_vectors
+    return verb_df, verb_global_count, total_entity_vectors
 
 def weight_entity_vectors(
     period_vectors,
     verb_df,
+    verb_global_count,
     total_entity_vectors
 ):
 
@@ -100,7 +102,7 @@ def weight_entity_vectors(
 
             for verb, count in verb_vector.items():
 
-                if verb_df[verb] < MIN_GLOBAL_VERB_DF:
+                if verb_global_count[verb] < MIN_GLOBAL_VERB_COUNT:
                     continue
 
                 idf = math.log(
@@ -263,13 +265,27 @@ def compute_entity_drift(grouped_texts):
     period_vectors = build_entity_vectors(grouped_texts)
     raw_period_vectors = period_vectors
 
-    verb_df, total_entity_vectors = compute_verb_document_frequency(
+    verb_df, verb_global_count, total_entity_vectors = compute_verb_document_frequency(
         period_vectors
+    )
+
+    print("\n=== GLOBAL VERB FILTER ===")
+
+    kept = sum(
+        1
+        for count in verb_global_count.values()
+        if count >= MIN_GLOBAL_VERB_COUNT
+    )
+
+    print(
+        f"Kept verbs: {kept} / "
+        f"{len(verb_global_count)}"
     )
 
     period_vectors = weight_entity_vectors(
         period_vectors,
         verb_df,
+        verb_global_count,
         total_entity_vectors
     )
 
@@ -424,9 +440,9 @@ def main():
     grouped = group_articles_by_period(df)
 
     period_vectors = build_entity_vectors(grouped)
-    verb_df, total_entity_vectors = compute_verb_document_frequency(period_vectors)
+    verb_df, verb_global_count, total_entity_vectors = compute_verb_document_frequency(period_vectors)
 
-    period_vectors = weight_entity_vectors(period_vectors, verb_df, total_entity_vectors)
+    period_vectors = weight_entity_vectors(period_vectors, verb_df, verb_global_count, total_entity_vectors)
     compare_periods(period_vectors) 
 
 if __name__ == "__main__":

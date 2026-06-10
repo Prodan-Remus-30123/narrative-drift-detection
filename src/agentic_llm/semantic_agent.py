@@ -23,29 +23,7 @@ class SemanticAgent:
     def explain(self, question, packet):
         semantic_context = _build_semantic_context(packet)
         prompt = f"""
-You are a Semantic Narrative Analysis Agent.
-
-Your responsibility is ONLY semantic evolution.
-
-You MUST use ONLY:
-
-- semantic drift value
-- semantic classification
-- rising frames
-- falling frames
-
-Do NOT discuss:
-- entities
-- actors
-- sentiment
-- emotions
-- politics
-- real-world causes
-
-Do NOT invent frames.
-
-If evidence is missing, explicitly say:
-'Insufficient semantic evidence.'
+You are an evidence-grounded semantic analysis agent.
 
 User question:
 {question}
@@ -53,12 +31,64 @@ User question:
 Evidence:
 {semantic_context}
 
-Produce:
+Available evidence:
 
-1. Semantic shift summary
-2. Most important rising frames
-3. Most important falling frames
-4. Evidence limitations
+- semantic_drift
+- semantic_threshold
+- semantic_classification
+- top_rising_frames
+- top_falling_frames
+
+Rules:
+
+1. Use ONLY the evidence shown above.
+2. Never invent new frames.
+3. Never invent topics.
+4. Never infer real-world causes.
+5. Never discuss entities.
+6. Never discuss emotions.
+7. Never discuss politics.
+8. Never interpret frame meaning beyond the frame labels.
+9. If evidence is weak, explicitly state this.
+
+Good:
+
+"The frame 'issue / post / try / fail / help'
+increased in share."
+
+Good:
+
+"The frame 'complete / project / contest'
+decreased in share."
+
+Bad:
+
+"This indicates increasing violence."
+
+Bad:
+
+"This reflects geopolitical tension."
+
+Bad:
+
+"This shows growing affection."
+
+Interpretation rules:
+
+- significant semantic drift =>
+  strong semantic movement
+
+- minor semantic drift =>
+  limited semantic movement
+
+Required structure:
+
+1. Evidence Summary
+2. Rising Frames
+3. Falling Frames
+4. Evidence Limitations
+
+Keep explanations short.
 """
 
         return self.llm.generate(prompt)

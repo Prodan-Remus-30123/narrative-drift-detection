@@ -9,34 +9,59 @@ from collections import defaultdict, Counter
 from entity_normalization import (normalize_entity)
 from filters.entity_filters import (ENTITY_BLACKLIST)
 from filters.verb_filters import (SEMANTICALLY_WEAK_VERBS, GENERIC_VERBS)
+import json
+from pathlib import Path
 
 nlp = spacy.load("en_core_web_sm")
 
 MIN_VERB_LENGTH = 3
 
+LEMMA_CORRECTIONS_PATH = Path(__file__).parent / "lemma_corrections.json"
 
-def is_valid_framing_verb(token):
+
+def load_lemma_corrections():
+    if not LEMMA_CORRECTIONS_PATH.exists():
+        return {}
+
+    with open(LEMMA_CORRECTIONS_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    return {
+        key: value
+        for key, value in data.items()
+        if value is not None
+    }
+
+
+LEMMA_CORRECTIONS = load_lemma_corrections()
+
+def get_valid_framing_lemma(token):
     lemma = token.lemma_.lower().strip()
 
+    lemma = LEMMA_CORRECTIONS.get(
+        lemma,
+        lemma
+    )
+
     if token.pos_ != "VERB":
-        return False
+        return None
 
     if token.tag_ in {"MD"}:
-        return False
+        return None
 
     if not lemma.isalpha():
-        return False
+        return None
 
     if len(lemma) < MIN_VERB_LENGTH:
-        return False
+        return None
 
     if lemma in GENERIC_VERBS:
-        return False
+        return None
 
     if lemma in SEMANTICALLY_WEAK_VERBS:
-        return False
+        return None
 
-    return True
+    return lemma
 
 def analyze_entities(texts):
     """
@@ -114,11 +139,11 @@ def analyze_entities(texts):
 
                 if current.pos_ == "VERB":
 
-                    if not is_valid_framing_verb(current):
-                        verb = None
+                    verb = get_valid_framing_lemma(current)
+
+                    if verb is None:
                         break
 
-                    verb = current.lemma_.lower().strip()
                     break
 
             if verb in GENERIC_VERBS:

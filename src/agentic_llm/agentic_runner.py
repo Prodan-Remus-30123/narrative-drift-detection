@@ -26,6 +26,10 @@ class AgenticNarrativeRunner:
             packet=packet
         )
 
+        print("\n=== PLANNER DECISION ===")
+        print("Question:", question)
+        print("Selected agents:", selected_agents)
+
         specialist_outputs = {}
 
         if "semantic" in selected_agents:

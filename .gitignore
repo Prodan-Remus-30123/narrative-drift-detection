@@ -59,4 +59,5 @@ settings.json
 analysis_results.json
 
 *.doc
+*.docx
 *.md

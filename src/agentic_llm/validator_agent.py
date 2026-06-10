@@ -101,6 +101,31 @@ class ValidatorAgent:
                 specialist_outputs.values()
             )
 
+            causal_phrases = [
+                "because",
+                "caused by",
+                "led to",
+                "resulted in",
+                "due to",
+                "therefore",
+                "as a result"
+            ]
+
+            found_causal = []
+
+            text_lower = combined_text.lower()
+
+            for phrase in causal_phrases:
+
+                if phrase in text_lower:
+                    found_causal.append(phrase)
+
+            if found_causal:
+                warnings.append(
+                    "Possible unsupported causal claims: "
+                    + ", ".join(found_causal)
+                )
+
             words = re.findall(
                 r"[A-Z][A-Za-z\\-]+(?:\\s+[A-Z][A-Za-z\\-]+)*",
                 combined_text
