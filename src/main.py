@@ -6,7 +6,6 @@ from preprocessing import preprocess_corpus
 from embeddings import EmbeddingModel
 from drift import (compute_cosine_drift, compute_dynamic_threshold, classify_drift)
 from plots.plot_semantic_comparison_across_sources import plot_multiple_sources
-from changepoints import detect_changepoints
 from entities import analyze_entities
 from interpreter import interpret_shift
 from database import load_full_articles
@@ -90,6 +89,13 @@ from agentic_explainers.explanation_runner import (
     print_explanations
 )
 
+from change_point_detection import (
+    detect_source_change_points,
+    detect_embedding_change_points,
+    detect_monthly_semantic_change_points,
+    print_change_point_summary
+)
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
@@ -108,6 +114,13 @@ SAVE_ANALYSIS_RESULTS = False
 VERBOSE_ENTITY_DEBUG = False
 SKIP_ENTITY_FRAME_ALIGNMENT = True
 PRINT_SENTIMENT_PERIODS = False
+SKIP_CHANGE_POINT_DETECTION = False
+SKIP_EVIDENCE_PACKETS = True
+SKIP_AGENTIC_EXPLANATIONS = True
+SKIP_NARRATIVE_SIGNATURES = False
+SKIP_ARCHETYPES = False
+SKIP_CROSS_LAYER_CORRELATION = False
+SKIP_CHANGE_PROFILE_PRINT = True
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -204,7 +217,7 @@ def main():
             #         f"share={point['share']:.3f}, "
             #         f"count={point['count']:.2f}"
             #     )
-
+        
     #  Embeddings
     model = get_embedding_model()
 
@@ -230,11 +243,27 @@ def main():
 
             aggregated_vectors.append((month, vec))
 
+
         drift_values = []
         drift_labels = []
 
         print(f"\nSource: {source}")
         analysis_results[source] = {}
+
+        embedding_labels = [
+            str(month)
+            for month, vec in aggregated_vectors
+        ]
+
+        embedding_vectors = [
+            vec
+            for month, vec in aggregated_vectors
+        ]
+
+        analysis_results[source]["semantic_embedding_trajectory"] = {
+            "labels": embedding_labels,
+            "vectors": embedding_vectors
+        }
 
         print("\n=== Temporal Frame Evolution ===")
 
@@ -388,6 +417,37 @@ def main():
 
         analysis_results[source]["entity_ecosystem"] = entity_ecosystem
 
+        # ==========================================
+        # CHANGE POINT DETECTION
+        # ==========================================
+
+        if not SKIP_CHANGE_POINT_DETECTION:
+            print("\n=== RUNNING CHANGE POINT DETECTION ===")
+
+            change_points = detect_source_change_points(
+                analysis_results[source]
+            )
+
+            embedding_change_points = detect_embedding_change_points(
+                vectors=embedding_vectors,
+                labels=embedding_labels,
+                model="rbf",
+                penalty=3.0
+            )
+
+            change_points["semantic_embedding_trajectory"] = embedding_change_points
+
+            analysis_results[source]["change_points"] = change_points
+
+            print_change_point_summary(
+                source,
+                change_points
+            )
+
+        else:
+            analysis_results[source]["change_points"] = {}
+
+
         if VERBOSE_ENTITY_DEBUG:
             print("\nENTITY DRIFT DEBUG")
 
@@ -456,10 +516,11 @@ def main():
 
         analysis_results[source]["change_profile"] = change_profile
 
-        print_narrative_change_profile(
-            change_profile,
-            top_n=3
-        )
+        if not SKIP_CHANGE_PROFILE_PRINT:
+            print_narrative_change_profile(
+                change_profile,
+                top_n=3
+            )
 
         summary = build_source_summary(
             source= source,
@@ -597,64 +658,86 @@ def main():
     if not SKIP_PLOTS:
         plot_multiple_sources(source_results)
 
-    print("\n=== NARRATIVE SIGNATURES ===")
-    narrative_signatures = build_all_narrative_signatures(
-        analysis_results
-    )
+    if not SKIP_NARRATIVE_SIGNATURES:
+        print("\n=== NARRATIVE SIGNATURES ===")
 
-    for signature in narrative_signatures:
-        print_narrative_signature(signature)
-
-    signature_df = pd.DataFrame(narrative_signatures)
-
-    print("\n=== NARRATIVE SIGNATURE TABLE ===")
-    print(signature_df)
-
-    evidence_packets = build_all_evidence_packets(
-        analysis_results,
-        top_n=3
-    )
-
-    print_evidence_packet_summary(
-        evidence_packets,
-        max_packets=5
-    )
-
-    agentic_explanations = explain_packets(
-        evidence_packets,
-        max_packets=5
-    )
-
-    print_explanations(
-        agentic_explanations
-    )
-
-
-    print("\n=== NARRATIVE ARCHETYPES ===")
-
-    archetype_table = build_transition_archetype_table(
-        analysis_results
-    )
-
-    archetype_table, archetype_summaries, silhouette_scores = (
-        discover_narrative_archetypes(
-            archetype_table,
-            n_clusters=None
+        narrative_signatures = build_all_narrative_signatures(
+            analysis_results
         )
-    )
 
-    print("\nSilhouette scores by k:")
-    print(silhouette_scores)
+        for signature in narrative_signatures:
+            print_narrative_signature(signature)
 
-    print_archetype_summaries(
-        archetype_summaries
-    )
+        signature_df = pd.DataFrame(narrative_signatures)
 
-    archetype_results = {
-        "table": archetype_table.to_dict("records"),
-        "summaries": archetype_summaries,
-        "silhouette_scores": silhouette_scores
-    }
+        print("\n=== NARRATIVE SIGNATURE TABLE ===")
+        print(signature_df)
+
+    else:
+        narrative_signatures = []
+        signature_df = pd.DataFrame()
+
+    if not SKIP_EVIDENCE_PACKETS:
+        print("\n=== EVIDENCE PACKETS ===")
+
+        evidence_packets = build_all_evidence_packets(
+            analysis_results,
+            top_n=3
+        )
+
+        print_evidence_packet_summary(
+            evidence_packets,
+            max_packets=5
+        )
+
+    else:
+        evidence_packets = []
+
+    if not SKIP_AGENTIC_EXPLANATIONS:
+        print("\n=== AGENTIC NARRATIVE EXPLANATIONS ===")
+
+        agentic_explanations = explain_packets(
+            evidence_packets,
+            max_packets=5
+        )
+
+        print_explanations(
+            agentic_explanations
+        )
+
+    else:
+        agentic_explanations = []
+
+
+    if not SKIP_ARCHETYPES:
+        print("\n=== NARRATIVE ARCHETYPES ===")
+
+        archetype_table = build_transition_archetype_table(
+            analysis_results
+        )
+
+        archetype_table, archetype_summaries, silhouette_scores = (
+            discover_narrative_archetypes(
+                archetype_table,
+                n_clusters=None
+            )
+        )
+
+        print("\nSilhouette scores by k:")
+        print(silhouette_scores)
+
+        print_archetype_summaries(
+            archetype_summaries
+        )
+
+        archetype_results = {
+            "table": archetype_table.to_dict("records"),
+            "summaries": archetype_summaries,
+            "silhouette_scores": silhouette_scores
+        }
+
+    else:
+        archetype_results = {}
 
     if not SKIP_SIGNATURE_COMPARISON:
         similarity_matrix, sources = compute_signature_similarity(

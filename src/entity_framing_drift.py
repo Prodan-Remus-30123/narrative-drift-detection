@@ -269,7 +269,7 @@ def compute_entity_drift(grouped_texts):
         period_vectors
     )
 
-    print("\n=== GLOBAL VERB FILTER ===")
+    # print("\n=== GLOBAL VERB FILTER ===")
 
     kept = sum(
         1
@@ -277,10 +277,10 @@ def compute_entity_drift(grouped_texts):
         if count >= MIN_GLOBAL_VERB_COUNT
     )
 
-    print(
-        f"Kept verbs: {kept} / "
-        f"{len(verb_global_count)}"
-    )
+    # print(
+    #     f"Kept verbs: {kept} / "
+    #     f"{len(verb_global_count)}"
+    # )
 
     period_vectors = weight_entity_vectors(
         period_vectors,
@@ -327,11 +327,11 @@ def compute_entity_drift(grouped_texts):
             vectors_b.keys()
         )
 
-        print(
-            f"{transition} "
-            f"shared entities: "
-            f"{len(shared_entities)}"
-        )
+        # print(
+        #     f"{transition} "
+        #     f"shared entities: "
+        #     f"{len(shared_entities)}"
+        # )
 
         for entity in shared_entities:
             before_verbs = set(vectors_a[entity].keys())
