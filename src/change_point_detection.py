@@ -328,7 +328,7 @@ def detect_monthly_semantic_change_points(
     labels=None,
     n_components=3,
     model="rbf",
-    penalty=1.0
+    penalty=0.5
 ):
     """
     Detects semantic regime shifts on monthly SBERT embedding trajectories.

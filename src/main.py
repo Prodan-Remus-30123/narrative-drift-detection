@@ -183,6 +183,28 @@ def main():
 
         grouped[source] = (group_articles_by_period(source_df))
 
+    monthly_grouped = {}
+
+    df_monthly = df.copy()
+    df_monthly["date"] = pd.to_datetime(
+        df_monthly["date"],
+        format="mixed",
+        utc=True
+    )
+    df_monthly["date"] = df_monthly["date"].dt.tz_localize(None)
+    df_monthly["month"] = df_monthly["date"].dt.to_period("M").astype(str)
+
+    for source in df_monthly["source"].unique():
+        source_df = df_monthly[df_monthly["source"] == source]
+
+        monthly_grouped[source] = {}
+
+        for month, rows in source_df.groupby("month"):
+            texts = rows["text"].dropna().tolist()
+
+            if len(texts) >= 20:
+                monthly_grouped[source][month] = texts
+
     print("\n=== GROUPED DATA ===")
 
     source_summaries = []
@@ -217,6 +239,15 @@ def main():
             #         f"share={point['share']:.3f}, "
             #         f"count={point['count']:.2f}"
             #     )
+    
+    for source in monthly_grouped:
+        if DEBUG_SOURCES is not None and source not in DEBUG_SOURCES:
+            continue
+
+        for month in sorted(monthly_grouped[source].keys()):
+            monthly_grouped[source][month] = preprocess_corpus(
+                monthly_grouped[source][month]
+            )
         
     #  Embeddings
     model = get_embedding_model()
@@ -249,6 +280,27 @@ def main():
 
         print(f"\nSource: {source}")
         analysis_results[source] = {}
+
+        monthly_embedding_labels = []
+        monthly_embedding_vectors = []
+
+        if source in monthly_grouped:
+            for month in sorted(monthly_grouped[source].keys()):
+                monthly_embeddings = model.encode_documents(
+                    monthly_grouped[source][month]
+                )
+
+                monthly_vec = model.aggregate_embeddings(
+                    monthly_embeddings
+                )
+
+                monthly_embedding_labels.append(month)
+                monthly_embedding_vectors.append(monthly_vec)
+
+        analysis_results[source]["monthly_semantic_embedding_trajectory"] = {
+            "labels": monthly_embedding_labels,
+            "vectors": monthly_embedding_vectors
+        }
 
         embedding_labels = [
             str(month)
@@ -436,7 +488,17 @@ def main():
             )
 
             change_points["semantic_embedding_trajectory"] = embedding_change_points
+            monthly_embedding_change_points = detect_monthly_semantic_change_points(
+                monthly_vectors=monthly_embedding_vectors,
+                labels=monthly_embedding_labels,
+                n_components=3,
+                model="rbf",
+                penalty=0.75
+            )
 
+            change_points["monthly_semantic_embedding_trajectory"] = (
+                monthly_embedding_change_points
+            )
             analysis_results[source]["change_points"] = change_points
 
             print_change_point_summary(
