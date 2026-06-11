@@ -96,6 +96,11 @@ from change_point_detection import (
     print_change_point_summary
 )
 
+from temporal_narrative_regimes import (
+    summarize_temporal_regimes,
+    print_temporal_regime_summary
+)
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
@@ -121,6 +126,7 @@ SKIP_NARRATIVE_SIGNATURES = False
 SKIP_ARCHETYPES = False
 SKIP_CROSS_LAYER_CORRELATION = False
 SKIP_CHANGE_PROFILE_PRINT = True
+SKIP_TEMPORAL_NARRATIVE_REGIMES = False
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -216,7 +222,7 @@ def main():
         total_docs = sum( len(grouped[source][period]) for period in grouped[source])
 
         if total_docs < 50:
-            print(f"\nSkipping {source}: insufficient documents ({total_docs})")
+            # print(f"\nSkipping {source}: insufficient documents ({total_docs})")
             continue
 
         print(f"\nSource: {source}")
@@ -262,7 +268,7 @@ def main():
             continue
         total_docs = sum(len(grouped[source][period]) for period in grouped[source])
         if total_docs < 50:
-            print(f"\nSkipping {source}: insufficient documents ({total_docs})")
+            #   print(f"\nSkipping {source}: insufficient documents ({total_docs})")
             continue
 
         aggregated_vectors = []
@@ -583,6 +589,21 @@ def main():
                 change_profile,
                 top_n=3
             )
+
+        if not SKIP_TEMPORAL_NARRATIVE_REGIMES:
+            temporal_regimes = summarize_temporal_regimes(
+                analysis_results[source],
+                top_n=5
+            )
+
+            analysis_results[source]["temporal_narrative_regimes"] = temporal_regimes
+
+            print_temporal_regime_summary(
+                temporal_regimes
+            )
+
+        else:
+            analysis_results[source]["temporal_narrative_regimes"] = {}
 
         summary = build_source_summary(
             source= source,
