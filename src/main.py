@@ -101,6 +101,11 @@ from temporal_narrative_regimes import (
     print_temporal_regime_summary
 )
 
+from cross_source_divergence import (
+    compute_cross_source_divergence,
+    print_cross_source_divergence_summary
+)
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
@@ -108,9 +113,9 @@ from temporal_narrative_regimes import (
 FAST_MODE = False
 
 # DEBUG_SOURCES = None
-DEBUG_SOURCES = {"bbc.co.uk"}
+# DEBUG_SOURCES = {"bbc.co.uk"}
 # DEBUG_SOURCES = {"cnn.com"}
-# DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
+DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
 
 SKIP_PLOTS = True
 SKIP_FRAME_LABELING = True
@@ -127,6 +132,7 @@ SKIP_ARCHETYPES = False
 SKIP_CROSS_LAYER_CORRELATION = False
 SKIP_CHANGE_PROFILE_PRINT = True
 SKIP_TEMPORAL_NARRATIVE_REGIMES = False
+SKIP_CROSS_SOURCE_DIVERGENCE = False
 
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
@@ -442,6 +448,9 @@ def main():
         
         if not SKIP_PLOTS:
             plot_sentiment_evolution(sentiment_results, source)
+
+        
+
         analysis_results[source]["sentiment"] = sentiment_results
 
         affective_result = compute_affective_dynamics(
@@ -533,7 +542,7 @@ def main():
             entity_ecosystem
         )
 
-        print(ecosystem_summary)
+        # print(ecosystem_summary)
 
         print_top_dynamic_entities(
             entity_ecosystem,
@@ -736,6 +745,18 @@ def main():
         # change_points = detect_changepoints(drift_values)
         # print(f"Detected change points: {change_points}")
 
+    if not SKIP_CROSS_SOURCE_DIVERGENCE:
+        cross_source_divergence = compute_cross_source_divergence(
+                analysis_results
+            )
+
+        print_cross_source_divergence_summary(
+                cross_source_divergence,
+                top_n=10
+            )
+
+    else:
+        cross_source_divergence = {}
 
     #  Plot drift signal
     if not SKIP_PLOTS:
@@ -848,6 +869,7 @@ def main():
     analysis_results["__narrative_signatures__"] = (narrative_signatures)
     analysis_results["__source_summary__"] = (summary_df.to_dict("records"))
     analysis_results["__archetypes__"] = archetype_results
+    analysis_results["__cross_source_divergence__"] = cross_source_divergence
 
     if SAVE_ANALYSIS_RESULTS:
         import json
