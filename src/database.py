@@ -58,18 +58,23 @@ def initialize_database():
 
 def load_full_articles():
     """
-    Load articles with full extracted text.
+    Load articles with full extracted text and metadata.
     """
 
     conn = get_connection()
 
     query = """
     SELECT
+        provider,
         source,
         date,
+        title,
+        url,
         text
     FROM articles
     WHERE ingestion_status='full_text'
+    AND text IS NOT NULL
+    AND TRIM(text) != ''
     """
 
     df = pd.read_sql_query(query, conn)

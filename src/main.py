@@ -106,6 +106,18 @@ from cross_source_divergence import (
     print_cross_source_divergence_summary
 )
 
+from confidence_scoring import (
+    compute_confidence_score,
+    print_confidence_score
+)
+
+from evidence_retrieval import (
+    build_representative_evidence_for_source,
+    compute_evidence_score,
+    print_representative_evidence_summary
+)
+
+
 # ==========================================
 # DEBUG / EXECUTION MODES
 # ==========================================
@@ -113,9 +125,9 @@ from cross_source_divergence import (
 FAST_MODE = False
 
 # DEBUG_SOURCES = None
-# DEBUG_SOURCES = {"bbc.co.uk"}
+DEBUG_SOURCES = {"bbc.co.uk"}
 # DEBUG_SOURCES = {"cnn.com"}
-DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
+# DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
 
 SKIP_PLOTS = True
 SKIP_FRAME_LABELING = True
@@ -133,7 +145,12 @@ SKIP_CROSS_LAYER_CORRELATION = False
 SKIP_CHANGE_PROFILE_PRINT = True
 SKIP_TEMPORAL_NARRATIVE_REGIMES = False
 SKIP_CROSS_SOURCE_DIVERGENCE = False
+SKIP_CONFIDENCE_SCORING = False
 
+SKIP_REPRESENTATIVE_EVIDENCE_RETRIEVAL = False
+MAX_EVIDENCE_TRANSITIONS = 5
+EVIDENCE_ARTICLES_PER_PERIOD = 2
+MAX_ARTICLES_PER_EVIDENCE_PERIOD = 300
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
 #     df["date"] = df["date"].dt.tz_localize(None)
@@ -613,6 +630,49 @@ def main():
 
         else:
             analysis_results[source]["temporal_narrative_regimes"] = {}
+        
+        if not SKIP_CONFIDENCE_SCORING:
+            confidence = compute_confidence_score(
+                analysis_results[source]
+            )
+
+            analysis_results[source]["confidence"] = confidence
+
+            print_confidence_score(
+                source,
+                confidence
+            )
+
+        else:
+            analysis_results[source]["confidence"] = {}
+
+        if not SKIP_REPRESENTATIVE_EVIDENCE_RETRIEVAL:
+            representative_evidence = build_representative_evidence_for_source(
+                df=df,
+                source=source,
+                source_result=analysis_results[source],
+                model=model,
+                top_transitions=MAX_EVIDENCE_TRANSITIONS,
+                articles_per_period=EVIDENCE_ARTICLES_PER_PERIOD,
+                max_articles_per_period=MAX_ARTICLES_PER_EVIDENCE_PERIOD
+            )
+
+            evidence_score = compute_evidence_score(
+                representative_evidence
+            )
+
+            analysis_results[source]["representative_evidence"] = representative_evidence
+            analysis_results[source]["evidence_score"] = evidence_score
+
+            print_representative_evidence_summary(
+                representative_evidence,
+                evidence_score=evidence_score,
+                max_transitions=3
+            )
+
+        else:
+            analysis_results[source]["representative_evidence"] = {}
+            analysis_results[source]["evidence_score"] = {}
 
         summary = build_source_summary(
             source= source,

@@ -182,54 +182,54 @@ def summarize_temporal_regimes(source_result, top_n=5):
                 transitions.append(label)
                 drift_values.append(value)
 
-                for transition_data in frame_transitions:
-                    transition = transition_data.get(
-                        "transition"
-                    )
+        for transition_data in frame_transitions:
+            transition = transition_data.get(
+                "transition"
+            )
 
-                    assigned_regime = _find_regime_for_transition(
-                        transition,
-                        regimes
-                    )
+            assigned_regime = _find_regime_for_transition(
+                transition,
+                regimes
+            )
 
-                    if assigned_regime != regime_id:
-                        continue
+            if assigned_regime != regime_id:
+                continue
 
-                    for frame in transition_data.get(
-                        "increasing_frames",
-                        []
-                    )[:top_n]:
+            for frame in transition_data.get(
+                "increasing_frames",
+                []
+            )[:top_n]:
 
-                        label = frame.get("frame_label")
+                label = frame.get("frame_label")
 
-                        if label:
-                            rising_frames[label] += 1
+                if label:
+                    rising_frames[label] += 1
 
-                    for frame in transition_data.get(
-                        "decreasing_frames",
-                        []
-                    )[:top_n]:
+            for frame in transition_data.get(
+                "decreasing_frames",
+                []
+            )[:top_n]:
 
-                        label = frame.get("frame_label")
+                label = frame.get("frame_label")
 
-                        if label:
-                            falling_frames[label] += 1
+                if label:
+                    falling_frames[label] += 1
 
-                    entity_data = entity_transitions.get(
-                        transition
-                    )
+            entity_data = entity_transitions.get(
+                transition
+            )
 
-                    if entity_data:
+            if entity_data:
 
-                        for item in entity_data.get(
-                            "top_entity_changes",
-                            []
-                        )[:top_n]:
+                for item in entity_data.get(
+                    "top_entity_changes",
+                    []
+                )[:top_n]:
 
-                            entity = item.get("entity")
+                    entity = item.get("entity")
 
-                            if entity:
-                                entities[entity] += 1
+                    if entity:
+                        entities[entity] += 1
 
         for item in affective_trajectory:
             transition = (
@@ -243,9 +243,9 @@ def summarize_temporal_regimes(source_result, top_n=5):
             if assigned_regime != regime_id:
                 continue
 
-            compound_deltas.append(item.get("compound_delta", 0.0))
-            intensity_deltas.append(item.get("intensity_delta", 0.0))
-            polarization_deltas.append(item.get("polarization_delta", 0.0))
+            compound_deltas.append(item.get("compound", 0.0))
+            intensity_deltas.append(item.get("narrative_intensity", 0.0))
+            polarization_deltas.append(item.get("polarization", 0.0))
 
         summary = {
             **regime,
@@ -310,7 +310,7 @@ def print_temporal_regime_summary(regime_result):
         )
 
         print(
-            "Affective mean deltas: "
+            "Affective means: "
             f"compound={regime['mean_compound_delta']:.4f}, "
             f"intensity={regime['mean_intensity_delta']:.4f}, "
             f"polarization={regime['mean_polarization_delta']:.4f}"
