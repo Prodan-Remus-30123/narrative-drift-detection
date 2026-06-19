@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 from utils.period_sorting import (sort_period_key)
+from utils.plot_saving import save_plot
 
-def plot_sentiment_evolution(sentiment_results, source):
+def plot_sentiment_evolution(sentiment_results, source, output_dir = None):
 
     periods = sorted(sentiment_results.keys(), key=sort_period_key)
 
@@ -41,4 +42,11 @@ def plot_sentiment_evolution(sentiment_results, source):
 
     plt.tight_layout()
 
-    plt.show()
+    if output_dir:
+        save_plot(
+            output_dir,
+            plot_name=f"{source}_sentiment_evolution",
+            source=source
+        )
+    else:
+        plt.close()

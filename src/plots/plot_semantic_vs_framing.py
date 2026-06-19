@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from utils.plot_saving import save_plot
 
-def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, source):
+def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, source, output_dir = None):
 
     semantic_values = np.array(semantic_values, dtype=float)
     framing_values = np.array(framing_values, dtype=float)
@@ -38,4 +39,11 @@ def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, s
 
     plt.tight_layout()
 
-    plt.show()
+    if output_dir:
+        save_plot(
+            output_dir,
+            plot_name=f"{source}_semantic_vs_framing_drift",
+            source=source
+        )
+    else:
+        plt.close()

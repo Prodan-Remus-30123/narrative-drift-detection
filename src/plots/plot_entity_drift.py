@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
+from utils.plot_saving import save_plot
 
-
-def plot_top_entity_drift(drift_results, top_n=10):
+def plot_top_entity_drift(drift_results, source, top_n=10, output_dir = None):
     averaged = {}
 
     for transition in drift_results:
@@ -32,4 +32,11 @@ def plot_top_entity_drift(drift_results, top_n=10):
 
     plt.tight_layout()
 
-    plt.show()
+    if output_dir:
+        save_plot(
+            output_dir,
+            plot_name=f"{source}_top_entity_framing_drift",
+            source=source
+        )
+    else:
+        plt.close()

@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from utils.period_sorting import sort_period_key
+from utils.plot_saving import save_plot
 
-
-def plot_actor_salience(salience_results, top_n=5):
+def plot_actor_salience(salience_results, source, top_n=5, output_dir = None):
     actor_totals = {}
     for period, entities in salience_results.items():
         for entity, score in entities.items():
@@ -34,4 +34,12 @@ def plot_actor_salience(salience_results, top_n=5):
     plt.xticks(rotation=45)
     plt.legend()
     plt.tight_layout()
-    plt.show()
+    
+    if output_dir:
+        save_plot(
+            output_dir,
+            plot_name=f"{source}_actor_salience_evolution",
+            source=source
+        )
+    else:
+        plt.close()

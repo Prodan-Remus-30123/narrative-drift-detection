@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from utils.plot_saving import save_plot
 
-
-def plot_entity_heatmap(framing_drift, top_n=15, min_transitions=1, title="Entity Framing Drift Heatmap"):
+def plot_entity_heatmap(framing_drift, source, top_n=15, min_transitions=1, title="Entity Framing Drift Heatmap", output_dir = None):
     """
     Plots entity-level framing drift across temporal transitions.
 
@@ -67,6 +67,15 @@ def plot_entity_heatmap(framing_drift, top_n=15, min_transitions=1, title="Entit
     plt.ylabel("Entity")
 
     plt.tight_layout()
-    plt.show()
+    
+
+    if output_dir:
+        save_plot(
+            output_dir,
+            plot_name=f"{source}_entity_framing_heatmap",
+            source=source
+        )
+    else:
+        plt.close()
 
     return matrix

@@ -3,9 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from utils.period_sorting import sort_period_key
+from utils.plot_saving import save_plot
 
-
-def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_results, framing_drift, top_n_entities=8):
+def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_results, framing_drift, top_n_entities=8, output_dir = None):
 
     fig, axs = plt.subplots(2, 2, figsize=(18, 12))
 
@@ -139,4 +139,12 @@ def plot_source_dashboard(source, semantic_labels, semantic_values, sentiment_re
         )
 
     plt.tight_layout()
-    plt.show()
+    
+    if output_dir:
+        save_plot(
+            output_dir,
+            plot_name=f"{source}_narrative_dashboard",
+            source=source
+        )
+    else:
+        plt.close()

@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from pathlib import Path
+import json
 
 from preprocessing import preprocess_corpus
 from embeddings import EmbeddingModel
@@ -124,15 +126,15 @@ from evidence_retrieval import (
 
 FAST_MODE = False
 
-# DEBUG_SOURCES = None
-DEBUG_SOURCES = {"bbc.co.uk"}
+DEBUG_SOURCES = None
+# DEBUG_SOURCES = {"bbc.co.uk"}
 # DEBUG_SOURCES = {"cnn.com"}
 # DEBUG_SOURCES = {"bbc.co.uk", "cnn.com"}
 
-SKIP_PLOTS = True
+SKIP_PLOTS = False
 SKIP_FRAME_LABELING = True
 SKIP_SIGNATURE_COMPARISON = True
-SAVE_ANALYSIS_RESULTS = False
+SAVE_ANALYSIS_RESULTS = True
 VERBOSE_ENTITY_DEBUG = False
 SKIP_ENTITY_FRAME_ALIGNMENT = True
 PRINT_SENTIMENT_PERIODS = False
@@ -151,6 +153,14 @@ SKIP_REPRESENTATIVE_EVIDENCE_RETRIEVAL = False
 MAX_EVIDENCE_TRANSITIONS = 5
 EVIDENCE_ARTICLES_PER_PERIOD = 2
 MAX_ARTICLES_PER_EVIDENCE_PERIOD = 300
+
+
+RUN_ID = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+OUTPUT_DIR = Path("outputs") / RUN_ID
+RESULTS_DIR = OUTPUT_DIR / "results"
+PLOTS_DIR = OUTPUT_DIR / "plots"
+
 # def group_by_source_and_month(df):
 #     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
 #     df["date"] = df["date"].dt.tz_localize(None)
@@ -200,6 +210,11 @@ def make_json_serializable(obj):
     return obj
 
 def main():
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+
     #  Load CSV
     df = load_full_articles()
 
@@ -464,7 +479,11 @@ def main():
                 print(f"Neutral: " f"{sentiment['neutral']:.4f}")
         
         if not SKIP_PLOTS:
-            plot_sentiment_evolution(sentiment_results, source)
+            plot_sentiment_evolution(
+                sentiment_results,
+                source,
+                output_dir=PLOTS_DIR
+            )
 
         
 
@@ -487,7 +506,12 @@ def main():
         salience_results = compute_actor_salience(grouped[source])
 
         if not SKIP_PLOTS:
-            plot_actor_salience(salience_results, top_n=5)
+            plot_actor_salience(
+                salience_results,
+                source=source,
+                top_n=5,
+                output_dir=PLOTS_DIR
+            )
 
         salience_totals = compute_total_actor_salience(salience_results)
         entity_importance = compute_entity_importance(framing_drift, salience_totals)
@@ -694,8 +718,12 @@ def main():
 
         print(f"\nEditorial behavior: "f"{behavior}")
 
+        analysis_results[source]["editorial_behavior"] = behavior
+
         volatility = compute_emotional_volatility(sentiment_results)
         print(f"\nEmotional volatility: "f"{volatility:.4f}")
+
+        analysis_results[source]["emotional_volatility"] = volatility
 
 
         average_framing_values = []
@@ -716,13 +744,26 @@ def main():
                 semantic_labels=drift_labels,
                 semantic_values=drift_values,
                 framing_values=average_framing_values,
-                source=source
+                source=source,
+                output_dir=PLOTS_DIR
             )
 
         if not SKIP_PLOTS:
-            plot_top_entity_drift(framing_drift)
-        # plot_entity_heatmap(framing_drift)
-        # plot_actor_evolution(framing_drift)
+            plot_top_entity_drift(
+                framing_drift,
+                source=source,
+                output_dir=PLOTS_DIR
+            )
+            plot_entity_heatmap(
+                framing_drift,
+                source=source,
+                output_dir=PLOTS_DIR
+            )
+            plot_actor_evolution(
+                framing_drift,
+                source=source,
+                output_dir=PLOTS_DIR
+            )
 
         print("\n=== Cross-Layer Correlation ===")
 
@@ -731,6 +772,8 @@ def main():
         correlation = compute_correlation(sentiment_deltas, avg_framing)
 
         print(f"Sentiment ↔ Framing correlation: " f"{correlation}")
+
+        analysis_results[source]["cross_layer_correlation"] = correlation
 
         # for transition, entities in framing_drift.items():
         #     print(f"\n{transition}")
@@ -742,13 +785,14 @@ def main():
         #         print(f"Before: " f"{list(stats['before'].keys())[:5]}")
         #         print(f"After: " f"{list(stats['after'].keys())[:5]}")
         
-        # plot_source_dashboard(
-        #     source=source,
-        #     semantic_labels=drift_labels,
-        #     semantic_values=drift_values,
-        #     sentiment_results=sentiment_results,
-        #     framing_drift=framing_drift
-        # )
+        plot_source_dashboard(
+            source=source,
+            semantic_labels=drift_labels,
+            semantic_values=drift_values,
+            sentiment_results=sentiment_results,
+            framing_drift=framing_drift,
+            output_dir=PLOTS_DIR
+        )
 
         # Entity analysis per month
         months_sorted = sorted(grouped[source].keys(), key=sort_period_key)
@@ -820,7 +864,10 @@ def main():
 
     #  Plot drift signal
     if not SKIP_PLOTS:
-        plot_multiple_sources(source_results)
+        plot_multiple_sources(
+            source_results,
+            output_dir=PLOTS_DIR
+        )
 
     if not SKIP_NARRATIVE_SIGNATURES:
         print("\n=== NARRATIVE SIGNATURES ===")
@@ -932,10 +979,10 @@ def main():
     analysis_results["__cross_source_divergence__"] = cross_source_divergence
 
     if SAVE_ANALYSIS_RESULTS:
-        import json
+        analysis_path = RESULTS_DIR / "analysis_results.json"
 
         with open(
-            "analysis_results.json",
+            analysis_path,
             "w",
             encoding="utf-8"
         ) as f:
@@ -946,7 +993,39 @@ def main():
                 ensure_ascii=False
             )
 
-        print("\nSaved analysis_results.json")
+        summary_df.to_csv(
+            RESULTS_DIR / "source_summary.csv",
+            index=False
+        )
+
+        signature_df.to_csv(
+            RESULTS_DIR / "narrative_signatures.csv",
+            index=False
+        )
+
+        pd.DataFrame(
+            cross_source_divergence.get("pairwise", [])
+        ).to_csv(
+            RESULTS_DIR / "cross_source_divergence_pairwise.csv",
+            index=False
+        )
+
+        pd.DataFrame(
+            cross_source_divergence.get("timeline", [])
+        ).to_csv(
+            RESULTS_DIR / "cross_source_divergence_timeline.csv",
+            index=False
+        )
+
+        if archetype_results.get("table"):
+            pd.DataFrame(
+                archetype_results["table"]
+            ).to_csv(
+                RESULTS_DIR / "narrative_archetype_table.csv",
+                index=False
+            )
+
+        print(f"\nSaved analysis results to: {RESULTS_DIR}")
 
 
 
