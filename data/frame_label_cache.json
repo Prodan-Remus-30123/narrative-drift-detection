@@ -1,0 +1,242 @@
+{
+  "approve": {
+    "frame_label": "Consent and Validation",
+    "frame_description": "The frame suggests that approval is a sign of legitimacy, validation, and agreement with existing norms or authority."
+  },
+  "assess|evaluate": {
+    "frame_label": "Judgment Frame",
+    "frame_description": "News stories that involve evaluating or assessing information to form an opinion or make a decision."
+  },
+  "compare": {
+    "frame_label": "Comparison Frame",
+    "frame_description": "A frame that highlights differences or similarities between two or more entities, individuals, or concepts to facilitate evaluation or decision-making."
+  },
+  "blame": {
+    "frame_label": "Villain Attribution",
+    "frame_description": "Attributing responsibility for a problem or situation to an individual, group, or entity."
+  },
+  "postpone": {
+    "frame_label": "Delayed Resolution",
+    "frame_description": "A narrative frame that implies a delay or extension of time to achieve a goal, often resulting in uncertainty and potential complications."
+  },
+  "evacuate": {
+    "frame_label": "Crisis Response",
+    "frame_description": "A situation requires immediate attention and removal of people to ensure safety."
+  },
+  "send": {
+    "frame_label": "Communication Initiation",
+    "frame_description": "The process of starting a communication chain or transaction, often indicating a request, proposal, or message transmission."
+  },
+  "die|kill|murder": {
+    "frame_label": "Violent Deprivation of Life",
+    "frame_description": "A narrative frame representing sudden and intentional loss of human life, often with a sense of tragedy or injustice."
+  },
+  "fly|hop|jump": {
+    "frame_label": "Mobility and Progress",
+    "frame_description": "The narrative frame 'Mobility and Progress' captures the idea that characters are moving towards a goal or achieving something new and exciting."
+  },
+  "contest": {
+    "frame_label": "Competition for Resources",
+    "frame_description": "A narrative frame that structures news stories around rival groups vying for limited resources, highlighting the struggles and conflicts that arise from competing interests."
+  },
+  "transition": {
+    "frame_label": "Change and Progress",
+    "frame_description": "A narrative frame that highlights gradual shifts towards improvement or development, often accompanied by a sense of optimism and forward momentum."
+  },
+  "confirm": {
+    "frame_label": "Verification Frame",
+    "frame_description": "Confirmation of facts or information, often used to establish credibility and authority."
+  },
+  "contain|include": {
+    "frame_label": "Inclusion Frame",
+    "frame_description": "A narrative frame emphasizing the importance of inclusivity, highlighting the coexistence or integration of different elements."
+  },
+  "claim|dispute": {
+    "frame_label": "Dispute Resolution",
+    "frame_description": "A frame that structures narratives around conflicts and disagreements, focusing on how parties negotiate or contest their claims."
+  },
+  "refund|return": {
+    "frame_label": "Financial Reckoning",
+    "frame_description": "A situation where someone must confront and resolve an imbalance or discrepancy in their financial dealings."
+  },
+  "comprise|constitute": {
+    "frame_label": "Defining Boundaries Frame",
+    "frame_description": "This frame constitutes a narrative structure that establishes and clarifies the limits or scope of something, such as an entity, concept, or situation."
+  },
+  "announce|disclose|inform": {
+    "frame_label": "Official Revelation",
+    "frame_description": "The frame represents a narrative of official authority revealing information or details to the public, often conveying importance or significance."
+  },
+  "earn|work": {
+    "frame_label": "Productive Labor",
+    "frame_description": "The notion that individuals engage in productive activities to earn a living and contribute to society."
+  },
+  "reroute": {
+    "frame_label": "Adaptation Framework",
+    "frame_description": "The process of adjusting to changed circumstances or plans."
+  },
+  "assess|detect|evaluate|examine|investigate|observe|study": {
+    "frame_label": "Scientific Investigation Frame",
+    "frame_description": "A narrative pattern that emphasizes systematic examination and analysis of data or phenomena to understand or identify patterns, anomalies, or causes."
+  },
+  "accept|add|approve|deal|enter|invite|offer|send": {
+    "frame_label": "Collaboration and Exchange",
+    "frame_description": "This frame represents a narrative where individuals or groups work together, share resources, and engage in mutually beneficial interactions."
+  },
+  "check|compare|fail|help|issue|result|test|try|verify": {
+    "frame_label": "Investigation and Evaluation",
+    "frame_description": "A frame that captures the process of gathering and analyzing information to form an opinion or arrive at a conclusion."
+  },
+  "attack|battle|champion|clash|contest|defend|fight|rival": {
+    "frame_label": "Conflict Engagement",
+    "frame_description": "A narrative pattern highlighting competitive or adversarial interactions between parties, often with a focus on power struggles or ideological differences."
+  },
+  "postpone|trigger": {
+    "frame_label": "Conflict Resolution",
+    "frame_description": "A frame that describes a situation where a delay or postponement leads to a triggering event that ultimately resolves a conflict."
+  },
+  "blame|cause|lack": {
+    "frame_label": "Causality and Blame",
+    "frame_description": "A narrative that links causes to effects, often assigning blame or responsibility for a situation."
+  },
+  "beat|blow|die|kill|live|lose|murder|win": {
+    "frame_label": "Conflict Resolution",
+    "frame_description": "A narrative frame that captures the struggle for power, control, or survival, where actions such as killing, beating, or murdering are used to achieve resolution."
+  },
+  "evacuate|flee": {
+    "frame_label": "Escape from Danger",
+    "frame_description": "A narrative frame highlighting individuals' desperate attempts to leave a hazardous situation, often marked by urgency and fear."
+  },
+  "assure|confirm|expect|promise": {
+    "frame_label": "Commitment and Expectations",
+    "frame_description": "A frame that highlights promises made or expected outcomes in a situation, conveying a sense of commitment and responsibility."
+  },
+  "fly|hop|jump|walk": {
+    "frame_label": "Mobile Movement Dynamics",
+    "frame_description": "A narrative pattern describing movement and progression through space, highlighting the agency and control of individuals or entities."
+  },
+  "alter|change|convert|modify|move|replace|shift|swap|switch|transform|transition|turn": {
+    "frame_label": "Transformation Process",
+    "frame_description": "The frame represents a process of transformation or change, where one state or entity is altered in some way to become something new."
+  },
+  "attempt|check|confirm|fail|help|result|succeed|try|verify": {
+    "frame_label": "Problem-Solving Effort",
+    "frame_description": "A story about trying to overcome an obstacle or challenge, with varying degrees of success."
+  },
+  "accord": {
+    "frame_label": "Consensus Framework",
+    "frame_description": "The emphasis is on agreement, cooperation, and harmony among stakeholders, highlighting a unified approach to address a common issue or problem."
+  },
+  "assign|comprise|constitute|declare|denote|designate": {
+    "frame_label": "Classification Frame",
+    "frame_description": "News stories categorizing and defining phenomena to establish their meaning and significance."
+  },
+  "contain|include|specify": {
+    "frame_label": "Definition Frame",
+    "frame_description": "A frame that highlights the importance of clarifying or specifying details to understand a particular issue or concept."
+  },
+  "claim|complain|dispute|exclaim|sue": {
+    "frame_label": "Dispute Resolution",
+    "frame_description": "A frame representing conflicts and disputes being resolved through official channels such as lawsuits or complaints."
+  },
+  "re|reaffirm|reassign|recirculate|reconsider|reconvene|recoup|reemerge|refund|reimpose|rein|reintroduce|reiterate|relegate|remand|replenish|resurge|resurrect|retaliate|return|revive": {
+    "frame_label": "Reconsideration and Reversal",
+    "frame_description": "The process of re-evaluating previous decisions or actions, potentially leading to changes in direction, policy, or outcome."
+  },
+  "earn|employ|hire|work": {
+    "frame_label": "Economic Participation",
+    "frame_description": "The process of engaging in productive activities to secure financial stability and well-being."
+  },
+  "answer|ask|asked|clarify|comment|commentate|elaborate|explain|know|look|point|question|reply|respond|see|understand": {
+    "frame_label": "Explain and Clarify",
+    "frame_description": "A frame where individuals seek to understand or make clear their perspectives or information, often involving questions, explanations, and responses."
+  },
+  "face|head|identify|name|star": {
+    "frame_label": "Achievement and Recognition",
+    "frame_description": "The narrative frame 'Achievement and Recognition' suggests that individuals are being celebrated for their accomplishments, with attention focused on their notable achievements and public recognition."
+  },
+  "answer|ask|clarify|comment|explain|question|quote|respond|rule|sentence|understand": {
+    "frame_label": "Information Seeking",
+    "frame_description": "News narratives frame interactions around seeking and providing information through quotes, questions, and answers."
+  },
+  "explore|journey|resort|tour|transit|transport|travel|visit": {
+    "frame_label": "Geographic Exploration",
+    "frame_description": "A story about moving through or experiencing different places, often with a sense of adventure and discovery."
+  },
+  "author|blog|write|writer": {
+    "frame_label": "Creative Expression Frames",
+    "frame_description": "The act of writing, authoring, or blogging represents a creative outlet for individuals to express themselves and share their ideas with others."
+  },
+  "answer|ask|assume|check|comment|confirm|hint|question|reply|respond|speculate|verify": {
+    "frame_label": "Investigation Protocol",
+    "frame_description": "A frame that represents the investigative process, involving questioning, verification, and validation of information."
+  },
+  "chat|communicate|discuss|speak|talk|transmit": {
+    "frame_label": "Verbal Information Exchange",
+    "frame_description": "The frame represents the exchange of information through verbal communication, emphasizing the importance of speaking, transmitting, and discussing ideas."
+  },
+  "bind|hold|retain|seal|withhold": {
+    "frame_label": "Secrecy and Control",
+    "frame_description": "A narrative of concealment and restriction, where information is withheld or sealed to maintain power or control over others."
+  },
+  "assign|constitute|declare|designate": {
+    "frame_label": "Establish Authority",
+    "frame_description": "The frame captures instances where a source or entity establishes its authority by declaring, designating, assigning, or constituting something, conveying a sense of legitimacy and power."
+  },
+  "embrace|hug|smile|soothe": {
+    "frame_label": "Emotional Comfort Framework",
+    "frame_description": "A narrative frame that portrays situations where emotional comfort and reassurance are paramount, highlighting the importance of human connection and affection in times of stress or uncertainty."
+  },
+  "explore|journey|navigate|resort|stroll|tour|transport|travel|visit|voyage|walk|wander": {
+    "frame_label": "Exploration and Movement",
+    "frame_description": "A narrative frame that captures the idea of moving through a physical or metaphorical space, often accompanied by a sense of discovery or exploration."
+  },
+  "close|come|don|get|give|knock|let|put|shut|wait": {
+    "frame_label": "Control and Access",
+    "frame_description": "The struggle for control over resources, information, or power, with varying degrees of access and restriction."
+  },
+  "premiere|preview|replay|view|watch": {
+    "frame_label": "Media Consumption Frame",
+    "frame_description": "A narrative frame that captures the attention-grabbing and interactive nature of consuming media, emphasizing the role of visual engagement and audience participation."
+  },
+  "alarm|alert|announce|inform|notify|trigger": {
+    "frame_label": "Warning or Alert Cycle",
+    "frame_description": "A narrative frame that involves announcing or informing about a threat or danger, which triggers an alarm or alert response."
+  },
+  "chant|discuss|hear|listen|mute|overhear|overheard|roar|scream|silence|sing|speak|talk|voice|whisper": {
+    "frame_label": "Expressive Communication",
+    "frame_description": "Verbs related to vocalizing thoughts, opinions, or emotions."
+  },
+  "answer|ask|comment|edit|fix|help|issue|question|reply|respond|update": {
+    "frame_label": "Information Seeking/Providing",
+    "frame_description": "A frame surrounding interactions involving seeking and providing information through questioning, answering, and commenting."
+  },
+  "hang|hold|open|reopen": {
+    "frame_label": "Emotional Closure Frame",
+    "frame_description": "This frame represents the emotional resolution or closure of a situation, with actions focusing on opening, holding, reopening, or hanging up the past."
+  },
+  "assure|caution|concern|ensure|fear|guarantee|protect|reassure|rely|risk|safeguard|secure|trust|unprotecte|warn": {
+    "frame_label": "Security Concerns",
+    "frame_description": "A narrative emphasizing the need to protect oneself or others from potential threats or risks, often accompanied by feelings of fear and concern."
+  },
+  "admit|clarify|elaborate|explain|know|mention|point|refer|reference|relate|see|seep|surprise|understand": {
+    "frame_label": "Clarify Understanding Process",
+    "frame_description": "The frame captures the process of gaining insight or clarity through a series of interactions or explanations."
+  },
+  "drain|drink|fill|leak|piss|pour|sink|spill|splash|water": {
+    "frame_label": "Water Flow Control",
+    "frame_description": "A story about managing the flow of water, often involving conflict or disruption in its natural or controlled state."
+  },
+  "adapt|alter|change|compensate|edit|fixate|modify|overhaul|rebuild|reform|remake|repair|replace|substitute|update": {
+    "frame_label": "Transformation and Renewal",
+    "frame_description": "The frame suggests a focus on significant changes or upgrades, implying a desire for improvement or innovation."
+  },
+  "accept|add|approve|arrive|complete|deal|deliver|enter|invite|need|offer|receive|request|send|ship|trade|want": {
+    "frame_label": "Negotiation and Exchange",
+    "frame_description": "A frame about negotiating and exchanging goods, services, or information, involving offers, requests, and acceptance."
+  },
+  "blend|combine|comprise|consist|contain|divide|include|merge|mix|separate|split": {
+    "frame_label": "Composition/Reorganization",
+    "frame_description": "A narrative frame that focuses on the processes of combining, separating, or rearranging elements to create a new whole, highlighting the dynamics of inclusion, exclusion, and redefinition."
+  }
+}

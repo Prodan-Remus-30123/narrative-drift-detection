@@ -11,20 +11,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from typing import List
 
 
-def compute_cosine_drift(vec1: np.ndarray, vec2: np.ndarray) -> float:
-    """
-    Compute cosine-based drift between two vectors.
+def compute_cosine_drift(vector_a, vector_b):
+    similarity = np.dot(vector_a, vector_b) / (np.linalg.norm(vector_a) * np.linalg.norm(vector_b))
 
-    Drift = 1 - cosine_similarity
-
-    Args:
-        vec1 (np.ndarray): First embedding vector.
-        vec2 (np.ndarray): Second embedding vector.
-
-    Returns:
-        float: Drift value.
-    """
-    similarity = cosine_similarity([vec1], [vec2])[0][0]
     return 1 - similarity
 
 
@@ -40,10 +29,33 @@ def build_drift_signal(aggregated_vectors: List[np.ndarray]) -> List[float]:
     """
     drift_values = []
     for i in range(len(aggregated_vectors) - 1):
-        drift = compute_cosine_drift(
-            aggregated_vectors[i],
-            aggregated_vectors[i + 1]
-        )
+        drift = compute_cosine_drift(aggregated_vectors[i], aggregated_vectors[i + 1])
         drift_values.append(drift)
 
     return drift_values
+
+def compute_dynamic_threshold(drift_values, method="mean_std"):
+    if len(drift_values) < 2:
+        return None
+
+    values = np.array(drift_values)
+
+    if method == "mean_std":
+        return values.mean() + values.std()
+
+    if method == "median_mad":
+        median = np.median(values)
+        mad = np.median(np.abs(values - median))
+
+        return median + 1.4826 * mad
+
+    raise ValueError(f"Unknown threshold method: {method}")
+
+def classify_drift(drift_value, threshold):
+    if threshold is None:
+        return "insufficient_data"
+
+    if drift_value > threshold:
+        return "significant"
+
+    return "minor"

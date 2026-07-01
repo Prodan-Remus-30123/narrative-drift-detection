@@ -1,0 +1,5586 @@
+[
+  {
+    "verb": "accord",
+    "count": 8053
+  },
+  {
+    "verb": "announce",
+    "count": 6543
+  },
+  {
+    "verb": "view",
+    "count": 3991
+  },
+  {
+    "verb": "write",
+    "count": 3954
+  },
+  {
+    "verb": "receive",
+    "count": 3774
+  },
+  {
+    "verb": "warn",
+    "count": 3664
+  },
+  {
+    "verb": "speak",
+    "count": 3622
+  },
+  {
+    "verb": "update",
+    "count": 3502
+  },
+  {
+    "verb": "get",
+    "count": 3305
+  },
+  {
+    "verb": "follow",
+    "count": 3248
+  },
+  {
+    "verb": "find",
+    "count": 3183
+  },
+  {
+    "verb": "lead",
+    "count": 3035
+  },
+  {
+    "verb": "confirm",
+    "count": 2681
+  },
+  {
+    "verb": "hold",
+    "count": 2607
+  },
+  {
+    "verb": "record",
+    "count": 2541
+  },
+  {
+    "verb": "test",
+    "count": 2316
+  },
+  {
+    "verb": "face",
+    "count": 2197
+  },
+  {
+    "verb": "meet",
+    "count": 2179
+  },
+  {
+    "verb": "die",
+    "count": 2141
+  },
+  {
+    "verb": "send",
+    "count": 2119
+  },
+  {
+    "verb": "leave",
+    "count": 2106
+  },
+  {
+    "verb": "remain",
+    "count": 2061
+  },
+  {
+    "verb": "set",
+    "count": 2014
+  },
+  {
+    "verb": "join",
+    "count": 1947
+  },
+  {
+    "verb": "return",
+    "count": 1881
+  },
+  {
+    "verb": "provide",
+    "count": 1865
+  },
+  {
+    "verb": "accuse",
+    "count": 1819
+  },
+  {
+    "verb": "travel",
+    "count": 1815
+  },
+  {
+    "verb": "urge",
+    "count": 1810
+  },
+  {
+    "verb": "expect",
+    "count": 1806
+  },
+  {
+    "verb": "sign",
+    "count": 1800
+  },
+  {
+    "verb": "arrive",
+    "count": 1795
+  },
+  {
+    "verb": "look",
+    "count": 1794
+  },
+  {
+    "verb": "live",
+    "count": 1776
+  },
+  {
+    "verb": "base",
+    "count": 1749
+  },
+  {
+    "verb": "suggest",
+    "count": 1731
+  },
+  {
+    "verb": "issue",
+    "count": 1703
+  },
+  {
+    "verb": "move",
+    "count": 1646
+  },
+  {
+    "verb": "read",
+    "count": 1616
+  },
+  {
+    "verb": "describe",
+    "count": 1608
+  },
+  {
+    "verb": "hit",
+    "count": 1591
+  },
+  {
+    "verb": "close",
+    "count": 1590
+  },
+  {
+    "verb": "offer",
+    "count": 1587
+  },
+  {
+    "verb": "release",
+    "count": 1552
+  },
+  {
+    "verb": "publish",
+    "count": 1548
+  },
+  {
+    "verb": "rise",
+    "count": 1546
+  },
+  {
+    "verb": "bring",
+    "count": 1528
+  },
+  {
+    "verb": "start",
+    "count": 1513
+  },
+  {
+    "verb": "know",
+    "count": 1508
+  },
+  {
+    "verb": "vaccinate",
+    "count": 1503
+  },
+  {
+    "verb": "approve",
+    "count": 1495
+  },
+  {
+    "verb": "visit",
+    "count": 1482
+  },
+  {
+    "verb": "run",
+    "count": 1445
+  },
+  {
+    "verb": "pass",
+    "count": 1410
+  },
+  {
+    "verb": "fall",
+    "count": 1397
+  },
+  {
+    "verb": "reach",
+    "count": 1329
+  },
+  {
+    "verb": "claim",
+    "count": 1308
+  },
+  {
+    "verb": "win",
+    "count": 1308
+  },
+  {
+    "verb": "respond",
+    "count": 1293
+  },
+  {
+    "verb": "note",
+    "count": 1287
+  },
+  {
+    "verb": "open",
+    "count": 1261
+  },
+  {
+    "verb": "declare",
+    "count": 1260
+  },
+  {
+    "verb": "push",
+    "count": 1249
+  },
+  {
+    "verb": "support",
+    "count": 1243
+  },
+  {
+    "verb": "raise",
+    "count": 1226
+  },
+  {
+    "verb": "spread",
+    "count": 1223
+  },
+  {
+    "verb": "impose",
+    "count": 1213
+  },
+  {
+    "verb": "agree",
+    "count": 1175
+  },
+  {
+    "verb": "attend",
+    "count": 1167
+  },
+  {
+    "verb": "stand",
+    "count": 1144
+  },
+  {
+    "verb": "lose",
+    "count": 1137
+  },
+  {
+    "verb": "launch",
+    "count": 1136
+  },
+  {
+    "verb": "enter",
+    "count": 1122
+  },
+  {
+    "verb": "seek",
+    "count": 1117
+  },
+  {
+    "verb": "deliver",
+    "count": 1117
+  },
+  {
+    "verb": "point",
+    "count": 1105
+  },
+  {
+    "verb": "allow",
+    "count": 1097
+  },
+  {
+    "verb": "turn",
+    "count": 1089
+  },
+  {
+    "verb": "develop",
+    "count": 1082
+  },
+  {
+    "verb": "believe",
+    "count": 1079
+  },
+  {
+    "verb": "suspend",
+    "count": 1073
+  },
+  {
+    "verb": "explain",
+    "count": 1069
+  },
+  {
+    "verb": "consider",
+    "count": 1060
+  },
+  {
+    "verb": "want",
+    "count": 1055
+  },
+  {
+    "verb": "play",
+    "count": 1042
+  },
+  {
+    "verb": "increase",
+    "count": 1032
+  },
+  {
+    "verb": "order",
+    "count": 1030
+  },
+  {
+    "verb": "serve",
+    "count": 1023
+  },
+  {
+    "verb": "keep",
+    "count": 1008
+  },
+  {
+    "verb": "require",
+    "count": 997
+  },
+  {
+    "verb": "reopen",
+    "count": 991
+  },
+  {
+    "verb": "link",
+    "count": 990
+  },
+  {
+    "verb": "cancel",
+    "count": 977
+  },
+  {
+    "verb": "identify",
+    "count": 974
+  },
+  {
+    "verb": "help",
+    "count": 969
+  },
+  {
+    "verb": "cause",
+    "count": 967
+  },
+  {
+    "verb": "share",
+    "count": 967
+  },
+  {
+    "verb": "spend",
+    "count": 960
+  },
+  {
+    "verb": "ban",
+    "count": 946
+  },
+  {
+    "verb": "administer",
+    "count": 943
+  },
+  {
+    "verb": "detect",
+    "count": 936
+  },
+  {
+    "verb": "plan",
+    "count": 935
+  },
+  {
+    "verb": "recommend",
+    "count": 925
+  },
+  {
+    "verb": "tweet",
+    "count": 924
+  },
+  {
+    "verb": "end",
+    "count": 898
+  },
+  {
+    "verb": "try",
+    "count": 880
+  },
+  {
+    "verb": "emerge",
+    "count": 869
+  },
+  {
+    "verb": "argue",
+    "count": 868
+  },
+  {
+    "verb": "mark",
+    "count": 839
+  },
+  {
+    "verb": "fly",
+    "count": 827
+  },
+  {
+    "verb": "mean",
+    "count": 826
+  },
+  {
+    "verb": "vote",
+    "count": 811
+  },
+  {
+    "verb": "reveal",
+    "count": 808
+  },
+  {
+    "verb": "compare",
+    "count": 796
+  },
+  {
+    "verb": "express",
+    "count": 789
+  },
+  {
+    "verb": "cite",
+    "count": 788
+  },
+  {
+    "verb": "kill",
+    "count": 784
+  },
+  {
+    "verb": "prepare",
+    "count": 778
+  },
+  {
+    "verb": "conduct",
+    "count": 774
+  },
+  {
+    "verb": "drive",
+    "count": 769
+  },
+  {
+    "verb": "pay",
+    "count": 761
+  },
+  {
+    "verb": "address",
+    "count": 757
+  },
+  {
+    "verb": "drop",
+    "count": 754
+  },
+  {
+    "verb": "grow",
+    "count": 754
+  },
+  {
+    "verb": "admit",
+    "count": 750
+  },
+  {
+    "verb": "criticize",
+    "count": 749
+  },
+  {
+    "verb": "post",
+    "count": 748
+  },
+  {
+    "verb": "extend",
+    "count": 746
+  },
+  {
+    "verb": "wear",
+    "count": 742
+  },
+  {
+    "verb": "discuss",
+    "count": 742
+  },
+  {
+    "verb": "produce",
+    "count": 734
+  },
+  {
+    "verb": "praise",
+    "count": 731
+  },
+  {
+    "verb": "deny",
+    "count": 731
+  },
+  {
+    "verb": "create",
+    "count": 727
+  },
+  {
+    "verb": "introduce",
+    "count": 726
+  },
+  {
+    "verb": "defend",
+    "count": 724
+  },
+  {
+    "verb": "back",
+    "count": 722
+  },
+  {
+    "verb": "lift",
+    "count": 716
+  },
+  {
+    "verb": "cut",
+    "count": 712
+  },
+  {
+    "verb": "carry",
+    "count": 709
+  },
+  {
+    "verb": "criticise",
+    "count": 706
+  },
+  {
+    "verb": "stop",
+    "count": 706
+  },
+  {
+    "verb": "contribute",
+    "count": 703
+  },
+  {
+    "verb": "register",
+    "count": 701
+  },
+  {
+    "verb": "force",
+    "count": 700
+  },
+  {
+    "verb": "talk",
+    "count": 700
+  },
+  {
+    "verb": "build",
+    "count": 697
+  },
+  {
+    "verb": "welcome",
+    "count": 697
+  },
+  {
+    "verb": "change",
+    "count": 693
+  },
+  {
+    "verb": "break",
+    "count": 689
+  },
+  {
+    "verb": "block",
+    "count": 687
+  },
+  {
+    "verb": "place",
+    "count": 683
+  },
+  {
+    "verb": "walk",
+    "count": 680
+  },
+  {
+    "verb": "represent",
+    "count": 679
+  },
+  {
+    "verb": "host",
+    "count": 679
+  },
+  {
+    "verb": "name",
+    "count": 678
+  },
+  {
+    "verb": "feel",
+    "count": 678
+  },
+  {
+    "verb": "buy",
+    "count": 669
+  },
+  {
+    "verb": "head",
+    "count": 663
+  },
+  {
+    "verb": "prompt",
+    "count": 661
+  },
+  {
+    "verb": "blame",
+    "count": 657
+  },
+  {
+    "verb": "sit",
+    "count": 655
+  },
+  {
+    "verb": "file",
+    "count": 644
+  },
+  {
+    "verb": "remove",
+    "count": 641
+  },
+  {
+    "verb": "refer",
+    "count": 634
+  },
+  {
+    "verb": "seem",
+    "count": 634
+  },
+  {
+    "verb": "apply",
+    "count": 633
+  },
+  {
+    "verb": "happen",
+    "count": 632
+  },
+  {
+    "verb": "reject",
+    "count": 631
+  },
+  {
+    "verb": "hear",
+    "count": 623
+  },
+  {
+    "verb": "suffer",
+    "count": 615
+  },
+  {
+    "verb": "experience",
+    "count": 614
+  },
+  {
+    "verb": "affect",
+    "count": 603
+  },
+  {
+    "verb": "decide",
+    "count": 598
+  },
+  {
+    "verb": "investigate",
+    "count": 594
+  },
+  {
+    "verb": "draw",
+    "count": 594
+  },
+  {
+    "verb": "advise",
+    "count": 593
+  },
+  {
+    "verb": "shut",
+    "count": 579
+  },
+  {
+    "verb": "involve",
+    "count": 574
+  },
+  {
+    "verb": "infect",
+    "count": 574
+  },
+  {
+    "verb": "account",
+    "count": 572
+  },
+  {
+    "verb": "estimate",
+    "count": 570
+  },
+  {
+    "verb": "acknowledge",
+    "count": 565
+  },
+  {
+    "verb": "insist",
+    "count": 565
+  },
+  {
+    "verb": "treat",
+    "count": 558
+  },
+  {
+    "verb": "own",
+    "count": 557
+  },
+  {
+    "verb": "protect",
+    "count": 554
+  },
+  {
+    "verb": "focus",
+    "count": 551
+  },
+  {
+    "verb": "sell",
+    "count": 544
+  },
+  {
+    "verb": "promise",
+    "count": 540
+  },
+  {
+    "verb": "gather",
+    "count": 530
+  },
+  {
+    "verb": "cover",
+    "count": 523
+  },
+  {
+    "verb": "struggle",
+    "count": 522
+  },
+  {
+    "verb": "stay",
+    "count": 522
+  },
+  {
+    "verb": "wait",
+    "count": 516
+  },
+  {
+    "verb": "watch",
+    "count": 514
+  },
+  {
+    "verb": "celebrate",
+    "count": 505
+  },
+  {
+    "verb": "refuse",
+    "count": 499
+  },
+  {
+    "verb": "pledge",
+    "count": 495
+  },
+  {
+    "verb": "highlight",
+    "count": 493
+  },
+  {
+    "verb": "decline",
+    "count": 484
+  },
+  {
+    "verb": "attack",
+    "count": 475
+  },
+  {
+    "verb": "relate",
+    "count": 473
+  },
+  {
+    "verb": "catch",
+    "count": 468
+  },
+  {
+    "verb": "fail",
+    "count": 467
+  },
+  {
+    "verb": "expand",
+    "count": 467
+  },
+  {
+    "verb": "testify",
+    "count": 467
+  },
+  {
+    "verb": "echo",
+    "count": 465
+  },
+  {
+    "verb": "bear",
+    "count": 461
+  },
+  {
+    "verb": "surge",
+    "count": 459
+  },
+  {
+    "verb": "present",
+    "count": 458
+  },
+  {
+    "verb": "predict",
+    "count": 455
+  },
+  {
+    "verb": "ease",
+    "count": 452
+  },
+  {
+    "verb": "feature",
+    "count": 450
+  },
+  {
+    "verb": "pose",
+    "count": 447
+  },
+  {
+    "verb": "strike",
+    "count": 446
+  },
+  {
+    "verb": "authorize",
+    "count": 446
+  },
+  {
+    "verb": "indicate",
+    "count": 444
+  },
+  {
+    "verb": "threaten",
+    "count": 442
+  },
+  {
+    "verb": "target",
+    "count": 438
+  },
+  {
+    "verb": "dismiss",
+    "count": 435
+  },
+  {
+    "verb": "operate",
+    "count": 434
+  },
+  {
+    "verb": "step",
+    "count": 428
+  },
+  {
+    "verb": "pull",
+    "count": 426
+  },
+  {
+    "verb": "reduce",
+    "count": 425
+  },
+  {
+    "verb": "condemn",
+    "count": 422
+  },
+  {
+    "verb": "hop",
+    "count": 421
+  },
+  {
+    "verb": "prevent",
+    "count": 420
+  },
+  {
+    "verb": "list",
+    "count": 418
+  },
+  {
+    "verb": "contract",
+    "count": 411
+  },
+  {
+    "verb": "rule",
+    "count": 407
+  },
+  {
+    "verb": "replace",
+    "count": 406
+  },
+  {
+    "verb": "hand",
+    "count": 406
+  },
+  {
+    "verb": "listen",
+    "count": 406
+  },
+  {
+    "verb": "gain",
+    "count": 405
+  },
+  {
+    "verb": "secure",
+    "count": 405
+  },
+  {
+    "verb": "encourage",
+    "count": 401
+  },
+  {
+    "verb": "deal",
+    "count": 400
+  },
+  {
+    "verb": "contain",
+    "count": 398
+  },
+  {
+    "verb": "maintain",
+    "count": 398
+  },
+  {
+    "verb": "shoot",
+    "count": 397
+  },
+  {
+    "verb": "fight",
+    "count": 394
+  },
+  {
+    "verb": "manage",
+    "count": 391
+  },
+  {
+    "verb": "postpone",
+    "count": 386
+  },
+  {
+    "verb": "accept",
+    "count": 386
+  },
+  {
+    "verb": "learn",
+    "count": 379
+  },
+  {
+    "verb": "charge",
+    "count": 374
+  },
+  {
+    "verb": "reflect",
+    "count": 368
+  },
+  {
+    "verb": "mention",
+    "count": 367
+  },
+  {
+    "verb": "occur",
+    "count": 366
+  },
+  {
+    "verb": "sue",
+    "count": 365
+  },
+  {
+    "verb": "distribute",
+    "count": 359
+  },
+  {
+    "verb": "choose",
+    "count": 358
+  },
+  {
+    "verb": "donate",
+    "count": 358
+  },
+  {
+    "verb": "resign",
+    "count": 354
+  },
+  {
+    "verb": "propose",
+    "count": 354
+  },
+  {
+    "verb": "arrest",
+    "count": 354
+  },
+  {
+    "verb": "act",
+    "count": 352
+  },
+  {
+    "verb": "prove",
+    "count": 352
+  },
+  {
+    "verb": "roll",
+    "count": 351
+  },
+  {
+    "verb": "commit",
+    "count": 350
+  },
+  {
+    "verb": "demand",
+    "count": 347
+  },
+  {
+    "verb": "grant",
+    "count": 341
+  },
+  {
+    "verb": "contact",
+    "count": 341
+  },
+  {
+    "verb": "study",
+    "count": 341
+  },
+  {
+    "verb": "appoint",
+    "count": 340
+  },
+  {
+    "verb": "rely",
+    "count": 340
+  },
+  {
+    "verb": "resume",
+    "count": 339
+  },
+  {
+    "verb": "jump",
+    "count": 338
+  },
+  {
+    "verb": "direct",
+    "count": 338
+  },
+  {
+    "verb": "double",
+    "count": 335
+  },
+  {
+    "verb": "challenge",
+    "count": 335
+  },
+  {
+    "verb": "beat",
+    "count": 328
+  },
+  {
+    "verb": "enjoy",
+    "count": 328
+  },
+  {
+    "verb": "spark",
+    "count": 327
+  },
+  {
+    "verb": "implement",
+    "count": 327
+  },
+  {
+    "verb": "withdraw",
+    "count": 325
+  },
+  {
+    "verb": "promote",
+    "count": 325
+  },
+  {
+    "verb": "participate",
+    "count": 324
+  },
+  {
+    "verb": "question",
+    "count": 323
+  },
+  {
+    "verb": "cross",
+    "count": 322
+  },
+  {
+    "verb": "stress",
+    "count": 322
+  },
+  {
+    "verb": "understand",
+    "count": 322
+  },
+  {
+    "verb": "fund",
+    "count": 321
+  },
+  {
+    "verb": "deploy",
+    "count": 321
+  },
+  {
+    "verb": "limit",
+    "count": 317
+  },
+  {
+    "verb": "halt",
+    "count": 316
+  },
+  {
+    "verb": "thank",
+    "count": 314
+  },
+  {
+    "verb": "press",
+    "count": 312
+  },
+  {
+    "verb": "establish",
+    "count": 309
+  },
+  {
+    "verb": "surpass",
+    "count": 306
+  },
+  {
+    "verb": "restrict",
+    "count": 305
+  },
+  {
+    "verb": "recall",
+    "count": 304
+  },
+  {
+    "verb": "avoid",
+    "count": 303
+  },
+  {
+    "verb": "endorse",
+    "count": 303
+  },
+  {
+    "verb": "schedule",
+    "count": 302
+  },
+  {
+    "verb": "adopt",
+    "count": 300
+  },
+  {
+    "verb": "pick",
+    "count": 297
+  },
+  {
+    "verb": "engage",
+    "count": 295
+  },
+  {
+    "verb": "delay",
+    "count": 291
+  },
+  {
+    "verb": "invite",
+    "count": 287
+  },
+  {
+    "verb": "discover",
+    "count": 286
+  },
+  {
+    "verb": "signal",
+    "count": 285
+  },
+  {
+    "verb": "examine",
+    "count": 284
+  },
+  {
+    "verb": "unveil",
+    "count": 276
+  },
+  {
+    "verb": "lock",
+    "count": 273
+  },
+  {
+    "verb": "undermine",
+    "count": 271
+  },
+  {
+    "verb": "lay",
+    "count": 270
+  },
+  {
+    "verb": "fire",
+    "count": 269
+  },
+  {
+    "verb": "tout",
+    "count": 268
+  },
+  {
+    "verb": "fill",
+    "count": 268
+  },
+  {
+    "verb": "approach",
+    "count": 267
+  },
+  {
+    "verb": "collect",
+    "count": 267
+  },
+  {
+    "verb": "slow",
+    "count": 266
+  },
+  {
+    "verb": "demonstrate",
+    "count": 266
+  },
+  {
+    "verb": "attempt",
+    "count": 265
+  },
+  {
+    "verb": "originate",
+    "count": 264
+  },
+  {
+    "verb": "authorise",
+    "count": 264
+  },
+  {
+    "verb": "recover",
+    "count": 264
+  },
+  {
+    "verb": "found",
+    "count": 264
+  },
+  {
+    "verb": "locate",
+    "count": 261
+  },
+  {
+    "verb": "review",
+    "count": 261
+  },
+  {
+    "verb": "conclude",
+    "count": 261
+  },
+  {
+    "verb": "perform",
+    "count": 260
+  },
+  {
+    "verb": "supply",
+    "count": 259
+  },
+  {
+    "verb": "lie",
+    "count": 258
+  },
+  {
+    "verb": "cast",
+    "count": 254
+  },
+  {
+    "verb": "control",
+    "count": 254
+  },
+  {
+    "verb": "land",
+    "count": 252
+  },
+  {
+    "verb": "form",
+    "count": 252
+  },
+  {
+    "verb": "manufacture",
+    "count": 251
+  },
+  {
+    "verb": "throw",
+    "count": 251
+  },
+  {
+    "verb": "subscribe",
+    "count": 250
+  },
+  {
+    "verb": "flee",
+    "count": 249
+  },
+  {
+    "verb": "expose",
+    "count": 249
+  },
+  {
+    "verb": "rank",
+    "count": 248
+  },
+  {
+    "verb": "outline",
+    "count": 248
+  },
+  {
+    "verb": "result",
+    "count": 247
+  },
+  {
+    "verb": "obtain",
+    "count": 246
+  },
+  {
+    "verb": "quarantine",
+    "count": 245
+  },
+  {
+    "verb": "save",
+    "count": 245
+  },
+  {
+    "verb": "quote",
+    "count": 244
+  },
+  {
+    "verb": "battle",
+    "count": 243
+  },
+  {
+    "verb": "oppose",
+    "count": 243
+  },
+  {
+    "verb": "submit",
+    "count": 243
+  },
+  {
+    "verb": "boost",
+    "count": 241
+  },
+  {
+    "verb": "chair",
+    "count": 240
+  },
+  {
+    "verb": "weigh",
+    "count": 239
+  },
+  {
+    "verb": "reiterate",
+    "count": 239
+  },
+  {
+    "verb": "regard",
+    "count": 238
+  },
+  {
+    "verb": "protest",
+    "count": 237
+  },
+  {
+    "verb": "overtake",
+    "count": 236
+  },
+  {
+    "verb": "complete",
+    "count": 236
+  },
+  {
+    "verb": "answer",
+    "count": 234
+  },
+  {
+    "verb": "miss",
+    "count": 234
+  },
+  {
+    "verb": "check",
+    "count": 232
+  },
+  {
+    "verb": "request",
+    "count": 232
+  },
+  {
+    "verb": "monitor",
+    "count": 230
+  },
+  {
+    "verb": "repeat",
+    "count": 230
+  },
+  {
+    "verb": "trigger",
+    "count": 229
+  },
+  {
+    "verb": "detain",
+    "count": 227
+  },
+  {
+    "verb": "oversee",
+    "count": 227
+  },
+  {
+    "verb": "diagnose",
+    "count": 225
+  },
+  {
+    "verb": "shift",
+    "count": 223
+  },
+  {
+    "verb": "state",
+    "count": 219
+  },
+  {
+    "verb": "inform",
+    "count": 218
+  },
+  {
+    "verb": "evacuate",
+    "count": 217
+  },
+  {
+    "verb": "ignore",
+    "count": 217
+  },
+  {
+    "verb": "aim",
+    "count": 214
+  },
+  {
+    "verb": "recognise",
+    "count": 214
+  },
+  {
+    "verb": "fuel",
+    "count": 214
+  },
+  {
+    "verb": "vow",
+    "count": 213
+  },
+  {
+    "verb": "associate",
+    "count": 213
+  },
+  {
+    "verb": "slam",
+    "count": 213
+  },
+  {
+    "verb": "purchase",
+    "count": 212
+  },
+  {
+    "verb": "complain",
+    "count": 212
+  },
+  {
+    "verb": "nominate",
+    "count": 212
+  },
+  {
+    "verb": "depart",
+    "count": 211
+  },
+  {
+    "verb": "pause",
+    "count": 211
+  },
+  {
+    "verb": "remember",
+    "count": 211
+  },
+  {
+    "verb": "transfer",
+    "count": 210
+  },
+  {
+    "verb": "seize",
+    "count": 210
+  },
+  {
+    "verb": "reply",
+    "count": 208
+  },
+  {
+    "verb": "track",
+    "count": 208
+  },
+  {
+    "verb": "elect",
+    "count": 207
+  },
+  {
+    "verb": "defeat",
+    "count": 207
+  },
+  {
+    "verb": "handle",
+    "count": 206
+  },
+  {
+    "verb": "improve",
+    "count": 206
+  },
+  {
+    "verb": "tighten",
+    "count": 205
+  },
+  {
+    "verb": "connect",
+    "count": 203
+  },
+  {
+    "verb": "hail",
+    "count": 201
+  },
+  {
+    "verb": "isolate",
+    "count": 201
+  },
+  {
+    "verb": "award",
+    "count": 201
+  },
+  {
+    "verb": "care",
+    "count": 197
+  },
+  {
+    "verb": "finish",
+    "count": 197
+  },
+  {
+    "verb": "accelerate",
+    "count": 196
+  },
+  {
+    "verb": "pursue",
+    "count": 196
+  },
+  {
+    "verb": "soar",
+    "count": 194
+  },
+  {
+    "verb": "let",
+    "count": 194
+  },
+  {
+    "verb": "compile",
+    "count": 193
+  },
+  {
+    "verb": "mandate",
+    "count": 192
+  },
+  {
+    "verb": "worry",
+    "count": 192
+  },
+  {
+    "verb": "caution",
+    "count": 192
+  },
+  {
+    "verb": "stick",
+    "count": 192
+  },
+  {
+    "verb": "dominate",
+    "count": 191
+  },
+  {
+    "verb": "impact",
+    "count": 191
+  },
+  {
+    "verb": "age",
+    "count": 191
+  },
+  {
+    "verb": "ramp",
+    "count": 190
+  },
+  {
+    "verb": "exclude",
+    "count": 189
+  },
+  {
+    "verb": "concern",
+    "count": 189
+  },
+  {
+    "verb": "count",
+    "count": 189
+  },
+  {
+    "verb": "line",
+    "count": 187
+  },
+  {
+    "verb": "circulate",
+    "count": 187
+  },
+  {
+    "verb": "invest",
+    "count": 187
+  },
+  {
+    "verb": "surround",
+    "count": 187
+  },
+  {
+    "verb": "ship",
+    "count": 186
+  },
+  {
+    "verb": "import",
+    "count": 186
+  },
+  {
+    "verb": "emphasize",
+    "count": 186
+  },
+  {
+    "verb": "escalate",
+    "count": 185
+  },
+  {
+    "verb": "assess",
+    "count": 184
+  },
+  {
+    "verb": "top",
+    "count": 184
+  },
+  {
+    "verb": "strengthen",
+    "count": 184
+  },
+  {
+    "verb": "interview",
+    "count": 184
+  },
+  {
+    "verb": "campaign",
+    "count": 183
+  },
+  {
+    "verb": "bar",
+    "count": 183
+  },
+  {
+    "verb": "appeal",
+    "count": 183
+  },
+  {
+    "verb": "burn",
+    "count": 182
+  },
+  {
+    "verb": "comment",
+    "count": 182
+  },
+  {
+    "verb": "clash",
+    "count": 181
+  },
+  {
+    "verb": "fear",
+    "count": 181
+  },
+  {
+    "verb": "sweep",
+    "count": 179
+  },
+  {
+    "verb": "benefit",
+    "count": 179
+  },
+  {
+    "verb": "range",
+    "count": 174
+  },
+  {
+    "verb": "clear",
+    "count": 174
+  },
+  {
+    "verb": "observe",
+    "count": 173
+  },
+  {
+    "verb": "voice",
+    "count": 172
+  },
+  {
+    "verb": "picture",
+    "count": 172
+  },
+  {
+    "verb": "plunge",
+    "count": 171
+  },
+  {
+    "verb": "negotiate",
+    "count": 171
+  },
+  {
+    "verb": "embrace",
+    "count": 171
+  },
+  {
+    "verb": "reverse",
+    "count": 170
+  },
+  {
+    "verb": "underscore",
+    "count": 170
+  },
+  {
+    "verb": "employ",
+    "count": 168
+  },
+  {
+    "verb": "hospitalize",
+    "count": 168
+  },
+  {
+    "verb": "attribute",
+    "count": 166
+  },
+  {
+    "verb": "sound",
+    "count": 166
+  },
+  {
+    "verb": "cost",
+    "count": 165
+  },
+  {
+    "verb": "remind",
+    "count": 165
+  },
+  {
+    "verb": "define",
+    "count": 165
+  },
+  {
+    "verb": "rally",
+    "count": 164
+  },
+  {
+    "verb": "resist",
+    "count": 163
+  },
+  {
+    "verb": "project",
+    "count": 162
+  },
+  {
+    "verb": "label",
+    "count": 161
+  },
+  {
+    "verb": "intend",
+    "count": 161
+  },
+  {
+    "verb": "plead",
+    "count": 160
+  },
+  {
+    "verb": "kick",
+    "count": 160
+  },
+  {
+    "verb": "achieve",
+    "count": 159
+  },
+  {
+    "verb": "confront",
+    "count": 159
+  },
+  {
+    "verb": "exceed",
+    "count": 157
+  },
+  {
+    "verb": "design",
+    "count": 156
+  },
+  {
+    "verb": "escape",
+    "count": 156
+  },
+  {
+    "verb": "apologise",
+    "count": 155
+  },
+  {
+    "verb": "love",
+    "count": 155
+  },
+  {
+    "verb": "trace",
+    "count": 152
+  },
+  {
+    "verb": "star",
+    "count": 152
+  },
+  {
+    "verb": "earn",
+    "count": 152
+  },
+  {
+    "verb": "explore",
+    "count": 152
+  },
+  {
+    "verb": "coordinate",
+    "count": 151
+  },
+  {
+    "verb": "attract",
+    "count": 150
+  },
+  {
+    "verb": "notify",
+    "count": 147
+  },
+  {
+    "verb": "enforce",
+    "count": 147
+  },
+  {
+    "verb": "depend",
+    "count": 147
+  },
+  {
+    "verb": "scrap",
+    "count": 147
+  },
+  {
+    "verb": "climb",
+    "count": 147
+  },
+  {
+    "verb": "determine",
+    "count": 147
+  },
+  {
+    "verb": "fin",
+    "count": 147
+  },
+  {
+    "verb": "quit",
+    "count": 146
+  },
+  {
+    "verb": "book",
+    "count": 145
+  },
+  {
+    "verb": "allege",
+    "count": 145
+  },
+  {
+    "verb": "concede",
+    "count": 145
+  },
+  {
+    "verb": "acquire",
+    "count": 144
+  },
+  {
+    "verb": "stretch",
+    "count": 144
+  },
+  {
+    "verb": "violate",
+    "count": 143
+  },
+  {
+    "verb": "forecast",
+    "count": 142
+  },
+  {
+    "verb": "relax",
+    "count": 142
+  },
+  {
+    "verb": "spot",
+    "count": 142
+  },
+  {
+    "verb": "hurt",
+    "count": 141
+  },
+  {
+    "verb": "like",
+    "count": 141
+  },
+  {
+    "verb": "dock",
+    "count": 140
+  },
+  {
+    "verb": "teach",
+    "count": 140
+  },
+  {
+    "verb": "ensure",
+    "count": 140
+  },
+  {
+    "verb": "contradict",
+    "count": 139
+  },
+  {
+    "verb": "convene",
+    "count": 139
+  },
+  {
+    "verb": "destroy",
+    "count": 139
+  },
+  {
+    "verb": "brief",
+    "count": 139
+  },
+  {
+    "verb": "tackle",
+    "count": 138
+  },
+  {
+    "verb": "organise",
+    "count": 138
+  },
+  {
+    "verb": "abandon",
+    "count": 137
+  },
+  {
+    "verb": "enact",
+    "count": 137
+  },
+  {
+    "verb": "worsen",
+    "count": 136
+  },
+  {
+    "verb": "tie",
+    "count": 136
+  },
+  {
+    "verb": "denounce",
+    "count": 135
+  },
+  {
+    "verb": "trust",
+    "count": 135
+  },
+  {
+    "verb": "export",
+    "count": 135
+  },
+  {
+    "verb": "advance",
+    "count": 135
+  },
+  {
+    "verb": "exist",
+    "count": 134
+  },
+  {
+    "verb": "rush",
+    "count": 134
+  },
+  {
+    "verb": "downplay",
+    "count": 134
+  },
+  {
+    "verb": "restore",
+    "count": 133
+  },
+  {
+    "verb": "partner",
+    "count": 133
+  },
+  {
+    "verb": "blast",
+    "count": 132
+  },
+  {
+    "verb": "grapple",
+    "count": 131
+  },
+  {
+    "verb": "flag",
+    "count": 131
+  },
+  {
+    "verb": "lag",
+    "count": 130
+  },
+  {
+    "verb": "tour",
+    "count": 130
+  },
+  {
+    "verb": "march",
+    "count": 130
+  },
+  {
+    "verb": "coincide",
+    "count": 129
+  },
+  {
+    "verb": "tear",
+    "count": 129
+  },
+  {
+    "verb": "recognize",
+    "count": 129
+  },
+  {
+    "verb": "pressure",
+    "count": 128
+  },
+  {
+    "verb": "permit",
+    "count": 127
+  },
+  {
+    "verb": "touch",
+    "count": 127
+  },
+  {
+    "verb": "hang",
+    "count": 126
+  },
+  {
+    "verb": "peak",
+    "count": 126
+  },
+  {
+    "verb": "survive",
+    "count": 126
+  },
+  {
+    "verb": "screen",
+    "count": 126
+  },
+  {
+    "verb": "compete",
+    "count": 126
+  },
+  {
+    "verb": "react",
+    "count": 125
+  },
+  {
+    "verb": "rid",
+    "count": 124
+  },
+  {
+    "verb": "opt",
+    "count": 124
+  },
+  {
+    "verb": "reference",
+    "count": 124
+  },
+  {
+    "verb": "disrupt",
+    "count": 124
+  },
+  {
+    "verb": "inspire",
+    "count": 123
+  },
+  {
+    "verb": "capture",
+    "count": 122
+  },
+  {
+    "verb": "accompany",
+    "count": 122
+  },
+  {
+    "verb": "paint",
+    "count": 121
+  },
+  {
+    "verb": "mock",
+    "count": 121
+  },
+  {
+    "verb": "exacerbate",
+    "count": 121
+  },
+  {
+    "verb": "await",
+    "count": 120
+  },
+  {
+    "verb": "shake",
+    "count": 120
+  },
+  {
+    "verb": "intensify",
+    "count": 119
+  },
+  {
+    "verb": "designate",
+    "count": 118
+  },
+  {
+    "verb": "brace",
+    "count": 118
+  },
+  {
+    "verb": "display",
+    "count": 117
+  },
+  {
+    "verb": "counter",
+    "count": 117
+  },
+  {
+    "verb": "organize",
+    "count": 117
+  },
+  {
+    "verb": "influence",
+    "count": 116
+  },
+  {
+    "verb": "unfold",
+    "count": 116
+  },
+  {
+    "verb": "lower",
+    "count": 115
+  },
+  {
+    "verb": "instruct",
+    "count": 115
+  },
+  {
+    "verb": "assist",
+    "count": 115
+  },
+  {
+    "verb": "congratulate",
+    "count": 114
+  },
+  {
+    "verb": "detail",
+    "count": 113
+  },
+  {
+    "verb": "lash",
+    "count": 113
+  },
+  {
+    "verb": "liken",
+    "count": 113
+  },
+  {
+    "verb": "document",
+    "count": 113
+  },
+  {
+    "verb": "instal",
+    "count": 113
+  },
+  {
+    "verb": "generate",
+    "count": 113
+  },
+  {
+    "verb": "transport",
+    "count": 112
+  },
+  {
+    "verb": "inoculate",
+    "count": 112
+  },
+  {
+    "verb": "invade",
+    "count": 112
+  },
+  {
+    "verb": "dispute",
+    "count": 112
+  },
+  {
+    "verb": "switch",
+    "count": 110
+  },
+  {
+    "verb": "disclose",
+    "count": 110
+  },
+  {
+    "verb": "expel",
+    "count": 109
+  },
+  {
+    "verb": "steal",
+    "count": 109
+  },
+  {
+    "verb": "fare",
+    "count": 109
+  },
+  {
+    "verb": "eliminate",
+    "count": 109
+  },
+  {
+    "verb": "succeed",
+    "count": 108
+  },
+  {
+    "verb": "witness",
+    "count": 107
+  },
+  {
+    "verb": "deem",
+    "count": 107
+  },
+  {
+    "verb": "hire",
+    "count": 107
+  },
+  {
+    "verb": "breach",
+    "count": 107
+  },
+  {
+    "verb": "combat",
+    "count": 107
+  },
+  {
+    "verb": "sentence",
+    "count": 106
+  },
+  {
+    "verb": "advocate",
+    "count": 106
+  },
+  {
+    "verb": "pack",
+    "count": 106
+  },
+  {
+    "verb": "assure",
+    "count": 105
+  },
+  {
+    "verb": "plummet",
+    "count": 105
+  },
+  {
+    "verb": "message",
+    "count": 105
+  },
+  {
+    "verb": "tap",
+    "count": 104
+  },
+  {
+    "verb": "divide",
+    "count": 104
+  },
+  {
+    "verb": "overturn",
+    "count": 104
+  },
+  {
+    "verb": "allocate",
+    "count": 103
+  },
+  {
+    "verb": "greet",
+    "count": 103
+  },
+  {
+    "verb": "undergo",
+    "count": 102
+  },
+  {
+    "verb": "trade",
+    "count": 102
+  },
+  {
+    "verb": "reinstate",
+    "count": 102
+  },
+  {
+    "verb": "commission",
+    "count": 101
+  },
+  {
+    "verb": "deteriorate",
+    "count": 101
+  },
+  {
+    "verb": "disagree",
+    "count": 101
+  },
+  {
+    "verb": "wish",
+    "count": 101
+  },
+  {
+    "verb": "risk",
+    "count": 101
+  },
+  {
+    "verb": "retire",
+    "count": 100
+  },
+  {
+    "verb": "collaborate",
+    "count": 100
+  },
+  {
+    "verb": "convince",
+    "count": 100
+  },
+  {
+    "verb": "overwhelm",
+    "count": 100
+  },
+  {
+    "verb": "combine",
+    "count": 100
+  },
+  {
+    "verb": "belong",
+    "count": 98
+  },
+  {
+    "verb": "trail",
+    "count": 98
+  },
+  {
+    "verb": "stag",
+    "count": 98
+  },
+  {
+    "verb": "search",
+    "count": 98
+  },
+  {
+    "verb": "collapse",
+    "count": 97
+  },
+  {
+    "verb": "debate",
+    "count": 97
+  },
+  {
+    "verb": "enable",
+    "count": 96
+  },
+  {
+    "verb": "bolster",
+    "count": 96
+  },
+  {
+    "verb": "feed",
+    "count": 95
+  },
+  {
+    "verb": "alert",
+    "count": 95
+  },
+  {
+    "verb": "consult",
+    "count": 94
+  },
+  {
+    "verb": "lack",
+    "count": 94
+  },
+  {
+    "verb": "assume",
+    "count": 94
+  },
+  {
+    "verb": "occupy",
+    "count": 94
+  },
+  {
+    "verb": "credit",
+    "count": 94
+  },
+  {
+    "verb": "honor",
+    "count": 94
+  },
+  {
+    "verb": "survey",
+    "count": 93
+  },
+  {
+    "verb": "portray",
+    "count": 93
+  },
+  {
+    "verb": "single",
+    "count": 93
+  },
+  {
+    "verb": "boast",
+    "count": 93
+  },
+  {
+    "verb": "hospitalise",
+    "count": 92
+  },
+  {
+    "verb": "outbreak",
+    "count": 92
+  },
+  {
+    "verb": "retain",
+    "count": 91
+  },
+  {
+    "verb": "select",
+    "count": 91
+  },
+  {
+    "verb": "average",
+    "count": 91
+  },
+  {
+    "verb": "author",
+    "count": 91
+  },
+  {
+    "verb": "endure",
+    "count": 90
+  },
+  {
+    "verb": "downgrade",
+    "count": 90
+  },
+  {
+    "verb": "defy",
+    "count": 90
+  },
+  {
+    "verb": "settle",
+    "count": 90
+  },
+  {
+    "verb": "float",
+    "count": 90
+  },
+  {
+    "verb": "seal",
+    "count": 89
+  },
+  {
+    "verb": "curb",
+    "count": 89
+  },
+  {
+    "verb": "spike",
+    "count": 89
+  },
+  {
+    "verb": "film",
+    "count": 88
+  },
+  {
+    "verb": "punish",
+    "count": 88
+  },
+  {
+    "verb": "shape",
+    "count": 88
+  },
+  {
+    "verb": "align",
+    "count": 88
+  },
+  {
+    "verb": "store",
+    "count": 88
+  },
+  {
+    "verb": "reimpose",
+    "count": 88
+  },
+  {
+    "verb": "stall",
+    "count": 88
+  },
+  {
+    "verb": "train",
+    "count": 87
+  },
+  {
+    "verb": "certify",
+    "count": 87
+  },
+  {
+    "verb": "match",
+    "count": 87
+  },
+  {
+    "verb": "lobby",
+    "count": 87
+  },
+  {
+    "verb": "comprise",
+    "count": 87
+  },
+  {
+    "verb": "scramble",
+    "count": 86
+  },
+  {
+    "verb": "hope",
+    "count": 86
+  },
+  {
+    "verb": "invoke",
+    "count": 86
+  },
+  {
+    "verb": "mount",
+    "count": 86
+  },
+  {
+    "verb": "undertake",
+    "count": 85
+  },
+  {
+    "verb": "sing",
+    "count": 85
+  },
+  {
+    "verb": "bind",
+    "count": 85
+  },
+  {
+    "verb": "stem",
+    "count": 85
+  },
+  {
+    "verb": "damage",
+    "count": 85
+  },
+  {
+    "verb": "comply",
+    "count": 84
+  },
+  {
+    "verb": "transform",
+    "count": 84
+  },
+  {
+    "verb": "murder",
+    "count": 84
+  },
+  {
+    "verb": "swear",
+    "count": 84
+  },
+  {
+    "verb": "notice",
+    "count": 84
+  },
+  {
+    "verb": "knock",
+    "count": 84
+  },
+  {
+    "verb": "team",
+    "count": 84
+  },
+  {
+    "verb": "slip",
+    "count": 83
+  },
+  {
+    "verb": "hide",
+    "count": 83
+  },
+  {
+    "verb": "leak",
+    "count": 83
+  },
+  {
+    "verb": "prefer",
+    "count": 83
+  },
+  {
+    "verb": "owe",
+    "count": 83
+  },
+  {
+    "verb": "spar",
+    "count": 83
+  },
+  {
+    "verb": "sum",
+    "count": 83
+  },
+  {
+    "verb": "emphasise",
+    "count": 82
+  },
+  {
+    "verb": "reaffirm",
+    "count": 82
+  },
+  {
+    "verb": "mirror",
+    "count": 82
+  },
+  {
+    "verb": "assert",
+    "count": 82
+  },
+  {
+    "verb": "wrap",
+    "count": 82
+  },
+  {
+    "verb": "tumble",
+    "count": 81
+  },
+  {
+    "verb": "prohibit",
+    "count": 81
+  },
+  {
+    "verb": "summon",
+    "count": 81
+  },
+  {
+    "verb": "access",
+    "count": 81
+  },
+  {
+    "verb": "shrink",
+    "count": 81
+  },
+  {
+    "verb": "analyse",
+    "count": 81
+  },
+  {
+    "verb": "revise",
+    "count": 81
+  },
+  {
+    "verb": "scale",
+    "count": 81
+  },
+  {
+    "verb": "slash",
+    "count": 81
+  },
+  {
+    "verb": "pour",
+    "count": 81
+  },
+  {
+    "verb": "patrol",
+    "count": 81
+  },
+  {
+    "verb": "classify",
+    "count": 80
+  },
+  {
+    "verb": "hint",
+    "count": 80
+  },
+  {
+    "verb": "air",
+    "count": 80
+  },
+  {
+    "verb": "score",
+    "count": 80
+  },
+  {
+    "verb": "shed",
+    "count": 79
+  },
+  {
+    "verb": "level",
+    "count": 79
+  },
+  {
+    "verb": "navigate",
+    "count": 79
+  },
+  {
+    "verb": "afford",
+    "count": 79
+  },
+  {
+    "verb": "disappear",
+    "count": 79
+  },
+  {
+    "verb": "marry",
+    "count": 78
+  },
+  {
+    "verb": "race",
+    "count": 78
+  },
+  {
+    "verb": "separate",
+    "count": 78
+  },
+  {
+    "verb": "suppress",
+    "count": 78
+  },
+  {
+    "verb": "near",
+    "count": 78
+  },
+  {
+    "verb": "edge",
+    "count": 78
+  },
+  {
+    "verb": "object",
+    "count": 77
+  },
+  {
+    "verb": "split",
+    "count": 77
+  },
+  {
+    "verb": "descend",
+    "count": 77
+  },
+  {
+    "verb": "respect",
+    "count": 76
+  },
+  {
+    "verb": "crash",
+    "count": 76
+  },
+  {
+    "verb": "eat",
+    "count": 76
+  },
+  {
+    "verb": "lambast",
+    "count": 75
+  },
+  {
+    "verb": "anger",
+    "count": 75
+  },
+  {
+    "verb": "photograph",
+    "count": 75
+  },
+  {
+    "verb": "decrease",
+    "count": 75
+  },
+  {
+    "verb": "ride",
+    "count": 75
+  },
+  {
+    "verb": "illustrate",
+    "count": 75
+  },
+  {
+    "verb": "joke",
+    "count": 74
+  },
+  {
+    "verb": "guarantee",
+    "count": 74
+  },
+  {
+    "verb": "restart",
+    "count": 74
+  },
+  {
+    "verb": "suppose",
+    "count": 73
+  },
+  {
+    "verb": "revive",
+    "count": 73
+  },
+  {
+    "verb": "cope",
+    "count": 73
+  },
+  {
+    "verb": "favor",
+    "count": 73
+  },
+  {
+    "verb": "bury",
+    "count": 72
+  },
+  {
+    "verb": "vary",
+    "count": 72
+  },
+  {
+    "verb": "strand",
+    "count": 72
+  },
+  {
+    "verb": "wake",
+    "count": 72
+  },
+  {
+    "verb": "freeze",
+    "count": 72
+  },
+  {
+    "verb": "suspect",
+    "count": 72
+  },
+  {
+    "verb": "erupt",
+    "count": 72
+  },
+  {
+    "verb": "proceed",
+    "count": 72
+  },
+  {
+    "verb": "lament",
+    "count": 72
+  },
+  {
+    "verb": "withhold",
+    "count": 72
+  },
+  {
+    "verb": "frame",
+    "count": 72
+  },
+  {
+    "verb": "unleash",
+    "count": 72
+  },
+  {
+    "verb": "renew",
+    "count": 71
+  },
+  {
+    "verb": "judge",
+    "count": 71
+  },
+  {
+    "verb": "board",
+    "count": 71
+  },
+  {
+    "verb": "pop",
+    "count": 71
+  },
+  {
+    "verb": "sail",
+    "count": 71
+  },
+  {
+    "verb": "drag",
+    "count": 71
+  },
+  {
+    "verb": "remark",
+    "count": 71
+  },
+  {
+    "verb": "relocate",
+    "count": 71
+  },
+  {
+    "verb": "evaluate",
+    "count": 70
+  },
+  {
+    "verb": "divert",
+    "count": 70
+  },
+  {
+    "verb": "dip",
+    "count": 70
+  },
+  {
+    "verb": "exit",
+    "count": 70
+  },
+  {
+    "verb": "clarify",
+    "count": 70
+  },
+  {
+    "verb": "convict",
+    "count": 70
+  },
+  {
+    "verb": "cough",
+    "count": 70
+  },
+  {
+    "verb": "applaud",
+    "count": 70
+  },
+  {
+    "verb": "slump",
+    "count": 69
+  },
+  {
+    "verb": "strain",
+    "count": 69
+  },
+  {
+    "verb": "convert",
+    "count": 69
+  },
+  {
+    "verb": "enrol",
+    "count": 69
+  },
+  {
+    "verb": "rail",
+    "count": 69
+  },
+  {
+    "verb": "poise",
+    "count": 69
+  },
+  {
+    "verb": "reel",
+    "count": 69
+  },
+  {
+    "verb": "initiate",
+    "count": 69
+  },
+  {
+    "verb": "side",
+    "count": 69
+  },
+  {
+    "verb": "amplify",
+    "count": 69
+  },
+  {
+    "verb": "sponsor",
+    "count": 69
+  },
+  {
+    "verb": "prioritise",
+    "count": 68
+  },
+  {
+    "verb": "aid",
+    "count": 68
+  },
+  {
+    "verb": "forget",
+    "count": 68
+  },
+  {
+    "verb": "epidemiologist",
+    "count": 68
+  },
+  {
+    "verb": "preside",
+    "count": 68
+  },
+  {
+    "verb": "appreciate",
+    "count": 68
+  },
+  {
+    "verb": "reassure",
+    "count": 68
+  },
+  {
+    "verb": "license",
+    "count": 67
+  },
+  {
+    "verb": "mislead",
+    "count": 67
+  },
+  {
+    "verb": "border",
+    "count": 67
+  },
+  {
+    "verb": "tend",
+    "count": 67
+  },
+  {
+    "verb": "underline",
+    "count": 66
+  },
+  {
+    "verb": "champion",
+    "count": 66
+  },
+  {
+    "verb": "brand",
+    "count": 66
+  },
+  {
+    "verb": "interfere",
+    "count": 66
+  },
+  {
+    "verb": "oust",
+    "count": 66
+  },
+  {
+    "verb": "arrange",
+    "count": 66
+  },
+  {
+    "verb": "govern",
+    "count": 66
+  },
+  {
+    "verb": "embark",
+    "count": 66
+  },
+  {
+    "verb": "download",
+    "count": 66
+  },
+  {
+    "verb": "dispatch",
+    "count": 66
+  },
+  {
+    "verb": "institute",
+    "count": 66
+  },
+  {
+    "verb": "facilitate",
+    "count": 66
+  },
+  {
+    "verb": "distance",
+    "count": 65
+  },
+  {
+    "verb": "guide",
+    "count": 65
+  },
+  {
+    "verb": "reinforce",
+    "count": 65
+  },
+  {
+    "verb": "stream",
+    "count": 65
+  },
+  {
+    "verb": "wonder",
+    "count": 65
+  },
+  {
+    "verb": "uphold",
+    "count": 65
+  },
+  {
+    "verb": "lean",
+    "count": 65
+  },
+  {
+    "verb": "dig",
+    "count": 65
+  },
+  {
+    "verb": "flood",
+    "count": 65
+  },
+  {
+    "verb": "transmit",
+    "count": 64
+  },
+  {
+    "verb": "hug",
+    "count": 64
+  },
+  {
+    "verb": "explode",
+    "count": 64
+  },
+  {
+    "verb": "amount",
+    "count": 64
+  },
+  {
+    "verb": "provoke",
+    "count": 64
+  },
+  {
+    "verb": "revoke",
+    "count": 64
+  },
+  {
+    "verb": "realise",
+    "count": 63
+  },
+  {
+    "verb": "wipe",
+    "count": 63
+  },
+  {
+    "verb": "contrast",
+    "count": 63
+  },
+  {
+    "verb": "injure",
+    "count": 63
+  },
+  {
+    "verb": "analyze",
+    "count": 63
+  },
+  {
+    "verb": "log",
+    "count": 63
+  },
+  {
+    "verb": "indict",
+    "count": 63
+  },
+  {
+    "verb": "rescue",
+    "count": 62
+  },
+  {
+    "verb": "jail",
+    "count": 62
+  },
+  {
+    "verb": "sack",
+    "count": 62
+  },
+  {
+    "verb": "shout",
+    "count": 62
+  },
+  {
+    "verb": "depict",
+    "count": 62
+  },
+  {
+    "verb": "terminate",
+    "count": 61
+  },
+  {
+    "verb": "last",
+    "count": 61
+  },
+  {
+    "verb": "attach",
+    "count": 61
+  },
+  {
+    "verb": "characterize",
+    "count": 61
+  },
+  {
+    "verb": "deserve",
+    "count": 61
+  },
+  {
+    "verb": "sanction",
+    "count": 61
+  },
+  {
+    "verb": "dump",
+    "count": 61
+  },
+  {
+    "verb": "concentrate",
+    "count": 60
+  },
+  {
+    "verb": "steer",
+    "count": 60
+  },
+  {
+    "verb": "raid",
+    "count": 60
+  },
+  {
+    "verb": "rag",
+    "count": 60
+  },
+  {
+    "verb": "shutter",
+    "count": 59
+  },
+  {
+    "verb": "strip",
+    "count": 59
+  },
+  {
+    "verb": "broadcast",
+    "count": 59
+  },
+  {
+    "verb": "recount",
+    "count": 59
+  },
+  {
+    "verb": "overshadow",
+    "count": 59
+  },
+  {
+    "verb": "repatriate",
+    "count": 59
+  },
+  {
+    "verb": "deepen",
+    "count": 59
+  },
+  {
+    "verb": "spur",
+    "count": 59
+  },
+  {
+    "verb": "encounter",
+    "count": 58
+  },
+  {
+    "verb": "widen",
+    "count": 58
+  },
+  {
+    "verb": "devastate",
+    "count": 58
+  },
+  {
+    "verb": "trend",
+    "count": 58
+  },
+  {
+    "verb": "email",
+    "count": 58
+  },
+  {
+    "verb": "weaken",
+    "count": 58
+  },
+  {
+    "verb": "cooperate",
+    "count": 58
+  },
+  {
+    "verb": "trap",
+    "count": 57
+  },
+  {
+    "verb": "surprise",
+    "count": 57
+  },
+  {
+    "verb": "persuade",
+    "count": 57
+  },
+  {
+    "verb": "wave",
+    "count": 57
+  },
+  {
+    "verb": "apologize",
+    "count": 57
+  },
+  {
+    "verb": "dub",
+    "count": 57
+  },
+  {
+    "verb": "rip",
+    "count": 57
+  },
+  {
+    "verb": "disinfect",
+    "count": 57
+  },
+  {
+    "verb": "rebuke",
+    "count": 57
+  },
+  {
+    "verb": "assemble",
+    "count": 57
+  },
+  {
+    "verb": "draft",
+    "count": 57
+  },
+  {
+    "verb": "confine",
+    "count": 56
+  },
+  {
+    "verb": "loom",
+    "count": 56
+  },
+  {
+    "verb": "recruit",
+    "count": 56
+  },
+  {
+    "verb": "imagine",
+    "count": 56
+  },
+  {
+    "verb": "laud",
+    "count": 56
+  },
+  {
+    "verb": "inject",
+    "count": 56
+  },
+  {
+    "verb": "pray",
+    "count": 56
+  },
+  {
+    "verb": "characterise",
+    "count": 56
+  },
+  {
+    "verb": "load",
+    "count": 55
+  },
+  {
+    "verb": "hamper",
+    "count": 55
+  },
+  {
+    "verb": "centre",
+    "count": 55
+  },
+  {
+    "verb": "arise",
+    "count": 55
+  },
+  {
+    "verb": "forge",
+    "count": 55
+  },
+  {
+    "verb": "anticipate",
+    "count": 55
+  },
+  {
+    "verb": "stoke",
+    "count": 55
+  },
+  {
+    "verb": "commemorate",
+    "count": 54
+  },
+  {
+    "verb": "implore",
+    "count": 54
+  },
+  {
+    "verb": "adapt",
+    "count": 54
+  },
+  {
+    "verb": "elevate",
+    "count": 54
+  },
+  {
+    "verb": "consume",
+    "count": 54
+  },
+  {
+    "verb": "fit",
+    "count": 53
+  },
+  {
+    "verb": "rest",
+    "count": 53
+  },
+  {
+    "verb": "crack",
+    "count": 53
+  },
+  {
+    "verb": "calculate",
+    "count": 53
+  },
+  {
+    "verb": "upgrade",
+    "count": 52
+  },
+  {
+    "verb": "honour",
+    "count": 52
+  },
+  {
+    "verb": "round",
+    "count": 52
+  },
+  {
+    "verb": "measure",
+    "count": 52
+  },
+  {
+    "verb": "contest",
+    "count": 52
+  },
+  {
+    "verb": "model",
+    "count": 52
+  },
+  {
+    "verb": "exchange",
+    "count": 52
+  },
+  {
+    "verb": "activate",
+    "count": 52
+  },
+  {
+    "verb": "erode",
+    "count": 52
+  },
+  {
+    "verb": "intervene",
+    "count": 52
+  },
+  {
+    "verb": "rejoin",
+    "count": 52
+  },
+  {
+    "verb": "censure",
+    "count": 52
+  },
+  {
+    "verb": "blow",
+    "count": 51
+  },
+  {
+    "verb": "light",
+    "count": 51
+  },
+  {
+    "verb": "source",
+    "count": 51
+  },
+  {
+    "verb": "lend",
+    "count": 51
+  },
+  {
+    "verb": "speed",
+    "count": 51
+  },
+  {
+    "verb": "affiliate",
+    "count": 51
+  },
+  {
+    "verb": "slide",
+    "count": 51
+  },
+  {
+    "verb": "unite",
+    "count": 51
+  },
+  {
+    "verb": "overrule",
+    "count": 51
+  },
+  {
+    "verb": "storm",
+    "count": 51
+  },
+  {
+    "verb": "trialle",
+    "count": 50
+  },
+  {
+    "verb": "mix",
+    "count": 50
+  },
+  {
+    "verb": "ravage",
+    "count": 50
+  },
+  {
+    "verb": "pile",
+    "count": 50
+  },
+  {
+    "verb": "evade",
+    "count": 50
+  },
+  {
+    "verb": "realize",
+    "count": 50
+  },
+  {
+    "verb": "practice",
+    "count": 50
+  },
+  {
+    "verb": "borrow",
+    "count": 49
+  },
+  {
+    "verb": "sink",
+    "count": 49
+  },
+  {
+    "verb": "impeach",
+    "count": 49
+  },
+  {
+    "verb": "airlift",
+    "count": 49
+  },
+  {
+    "verb": "frustrate",
+    "count": 49
+  },
+  {
+    "verb": "process",
+    "count": 48
+  },
+  {
+    "verb": "queue",
+    "count": 48
+  },
+  {
+    "verb": "mourn",
+    "count": 48
+  },
+  {
+    "verb": "commend",
+    "count": 48
+  },
+  {
+    "verb": "volunteer",
+    "count": 48
+  },
+  {
+    "verb": "title",
+    "count": 48
+  },
+  {
+    "verb": "endanger",
+    "count": 47
+  },
+  {
+    "verb": "procure",
+    "count": 47
+  },
+  {
+    "verb": "showcase",
+    "count": 47
+  },
+  {
+    "verb": "value",
+    "count": 47
+  },
+  {
+    "verb": "beg",
+    "count": 47
+  },
+  {
+    "verb": "grip",
+    "count": 47
+  },
+  {
+    "verb": "hammer",
+    "count": 47
+  },
+  {
+    "verb": "disembark",
+    "count": 47
+  },
+  {
+    "verb": "pin",
+    "count": 47
+  },
+  {
+    "verb": "dance",
+    "count": 47
+  },
+  {
+    "verb": "slat",
+    "count": 47
+  },
+  {
+    "verb": "dodge",
+    "count": 47
+  },
+  {
+    "verb": "retweete",
+    "count": 46
+  },
+  {
+    "verb": "gear",
+    "count": 46
+  },
+  {
+    "verb": "stage",
+    "count": 46
+  },
+  {
+    "verb": "reintroduce",
+    "count": 46
+  },
+  {
+    "verb": "reserve",
+    "count": 46
+  },
+  {
+    "verb": "spray",
+    "count": 46
+  },
+  {
+    "verb": "subject",
+    "count": 46
+  },
+  {
+    "verb": "exploit",
+    "count": 46
+  },
+  {
+    "verb": "harm",
+    "count": 46
+  },
+  {
+    "verb": "infuriate",
+    "count": 46
+  },
+  {
+    "verb": "sideline",
+    "count": 46
+  },
+  {
+    "verb": "outpace",
+    "count": 46
+  },
+  {
+    "verb": "moderate",
+    "count": 46
+  },
+  {
+    "verb": "edit",
+    "count": 45
+  },
+  {
+    "verb": "fix",
+    "count": 45
+  },
+  {
+    "verb": "discharge",
+    "count": 45
+  },
+  {
+    "verb": "research",
+    "count": 45
+  },
+  {
+    "verb": "resolve",
+    "count": 45
+  },
+  {
+    "verb": "complicate",
+    "count": 45
+  },
+  {
+    "verb": "pave",
+    "count": 45
+  },
+  {
+    "verb": "bounce",
+    "count": 45
+  },
+  {
+    "verb": "sicken",
+    "count": 45
+  },
+  {
+    "verb": "convey",
+    "count": 45
+  },
+  {
+    "verb": "subpoena",
+    "count": 45
+  },
+  {
+    "verb": "bet",
+    "count": 44
+  },
+  {
+    "verb": "rebound",
+    "count": 44
+  },
+  {
+    "verb": "spearhead",
+    "count": 44
+  },
+  {
+    "verb": "position",
+    "count": 44
+  },
+  {
+    "verb": "qualify",
+    "count": 44
+  },
+  {
+    "verb": "translate",
+    "count": 44
+  },
+  {
+    "verb": "lockdown",
+    "count": 44
+  },
+  {
+    "verb": "deport",
+    "count": 43
+  },
+  {
+    "verb": "reckon",
+    "count": 43
+  },
+  {
+    "verb": "jab",
+    "count": 43
+  },
+  {
+    "verb": "alter",
+    "count": 43
+  },
+  {
+    "verb": "compound",
+    "count": 43
+  },
+  {
+    "verb": "ditch",
+    "count": 43
+  },
+  {
+    "verb": "inspect",
+    "count": 43
+  },
+  {
+    "verb": "entitle",
+    "count": 43
+  },
+  {
+    "verb": "adjourn",
+    "count": 43
+  },
+  {
+    "verb": "communicate",
+    "count": 43
+  },
+  {
+    "verb": "deter",
+    "count": 43
+  },
+  {
+    "verb": "transition",
+    "count": 43
+  },
+  {
+    "verb": "loosen",
+    "count": 43
+  },
+  {
+    "verb": "halve",
+    "count": 43
+  },
+  {
+    "verb": "collate",
+    "count": 42
+  },
+  {
+    "verb": "snap",
+    "count": 42
+  },
+  {
+    "verb": "abuse",
+    "count": 42
+  },
+  {
+    "verb": "imply",
+    "count": 42
+  },
+  {
+    "verb": "adjust",
+    "count": 42
+  },
+  {
+    "verb": "clean",
+    "count": 42
+  },
+  {
+    "verb": "drink",
+    "count": 42
+  },
+  {
+    "verb": "delete",
+    "count": 42
+  },
+  {
+    "verb": "spell",
+    "count": 42
+  },
+  {
+    "verb": "flank",
+    "count": 42
+  },
+  {
+    "verb": "reunite",
+    "count": 41
+  },
+  {
+    "verb": "balance",
+    "count": 41
+  },
+  {
+    "verb": "rebuild",
+    "count": 41
+  },
+  {
+    "verb": "alarm",
+    "count": 41
+  },
+  {
+    "verb": "prosecute",
+    "count": 41
+  },
+  {
+    "verb": "differ",
+    "count": 41
+  },
+  {
+    "verb": "shock",
+    "count": 41
+  },
+  {
+    "verb": "heighten",
+    "count": 41
+  },
+  {
+    "verb": "park",
+    "count": 41
+  },
+  {
+    "verb": "incorporate",
+    "count": 41
+  },
+  {
+    "verb": "constitute",
+    "count": 41
+  },
+  {
+    "verb": "speculate",
+    "count": 41
+  },
+  {
+    "verb": "heed",
+    "count": 41
+  },
+  {
+    "verb": "trump",
+    "count": 41
+  },
+  {
+    "verb": "execute",
+    "count": 41
+  },
+  {
+    "verb": "photo",
+    "count": 41
+  },
+  {
+    "verb": "batter",
+    "count": 41
+  },
+  {
+    "verb": "herald",
+    "count": 40
+  },
+  {
+    "verb": "assault",
+    "count": 40
+  },
+  {
+    "verb": "house",
+    "count": 40
+  },
+  {
+    "verb": "inflict",
+    "count": 40
+  },
+  {
+    "verb": "cry",
+    "count": 40
+  },
+  {
+    "verb": "wind",
+    "count": 40
+  },
+  {
+    "verb": "skip",
+    "count": 40
+  },
+  {
+    "verb": "bow",
+    "count": 40
+  },
+  {
+    "verb": "courtesy",
+    "count": 40
+  },
+  {
+    "verb": "culminate",
+    "count": 40
+  },
+  {
+    "verb": "embroil",
+    "count": 40
+  },
+  {
+    "verb": "evolve",
+    "count": 40
+  },
+  {
+    "verb": "implicate",
+    "count": 40
+  },
+  {
+    "verb": "propel",
+    "count": 40
+  },
+  {
+    "verb": "chase",
+    "count": 40
+  },
+  {
+    "verb": "dent",
+    "count": 39
+  },
+  {
+    "verb": "crush",
+    "count": 39
+  },
+  {
+    "verb": "lodge",
+    "count": 39
+  },
+  {
+    "verb": "seat",
+    "count": 39
+  },
+  {
+    "verb": "crowd",
+    "count": 39
+  },
+  {
+    "verb": "date",
+    "count": 39
+  },
+  {
+    "verb": "broker",
+    "count": 39
+  },
+  {
+    "verb": "uncover",
+    "count": 39
+  },
+  {
+    "verb": "poll",
+    "count": 39
+  },
+  {
+    "verb": "sour",
+    "count": 39
+  },
+  {
+    "verb": "overcome",
+    "count": 39
+  },
+  {
+    "verb": "preserve",
+    "count": 38
+  },
+  {
+    "verb": "ground",
+    "count": 38
+  },
+  {
+    "verb": "exercise",
+    "count": 38
+  },
+  {
+    "verb": "defer",
+    "count": 38
+  },
+  {
+    "verb": "neighbour",
+    "count": 38
+  },
+  {
+    "verb": "ring",
+    "count": 38
+  },
+  {
+    "verb": "resemble",
+    "count": 38
+  },
+  {
+    "verb": "affirm",
+    "count": 38
+  },
+  {
+    "verb": "prioritize",
+    "count": 38
+  },
+  {
+    "verb": "veto",
+    "count": 38
+  },
+  {
+    "verb": "proclaim",
+    "count": 38
+  },
+  {
+    "verb": "install",
+    "count": 38
+  },
+  {
+    "verb": "upload",
+    "count": 38
+  },
+  {
+    "verb": "dedicate",
+    "count": 38
+  },
+  {
+    "verb": "finalise",
+    "count": 38
+  },
+  {
+    "verb": "censor",
+    "count": 37
+  },
+  {
+    "verb": "sleep",
+    "count": 37
+  },
+  {
+    "verb": "redirect",
+    "count": 37
+  },
+  {
+    "verb": "expire",
+    "count": 37
+  },
+  {
+    "verb": "total",
+    "count": 37
+  },
+  {
+    "verb": "derail",
+    "count": 37
+  },
+  {
+    "verb": "assign",
+    "count": 37
+  },
+  {
+    "verb": "center",
+    "count": 37
+  },
+  {
+    "verb": "persist",
+    "count": 37
+  },
+  {
+    "verb": "sow",
+    "count": 37
+  },
+  {
+    "verb": "tally",
+    "count": 37
+  },
+  {
+    "verb": "flatten",
+    "count": 37
+  },
+  {
+    "verb": "devote",
+    "count": 37
+  },
+  {
+    "verb": "regain",
+    "count": 37
+  },
+  {
+    "verb": "favour",
+    "count": 37
+  },
+  {
+    "verb": "cap",
+    "count": 36
+  },
+  {
+    "verb": "unload",
+    "count": 36
+  },
+  {
+    "verb": "upset",
+    "count": 36
+  },
+  {
+    "verb": "wag",
+    "count": 36
+  },
+  {
+    "verb": "adhere",
+    "count": 36
+  },
+  {
+    "verb": "swing",
+    "count": 36
+  },
+  {
+    "verb": "retaliate",
+    "count": 36
+  },
+  {
+    "verb": "front",
+    "count": 36
+  },
+  {
+    "verb": "dress",
+    "count": 36
+  },
+  {
+    "verb": "behave",
+    "count": 36
+  },
+  {
+    "verb": "flow",
+    "count": 36
+  },
+  {
+    "verb": "transit",
+    "count": 36
+  },
+  {
+    "verb": "brew",
+    "count": 36
+  },
+  {
+    "verb": "diminish",
+    "count": 36
+  },
+  {
+    "verb": "upend",
+    "count": 36
+  },
+  {
+    "verb": "engulf",
+    "count": 35
+  },
+  {
+    "verb": "interact",
+    "count": 35
+  },
+  {
+    "verb": "slap",
+    "count": 35
+  },
+  {
+    "verb": "overlook",
+    "count": 35
+  },
+  {
+    "verb": "grab",
+    "count": 35
+  },
+  {
+    "verb": "chart",
+    "count": 35
+  },
+  {
+    "verb": "underestimate",
+    "count": 35
+  },
+  {
+    "verb": "construct",
+    "count": 35
+  },
+  {
+    "verb": "rat",
+    "count": 35
+  },
+  {
+    "verb": "headquarter",
+    "count": 35
+  },
+  {
+    "verb": "consist",
+    "count": 35
+  },
+  {
+    "verb": "guard",
+    "count": 35
+  },
+  {
+    "verb": "laugh",
+    "count": 35
+  },
+  {
+    "verb": "regret",
+    "count": 34
+  },
+  {
+    "verb": "cheer",
+    "count": 34
+  },
+  {
+    "verb": "plant",
+    "count": 34
+  },
+  {
+    "verb": "compromise",
+    "count": 34
+  },
+  {
+    "verb": "pitch",
+    "count": 34
+  },
+  {
+    "verb": "ratchet",
+    "count": 34
+  },
+  {
+    "verb": "rock",
+    "count": 34
+  },
+  {
+    "verb": "task",
+    "count": 34
+  },
+  {
+    "verb": "trumpet",
+    "count": 34
+  },
+  {
+    "verb": "narrow",
+    "count": 34
+  },
+  {
+    "verb": "bash",
+    "count": 34
+  },
+  {
+    "verb": "table",
+    "count": 34
+  },
+  {
+    "verb": "displace",
+    "count": 34
+  },
+  {
+    "verb": "justify",
+    "count": 34
+  },
+  {
+    "verb": "engineer",
+    "count": 33
+  },
+  {
+    "verb": "cease",
+    "count": 33
+  },
+  {
+    "verb": "discourage",
+    "count": 33
+  },
+  {
+    "verb": "flout",
+    "count": 33
+  },
+  {
+    "verb": "charter",
+    "count": 33
+  },
+  {
+    "verb": "sequence",
+    "count": 33
+  },
+  {
+    "verb": "rattle",
+    "count": 33
+  },
+  {
+    "verb": "wash",
+    "count": 33
+  },
+  {
+    "verb": "surface",
+    "count": 33
+  },
+  {
+    "verb": "fend",
+    "count": 33
+  },
+  {
+    "verb": "curtail",
+    "count": 33
+  },
+  {
+    "verb": "fault",
+    "count": 33
+  },
+  {
+    "verb": "skyrocket",
+    "count": 33
+  },
+  {
+    "verb": "amend",
+    "count": 33
+  },
+  {
+    "verb": "harass",
+    "count": 33
+  },
+  {
+    "verb": "finalize",
+    "count": 33
+  },
+  {
+    "verb": "eclipse",
+    "count": 33
+  },
+  {
+    "verb": "smash",
+    "count": 33
+  },
+  {
+    "verb": "impress",
+    "count": 33
+  },
+  {
+    "verb": "safeguard",
+    "count": 32
+  },
+  {
+    "verb": "cop",
+    "count": 32
+  },
+  {
+    "verb": "rival",
+    "count": 32
+  },
+  {
+    "verb": "hike",
+    "count": 32
+  },
+  {
+    "verb": "advertise",
+    "count": 32
+  },
+  {
+    "verb": "spill",
+    "count": 32
+  },
+  {
+    "verb": "prescribe",
+    "count": 32
+  },
+  {
+    "verb": "undercut",
+    "count": 32
+  },
+  {
+    "verb": "brush",
+    "count": 32
+  },
+  {
+    "verb": "shop",
+    "count": 32
+  },
+  {
+    "verb": "retract",
+    "count": 32
+  },
+  {
+    "verb": "bill",
+    "count": 32
+  },
+  {
+    "verb": "roundup",
+    "count": 32
+  },
+  {
+    "verb": "merge",
+    "count": 31
+  },
+  {
+    "verb": "dose",
+    "count": 31
+  },
+  {
+    "verb": "hack",
+    "count": 31
+  },
+  {
+    "verb": "educate",
+    "count": 31
+  },
+  {
+    "verb": "unvaccinate",
+    "count": 31
+  },
+  {
+    "verb": "contend",
+    "count": 31
+  },
+  {
+    "verb": "station",
+    "count": 31
+  },
+  {
+    "verb": "scatter",
+    "count": 31
+  },
+  {
+    "verb": "hinder",
+    "count": 31
+  },
+  {
+    "verb": "matter",
+    "count": 31
+  },
+  {
+    "verb": "weather",
+    "count": 31
+  },
+  {
+    "verb": "rebuff",
+    "count": 31
+  },
+  {
+    "verb": "channel",
+    "count": 31
+  },
+  {
+    "verb": "phase",
+    "count": 31
+  },
+  {
+    "verb": "succumb",
+    "count": 31
+  },
+  {
+    "verb": "interrupt",
+    "count": 31
+  },
+  {
+    "verb": "readout",
+    "count": 31
+  },
+  {
+    "verb": "mishandle",
+    "count": 30
+  },
+  {
+    "verb": "alienate",
+    "count": 30
+  },
+  {
+    "verb": "earmark",
+    "count": 30
+  },
+  {
+    "verb": "tip",
+    "count": 30
+  },
+  {
+    "verb": "reside",
+    "count": 30
+  },
+  {
+    "verb": "correct",
+    "count": 30
+  },
+  {
+    "verb": "field",
+    "count": 30
+  },
+  {
+    "verb": "enhance",
+    "count": 30
+  },
+  {
+    "verb": "flock",
+    "count": 30
+  },
+  {
+    "verb": "shrug",
+    "count": 30
+  },
+  {
+    "verb": "seed",
+    "count": 30
+  },
+  {
+    "verb": "eradicate",
+    "count": 30
+  },
+  {
+    "verb": "venture",
+    "count": 30
+  },
+  {
+    "verb": "grill",
+    "count": 30
+  },
+  {
+    "verb": "prevail",
+    "count": 30
+  },
+  {
+    "verb": "deflect",
+    "count": 30
+  },
+  {
+    "verb": "wreak",
+    "count": 30
+  },
+  {
+    "verb": "free",
+    "count": 30
+  },
+  {
+    "verb": "spring",
+    "count": 30
+  },
+  {
+    "verb": "revisit",
+    "count": 30
+  },
+  {
+    "verb": "foreshadow",
+    "count": 30
+  },
+  {
+    "verb": "outweigh",
+    "count": 30
+  },
+  {
+    "verb": "waste",
+    "count": 30
+  },
+  {
+    "verb": "leverage",
+    "count": 30
+  },
+  {
+    "verb": "decry",
+    "count": 30
+  },
+  {
+    "verb": "triple",
+    "count": 30
+  },
+  {
+    "verb": "immigrate",
+    "count": 30
+  },
+  {
+    "verb": "carve",
+    "count": 30
+  },
+  {
+    "verb": "chief",
+    "count": 29
+  },
+  {
+    "verb": "console",
+    "count": 29
+  },
+  {
+    "verb": "headline",
+    "count": 29
+  },
+  {
+    "verb": "rent",
+    "count": 29
+  },
+  {
+    "verb": "rescind",
+    "count": 29
+  },
+  {
+    "verb": "coin",
+    "count": 29
+  },
+  {
+    "verb": "enlist",
+    "count": 29
+  },
+  {
+    "verb": "plot",
+    "count": 29
+  },
+  {
+    "verb": "figure",
+    "count": 29
+  },
+  {
+    "verb": "hinge",
+    "count": 29
+  },
+  {
+    "verb": "interpret",
+    "count": 29
+  },
+  {
+    "verb": "inaugurate",
+    "count": 29
+  },
+  {
+    "verb": "practise",
+    "count": 29
+  },
+  {
+    "verb": "outstrip",
+    "count": 28
+  },
+  {
+    "verb": "solve",
+    "count": 28
+  },
+  {
+    "verb": "unseat",
+    "count": 28
+  },
+  {
+    "verb": "inflame",
+    "count": 28
+  },
+  {
+    "verb": "texte",
+    "count": 28
+  },
+  {
+    "verb": "disappoint",
+    "count": 28
+  },
+  {
+    "verb": "graduate",
+    "count": 28
+  },
+  {
+    "verb": "command",
+    "count": 28
+  },
+  {
+    "verb": "vie",
+    "count": 28
+  },
+  {
+    "verb": "abolish",
+    "count": 28
+  },
+  {
+    "verb": "pit",
+    "count": 28
+  },
+  {
+    "verb": "cruise",
+    "count": 28
+  },
+  {
+    "verb": "mask",
+    "count": 28
+  },
+  {
+    "verb": "pende",
+    "count": 28
+  },
+  {
+    "verb": "staff",
+    "count": 28
+  },
+  {
+    "verb": "reward",
+    "count": 28
+  },
+  {
+    "verb": "perceive",
+    "count": 28
+  },
+  {
+    "verb": "situate",
+    "count": 28
+  },
+  {
+    "verb": "inherit",
+    "count": 28
+  },
+  {
+    "verb": "rename",
+    "count": 28
+  },
+  {
+    "verb": "pen",
+    "count": 28
+  },
+  {
+    "verb": "inch",
+    "count": 28
+  },
+  {
+    "verb": "incite",
+    "count": 28
+  },
+  {
+    "verb": "verify",
+    "count": 27
+  },
+  {
+    "verb": "reshape",
+    "count": 27
+  },
+  {
+    "verb": "shield",
+    "count": 27
+  },
+  {
+    "verb": "migrate",
+    "count": 27
+  },
+  {
+    "verb": "repair",
+    "count": 27
+  },
+  {
+    "verb": "pump",
+    "count": 27
+  },
+  {
+    "verb": "breathe",
+    "count": 27
+  },
+  {
+    "verb": "term",
+    "count": 27
+  },
+  {
+    "verb": "anchor",
+    "count": 27
+  },
+  {
+    "verb": "flip",
+    "count": 27
+  },
+  {
+    "verb": "tick",
+    "count": 27
+  },
+  {
+    "verb": "broaden",
+    "count": 27
+  },
+  {
+    "verb": "exemplify",
+    "count": 27
+  },
+  {
+    "verb": "shun",
+    "count": 27
+  },
+  {
+    "verb": "chant",
+    "count": 27
+  },
+  {
+    "verb": "swap",
+    "count": 27
+  },
+  {
+    "verb": "pair",
+    "count": 27
+  },
+  {
+    "verb": "encompass",
+    "count": 27
+  },
+  {
+    "verb": "wound",
+    "count": 27
+  },
+  {
+    "verb": "inundate",
+    "count": 27
+  },
+  {
+    "verb": "shorten",
+    "count": 27
+  },
+  {
+    "verb": "bypass",
+    "count": 26
+  },
+  {
+    "verb": "exaggerate",
+    "count": 26
+  },
+  {
+    "verb": "stumble",
+    "count": 26
+  },
+  {
+    "verb": "oblige",
+    "count": 26
+  },
+  {
+    "verb": "progress",
+    "count": 26
+  },
+  {
+    "verb": "stab",
+    "count": 26
+  },
+  {
+    "verb": "soften",
+    "count": 26
+  },
+  {
+    "verb": "span",
+    "count": 26
+  },
+  {
+    "verb": "fulfil",
+    "count": 26
+  },
+  {
+    "verb": "empower",
+    "count": 26
+  },
+  {
+    "verb": "exempt",
+    "count": 26
+  },
+  {
+    "verb": "stock",
+    "count": 26
+  },
+  {
+    "verb": "misstate",
+    "count": 26
+  },
+  {
+    "verb": "couple",
+    "count": 26
+  },
+  {
+    "verb": "discredit",
+    "count": 26
+  },
+  {
+    "verb": "garner",
+    "count": 26
+  },
+  {
+    "verb": "cement",
+    "count": 26
+  },
+  {
+    "verb": "quip",
+    "count": 26
+  },
+  {
+    "verb": "allude",
+    "count": 25
+  },
+  {
+    "verb": "equip",
+    "count": 25
+  },
+  {
+    "verb": "reconsider",
+    "count": 25
+  },
+  {
+    "verb": "replicate",
+    "count": 25
+  },
+  {
+    "verb": "distinguish",
+    "count": 25
+  },
+  {
+    "verb": "pivot",
+    "count": 25
+  },
+  {
+    "verb": "court",
+    "count": 25
+  },
+  {
+    "verb": "exert",
+    "count": 25
+  },
+  {
+    "verb": "preview",
+    "count": 25
+  },
+  {
+    "verb": "admire",
+    "count": 25
+  },
+  {
+    "verb": "confer",
+    "count": 25
+  },
+  {
+    "verb": "dismay",
+    "count": 25
+  },
+  {
+    "verb": "revert",
+    "count": 25
+  },
+  {
+    "verb": "derive",
+    "count": 25
+  },
+  {
+    "verb": "underpin",
+    "count": 25
+  },
+  {
+    "verb": "probe",
+    "count": 25
+  },
+  {
+    "verb": "dream",
+    "count": 24
+  },
+  {
+    "verb": "smear",
+    "count": 24
+  },
+  {
+    "verb": "finance",
+    "count": 24
+  },
+  {
+    "verb": "thwart",
+    "count": 24
+  },
+  {
+    "verb": "drain",
+    "count": 24
+  },
+  {
+    "verb": "sustain",
+    "count": 24
+  },
+  {
+    "verb": "crown",
+    "count": 24
+  },
+  {
+    "verb": "refute",
+    "count": 24
+  },
+  {
+    "verb": "wrestle",
+    "count": 24
+  },
+  {
+    "verb": "stack",
+    "count": 24
+  },
+  {
+    "verb": "waive",
+    "count": 24
+  },
+  {
+    "verb": "minimize",
+    "count": 24
+  },
+  {
+    "verb": "funnel",
+    "count": 24
+  },
+  {
+    "verb": "stamp",
+    "count": 24
+  },
+  {
+    "verb": "sharpen",
+    "count": 24
+  },
+  {
+    "verb": "crop",
+    "count": 24
+  },
+  {
+    "verb": "eschew",
+    "count": 24
+  },
+  {
+    "verb": "induce",
+    "count": 24
+  },
+  {
+    "verb": "reignite",
+    "count": 24
+  },
+  {
+    "verb": "consolidate",
+    "count": 23
+  },
+  {
+    "verb": "compel",
+    "count": 23
+  },
+  {
+    "verb": "impede",
+    "count": 23
+  },
+  {
+    "verb": "roar",
+    "count": 23
+  },
+  {
+    "verb": "extradite",
+    "count": 23
+  },
+  {
+    "verb": "stockpile",
+    "count": 23
+  },
+  {
+    "verb": "elaborate",
+    "count": 23
+  },
+  {
+    "verb": "burst",
+    "count": 23
+  },
+  {
+    "verb": "distract",
+    "count": 23
+  },
+  {
+    "verb": "pronounce",
+    "count": 23
+  },
+  {
+    "verb": "acquit",
+    "count": 23
+  },
+  {
+    "verb": "prop",
+    "count": 23
+  },
+  {
+    "verb": "relieve",
+    "count": 23
+  },
+  {
+    "verb": "mobilize",
+    "count": 23
+  },
+  {
+    "verb": "topple",
+    "count": 23
+  },
+  {
+    "verb": "exhaust",
+    "count": 23
+  },
+  {
+    "verb": "drown",
+    "count": 23
+  },
+  {
+    "verb": "undo",
+    "count": 23
+  },
+  {
+    "verb": "dampen",
+    "count": 23
+  },
+  {
+    "verb": "covid",
+    "count": 23
+  },
+  {
+    "verb": "craft",
+    "count": 23
+  },
+  {
+    "verb": "kidnap",
+    "count": 23
+  },
+  {
+    "verb": "heap",
+    "count": 23
+  },
+  {
+    "verb": "specialise",
+    "count": 23
+  },
+  {
+    "verb": "instigate",
+    "count": 22
+  },
+  {
+    "verb": "resonate",
+    "count": 22
+  },
+  {
+    "verb": "tune",
+    "count": 22
+  },
+  {
+    "verb": "motivate",
+    "count": 22
+  },
+  {
+    "verb": "surrender",
+    "count": 22
+  },
+  {
+    "verb": "pre",
+    "count": 22
+  },
+  {
+    "verb": "destine",
+    "count": 22
+  },
+  {
+    "verb": "recede",
+    "count": 22
+  },
+  {
+    "verb": "relay",
+    "count": 22
+  },
+  {
+    "verb": "cripple",
+    "count": 22
+  },
+  {
+    "verb": "expedite",
+    "count": 22
+  },
+  {
+    "verb": "tolerate",
+    "count": 22
+  },
+  {
+    "verb": "precede",
+    "count": 22
+  },
+  {
+    "verb": "usher",
+    "count": 22
+  },
+  {
+    "verb": "flare",
+    "count": 22
+  },
+  {
+    "verb": "shelve",
+    "count": 22
+  },
+  {
+    "verb": "decimate",
+    "count": 22
+  },
+  {
+    "verb": "dissolve",
+    "count": 22
+  },
+  {
+    "verb": "creep",
+    "count": 22
+  },
+  {
+    "verb": "silence",
+    "count": 22
+  },
+  {
+    "verb": "plague",
+    "count": 22
+  },
+  {
+    "verb": "poison",
+    "count": 22
+  },
+  {
+    "verb": "sort",
+    "count": 22
+  },
+  {
+    "verb": "gift",
+    "count": 22
+  },
+  {
+    "verb": "cremate",
+    "count": 22
+  },
+  {
+    "verb": "deride",
+    "count": 22
+  },
+  {
+    "verb": "disparage",
+    "count": 22
+  },
+  {
+    "verb": "spy",
+    "count": 21
+  },
+  {
+    "verb": "snatch",
+    "count": 21
+  },
+  {
+    "verb": "offset",
+    "count": 21
+  },
+  {
+    "verb": "ridicule",
+    "count": 21
+  },
+  {
+    "verb": "amass",
+    "count": 21
+  },
+  {
+    "verb": "shatter",
+    "count": 21
+  },
+  {
+    "verb": "circle",
+    "count": 21
+  },
+  {
+    "verb": "linger",
+    "count": 21
+  },
+  {
+    "verb": "roil",
+    "count": 21
+  },
+  {
+    "verb": "mitigate",
+    "count": 21
+  },
+  {
+    "verb": "print",
+    "count": 21
+  },
+  {
+    "verb": "appease",
+    "count": 21
+  },
+  {
+    "verb": "tease",
+    "count": 21
+  },
+  {
+    "verb": "embed",
+    "count": 21
+  },
+  {
+    "verb": "debut",
+    "count": 21
+  },
+  {
+    "verb": "power",
+    "count": 21
+  },
+  {
+    "verb": "shadow",
+    "count": 21
+  },
+  {
+    "verb": "insult",
+    "count": 21
+  },
+  {
+    "verb": "sacrifice",
+    "count": 21
+  },
+  {
+    "verb": "cook",
+    "count": 21
+  },
+  {
+    "verb": "hate",
+    "count": 21
+  },
+  {
+    "verb": "dismantle",
+    "count": 21
+  },
+  {
+    "verb": "scream",
+    "count": 21
+  },
+  {
+    "verb": "bid",
+    "count": 21
+  },
+  {
+    "verb": "rollout",
+    "count": 21
+  },
+  {
+    "verb": "strive",
+    "count": 21
+  },
+  {
+    "verb": "chat",
+    "count": 21
+  },
+  {
+    "verb": "repay",
+    "count": 21
+  },
+  {
+    "verb": "spook",
+    "count": 21
+  },
+  {
+    "verb": "clamp",
+    "count": 20
+  },
+  {
+    "verb": "shine",
+    "count": 20
+  },
+  {
+    "verb": "boom",
+    "count": 20
+  },
+  {
+    "verb": "cycle",
+    "count": 20
+  },
+  {
+    "verb": "don",
+    "count": 20
+  },
+  {
+    "verb": "cloud",
+    "count": 20
+  },
+  {
+    "verb": "swim",
+    "count": 20
+  },
+  {
+    "verb": "forbid",
+    "count": 20
+  },
+  {
+    "verb": "compose",
+    "count": 20
+  },
+  {
+    "verb": "kiss",
+    "count": 20
+  },
+  {
+    "verb": "class",
+    "count": 20
+  },
+  {
+    "verb": "minimise",
+    "count": 20
+  },
+  {
+    "verb": "languish",
+    "count": 20
+  },
+  {
+    "verb": "blockade",
+    "count": 20
+  },
+  {
+    "verb": "illuminate",
+    "count": 20
+  },
+  {
+    "verb": "resort",
+    "count": 20
+  },
+  {
+    "verb": "bless",
+    "count": 20
+  },
+  {
+    "verb": "berate",
+    "count": 20
+  },
+  {
+    "verb": "conspire",
+    "count": 20
+  },
+  {
+    "verb": "colleague",
+    "count": 20
+  },
+  {
+    "verb": "rack",
+    "count": 20
+  },
+  {
+    "verb": "envision",
+    "count": 20
+  },
+  {
+    "verb": "spin",
+    "count": 20
+  },
+  {
+    "verb": "annex",
+    "count": 20
+  },
+  {
+    "verb": "dwarf",
+    "count": 20
+  },
+  {
+    "verb": "deprive",
+    "count": 20
+  },
+  {
+    "verb": "jeopardize",
+    "count": 20
+  },
+  {
+    "verb": "leap",
+    "count": 20
+  },
+  {
+    "verb": "yield",
+    "count": 20
+  },
+  {
+    "verb": "assail",
+    "count": 20
+  },
+  {
+    "verb": "absorb",
+    "count": 20
+  },
+  {
+    "verb": "bail",
+    "count": 20
+  },
+  {
+    "verb": "commute",
+    "count": 20
+  },
+  {
+    "verb": "reform",
+    "count": 20
+  },
+  {
+    "verb": "vent",
+    "count": 20
+  },
+  {
+    "verb": "squeeze",
+    "count": 20
+  },
+  {
+    "verb": "sidestep",
+    "count": 20
+  },
+  {
+    "verb": "reset",
+    "count": 20
+  },
+  {
+    "verb": "backtrack",
+    "count": 20
+  },
+  {
+    "verb": "swamp",
+    "count": 20
+  }
+]
