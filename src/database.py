@@ -41,6 +41,7 @@ def initialize_database():
         url TEXT UNIQUE,
 
         text TEXT,
+        topic TEXT DEFAULT 'covid',
 
         ingestion_status TEXT,
         extraction_status TEXT,
@@ -64,18 +65,19 @@ def load_full_articles():
     conn = get_connection()
 
     query = """
-    SELECT
-        provider,
-        source,
-        date,
-        title,
-        url,
-        text
-    FROM articles
-    WHERE ingestion_status='full_text'
-    AND text IS NOT NULL
-    AND TRIM(text) != ''
-    """
+        SELECT
+            provider,
+            source,
+            date,
+            title,
+            url,
+            text,
+            topic
+        FROM articles
+        WHERE ingestion_status='full_text'
+        AND text IS NOT NULL
+        AND TRIM(text) != ''
+        """
 
     df = pd.read_sql_query(query, conn)
 

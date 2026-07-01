@@ -14,9 +14,12 @@ from utils.filtering import (filter_articles)
 from utils.date_utils import (generate_monthly_ranges)
 
 
+# COLLECTION_TOPIC = "covid"
+COLLECTION_TOPIC = "ukraine_war"
+
 load_dotenv()
 
-provider_configs = {
+COVID_PROVIDER_CONFIGS = {
 
     "RawGDELTProvider": {
 
@@ -191,6 +194,124 @@ provider_configs = {
         "domains": None
     }}
 
+UKRAINE_WAR_PROVIDER_CONFIGS = {
+    "RawGDELTProvider": {
+        "queries": [
+            {
+                "query":
+                    "Ukraine AND Russia AND invasion "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND Russia AND war "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND Russian forces "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Kyiv AND Russia "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND Zelensky "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND Putin "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND NATO "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND sanctions AND Russia "
+                    "AND theme:SANCTIONS "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND refugees "
+                    "AND theme:REFUGEES "
+                    "AND sourcelang:english",
+                "num_records": 100
+            },
+            {
+                "query":
+                    "Ukraine AND weapons "
+                    "AND theme:ARMEDCONFLICT "
+                    "AND sourcelang:english",
+                "num_records": 100
+            }
+        ],
+        "domains": [
+            "bbc.co.uk",
+            "cnn.com",
+            "washingtonpost.com",
+            "nytimes.com"
+        ]
+    },
+
+    "GuardianProvider": {
+        "queries": [
+            {
+                "query": "Ukraine Russia invasion",
+                "num_records": 50
+            },
+            {
+                "query": "Ukraine war",
+                "num_records": 50
+            },
+            {
+                "query": "Russia sanctions Ukraine",
+                "num_records": 50
+            },
+            {
+                "query": "Zelensky Putin Ukraine",
+                "num_records": 50
+            },
+            {
+                "query": "Ukraine refugees",
+                "num_records": 50
+            },
+            {
+                "query": "Ukraine NATO weapons",
+                "num_records": 50
+            }
+        ],
+        "domains": None
+    }
+}
+
+TOPIC_PROVIDER_CONFIGS = {
+    "covid": COVID_PROVIDER_CONFIGS,
+    "ukraine_war": UKRAINE_WAR_PROVIDER_CONFIGS
+}
+
 
 def insert_article(article):
 
@@ -202,32 +323,26 @@ def insert_article(article):
 
         cursor.execute("""
         INSERT INTO articles (
-
             provider,
             source,
             date,
-
             title,
             url,
-
             text,
-
+            topic,
             ingestion_status,
             extraction_status
-
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
 
             article["provider"],
             article["source"],
             article["date"],
-
             article["title"],
             article["url"],
-
             "",
-
+            article.get("topic", COLLECTION_TOPIC),
             "metadata_collected",
             "pending"
         ))
@@ -238,9 +353,8 @@ def insert_article(article):
             f"Inserted: {article['title']}"
         )
 
-    except Exception:
-
-        pass
+    except Exception as e:
+        print(f"Insert skipped/error: {e}")
 
     conn.close()
 
@@ -251,8 +365,20 @@ def run_collection():
 
     providers = [RawGDELTProvider(), GuardianProvider( api_key=os.getenv("GUARDIAN_API_KEY"))]
 
-    global_start_date = "2020-01-01"
-    global_end_date = "2022-12-31"
+    TOPIC_DATE_RANGES = {
+        "covid": {
+            "start": "2020-01-01",
+            "end": "2022-12-31"
+        },
+        "ukraine_war": {
+            "start": "2022-02-01",
+            "end": "2025-06-01"
+        }
+    }
+
+    global_start_date = TOPIC_DATE_RANGES[COLLECTION_TOPIC]["start"]
+    global_end_date = TOPIC_DATE_RANGES[COLLECTION_TOPIC]["end"]
+
 
     monthly_ranges = generate_monthly_ranges(global_start_date, global_end_date)
 
@@ -291,6 +417,7 @@ def run_collection():
                 f"\n=== Trying provider: {provider_name} ==="
             )
 
+            provider_configs = TOPIC_PROVIDER_CONFIGS[COLLECTION_TOPIC]
             config = provider_configs.get(
                 provider_name,
                 {}
@@ -377,9 +504,8 @@ def run_collection():
     )
 
     for article in all_articles:
-
+        article["topic"] = COLLECTION_TOPIC
         insert_article(article)
-
         time.sleep(1)
 
 

@@ -154,10 +154,11 @@ MAX_EVIDENCE_TRANSITIONS = 5
 EVIDENCE_ARTICLES_PER_PERIOD = 2
 MAX_ARTICLES_PER_EVIDENCE_PERIOD = 300
 
-
+# TOPIC_FILTER = "covid"
+TOPIC_FILTER = "ukraine_war"
 RUN_ID = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-OUTPUT_DIR = Path("outputs") / RUN_ID
+OUTPUT_DIR = Path("outputs") / TOPIC_FILTER / RUN_ID
 RESULTS_DIR = OUTPUT_DIR / "results"
 PLOTS_DIR = OUTPUT_DIR / "plots"
 
@@ -217,6 +218,15 @@ def main():
 
     #  Load CSV
     df = load_full_articles()
+
+    if TOPIC_FILTER is not None:
+        df = df[df["topic"] == TOPIC_FILTER].copy()
+
+        print(
+            f"\n=== TOPIC FILTER ===\n"
+            f"Topic: {TOPIC_FILTER}\n"
+            f"Articles: {len(df)}"
+        )
 
     #  Group by month
     grouped = {}

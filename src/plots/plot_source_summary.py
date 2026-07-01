@@ -3,7 +3,7 @@ from utils.plot_saving import save_plot
 
 def build_source_summary(source, semantic_values, framing_drift, entity_importance, num_periods, num_articles, avg_sentiment):
 
-    avg_semantic = (sum(semantic_values) / len(semantic_values))
+    avg_semantic = (sum(semantic_values) / len(semantic_values) if semantic_values else 0.0)
 
     framing_values = []
     for transition, entities in framing_drift.items():

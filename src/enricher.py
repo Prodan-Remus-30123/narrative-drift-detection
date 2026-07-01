@@ -15,6 +15,10 @@ import tempfile
 MIN_ARTICLE_LENGTH = 500
 MAX_EXTRACTION_ATTEMPTS = 3
 
+ENRICH_TOPIC = "ukraine_war"
+# ENRICH_TOPIC = "covid"
+# ENRICH_TOPIC = None
+
 temp_dir = os.path.join(
     tempfile.gettempdir(),
     ".newspaper_scraper",
@@ -31,14 +35,26 @@ def fetch_pending_articles():
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("""
-    SELECT id, url, extraction_attempts
-    FROM articles
-    WHERE extraction_status IN ('pending', 'failed')
-    AND extraction_attempts < ?
-    """, (
-        MAX_EXTRACTION_ATTEMPTS,
-    ))
+    if ENRICH_TOPIC is None:
+        cursor.execute("""
+        SELECT id, url, extraction_attempts
+        FROM articles
+        WHERE extraction_status IN ('pending', 'failed')
+        AND extraction_attempts < ?
+        """, (
+            MAX_EXTRACTION_ATTEMPTS,
+        ))
+    else:
+        cursor.execute("""
+        SELECT id, url, extraction_attempts
+        FROM articles
+        WHERE topic = ?
+        AND extraction_status IN ('pending', 'failed')
+        AND extraction_attempts < ?
+        """, (
+            ENRICH_TOPIC,
+            MAX_EXTRACTION_ATTEMPTS,
+        ))
 
     rows = cursor.fetchall()
     conn.close()
@@ -102,6 +118,7 @@ def enrich_articles():
 
     rows = fetch_pending_articles()
 
+    print(f"Enrich topic: {ENRICH_TOPIC}")
     print(f"Pending articles: {len(rows)}")
 
     for article_id, url, attempts in rows:
