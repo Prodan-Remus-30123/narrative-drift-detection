@@ -63,3 +63,4 @@ analysis_results.json
 *.md
 *.json
 data/frame_label_cache.json
+data
