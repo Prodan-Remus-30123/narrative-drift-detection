@@ -108,10 +108,13 @@ the real `errorMessage` far more often than the build/run log streams do.
 ## Notes for whoever reviews this (e.g. the professor)
 
 - This demo intentionally runs on a small, truncated sample
-  (`data/sample_articles.db`, ~480 articles, 800-character excerpts,
-  Jan-Aug 2022, BBC/CNN/The Guardian) rather than the full ~40,000-article
-  corpus, to avoid redistributing scraped news article text publicly. See
-  `scripts/build_sample_dataset.py` for how it was built.
+  (`data/sample_articles.db`, ~1,400 articles, 800-character excerpts,
+  Jan-Dec 2020 COVID-19 coverage, BBC/CNN/The Guardian/The Washington
+  Post) rather than the full ~40,000-article corpus, to avoid
+  redistributing scraped news article text publicly. See
+  `scripts/build_sample_dataset.py` for how it was built and why that
+  particular topic/window/source combination was chosen (each source
+  has real gaps in different topics/periods in the underlying data).
 - The full pipeline (24 analysis stages: narrative signatures/archetypes,
   cross-source divergence, change-point detection, evidence retrieval, and
   more, versus the ~6 shown in the demo) runs locally against the complete

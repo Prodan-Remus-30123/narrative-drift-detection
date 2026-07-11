@@ -37,6 +37,11 @@ import os
 
 os.environ.setdefault("ARTICLES_DB_PATH", "data/sample_articles.db")
 os.environ.setdefault("LLM_BACKEND", "hf")
+# This Space's ZeroGPU hardware patches torch to intercept CUDA calls,
+# which only works inside an @spaces.GPU-decorated function -- outside
+# one it raises rather than falling back. Nothing here needs a GPU, so
+# force CPU and avoid that machinery entirely.
+os.environ.setdefault("EMBEDDING_DEVICE", "cpu")
 
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
@@ -60,8 +65,8 @@ from confidence_scoring import compute_confidence_score
 from utils.period_sorting import sort_period_key
 
 
-TOPIC = "ukraine_war"
-SOURCES = ["bbc.co.uk", "cnn.com", "theguardian.com"]
+TOPIC = "covid"
+SOURCES = ["bbc.co.uk", "cnn.com", "theguardian.com", "washingtonpost.com"]
 # Lower than main.py's 50: the bundled sample is deliberately small.
 MIN_TOTAL_DOCS = 30
 
@@ -280,8 +285,9 @@ with gr.Blocks(title="Narrative Drift Detection") as demo:
         "# Narrative Drift Detection\n"
         "Master's dissertation demo (Technical University of Cluj-Napoca). "
         "Runs the real analysis pipeline live, over a small bundled sample "
-        "of Ukraine-war coverage (a few hundred truncated article excerpts "
-        "per source) rather than the full ~40k-article research database.\n\n"
+        "of COVID-19 coverage (Jan-Dec 2020, ~1,400 truncated article "
+        "excerpts across 4 sources) rather than the full ~40k-article "
+        "research database.\n\n"
         "See the [project README](https://github.com/Prodan-Remus-30123/narrative-drift-detection) "
         "for the full pipeline, which also covers latent frame discovery, "
         "narrative signatures/archetypes, cross-source divergence and more."

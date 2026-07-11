@@ -7,6 +7,7 @@ Responsible for:
 - Aggregating embeddings per time window
 """
 
+import os
 from typing import List
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -17,8 +18,17 @@ class EmbeddingModel:
     Wrapper for Sentence-BERT embedding model.
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
-        self.model = SentenceTransformer(model_name)
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2", device: str = None):
+        # EMBEDDING_DEVICE lets the Hugging Face Space demo force "cpu"
+        # explicitly: that Space is provisioned with ZeroGPU hardware,
+        # whose CUDA-interception (see src/llm_backend.py's sibling
+        # `spaces` import in app.py) only works inside a
+        # `@spaces.GPU`-decorated call, and otherwise raises rather
+        # than silently falling back. Local dissertation runs are
+        # unaffected (device stays None -> sentence-transformers'
+        # normal auto-detection).
+        device = device or os.environ.get("EMBEDDING_DEVICE")
+        self.model = SentenceTransformer(model_name, device=device)
 
     def encode_documents(self, texts: List[str]) -> np.ndarray:
         """

@@ -17,10 +17,11 @@ in online news, developed as part of a Master's dissertation at the Technical
 University of Cluj-Napoca.
 
 This Space runs a real, live subset of the full pipeline over a small bundled
-sample of Ukraine-war coverage (BBC, CNN, The Guardian; Jan-Aug 2022; ~480
-articles, excerpts truncated to 800 characters each) rather than the full
-~40,000-article research database, and uses the Hugging Face Inference API
-for LLM-based frame labeling instead of a local Ollama server.
+sample of COVID-19 coverage (BBC, CNN, The Guardian, The Washington Post;
+Jan-Dec 2020; ~1,400 articles, excerpts truncated to 800 characters each)
+rather than the full ~40,000-article research database, and uses the
+Hugging Face Inference API for LLM-based frame labeling instead of a local
+Ollama server.
 
 Pick a source, optionally enable the LLM-based stages (latent frame labeling
 + actor-frame graph), and click **Run analysis** to see:

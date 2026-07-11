@@ -14,10 +14,15 @@ Why a sample instead of the full corpus:
   the period is dropped), is enough to show every pipeline stage
   producing real signal, and runs in seconds instead of minutes.
 
-The sample window (Jan-Aug 2022) was chosen because all three source
-have dense coverage there; cnn.com in particular has a real gap in the
-raw collected data after September 2022 that would otherwise starve
-several periods.
+The sample window (all of 2020) and source list (bbc.co.uk, cnn.com,
+theguardian.com, washingtonpost.com) were chosen for the "covid" topic
+rather than "ukraine_war" because ukraine_war only has 3 sources with
+real volume (a 4th, nytimes.com, has just 25 articles total) and no
+window longer than Jan-Aug 2022 with all of them present (cnn.com's
+coverage stops in Sept 2022). For "covid", washingtonpost.com is the
+constraint instead: it has real data only Jan-Nov 2020, so that's the
+window used here; the other three sources have much wider coverage
+than that but are capped to the same window for consistency.
 
 Article text is truncated to TEXT_EXCERPT_CHARS characters per
 article, which keeps the redistributed excerpt short (well under a
@@ -36,18 +41,21 @@ import pandas as pd
 SOURCE_DB_PATH = "database/articles.db"
 SAMPLE_DB_PATH = "data/sample_articles.db"
 
-TOPIC = "ukraine_war"
-SOURCES = ["bbc.co.uk", "cnn.com", "theguardian.com"]
-ARTICLES_PER_PERIOD = 40
+TOPIC = "covid"
+SOURCES = ["bbc.co.uk", "cnn.com", "theguardian.com", "washingtonpost.com"]
+ARTICLES_PER_PERIOD = 60
 TEXT_EXCERPT_CHARS = 800
 
 # Must match temporal_entity_analysis.group_articles_by_period's
 # bimonthly bucketing so every bucket clears MIN_DOCS_PER_PERIOD=20.
+# Bounded by washingtonpost.com, which only has real data Jan-Nov 2020.
 PERIODS = [
-    ("2022-01-01", "2022-02-28"),
-    ("2022-03-01", "2022-04-30"),
-    ("2022-05-01", "2022-06-30"),
-    ("2022-07-01", "2022-08-31"),
+    ("2020-01-01", "2020-02-29"),
+    ("2020-03-01", "2020-04-30"),
+    ("2020-05-01", "2020-06-30"),
+    ("2020-07-01", "2020-08-31"),
+    ("2020-09-01", "2020-10-31"),
+    ("2020-11-01", "2020-12-31"),
 ]
 
 
