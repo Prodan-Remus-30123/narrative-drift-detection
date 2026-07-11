@@ -62,9 +62,14 @@ analysis_results.json
 *.docx
 *.md
 *.json
-data/frame_label_cache.json
-data
+data/*
 
 # Generated pipeline outputs (plots, CSVs, run artifacts)
 outputs/
 plots/
+
+# Hugging Face Space demo: docs and small bundled sample dataset,
+# explicitly un-ignored despite the broad *.md / data rules above.
+!SPACE_README.md
+!DEPLOY.md
+!data/sample_articles.db

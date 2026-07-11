@@ -1,11 +1,12 @@
 """
 llm_frame_labeler.py
 
-Ollama-based semantic labeling for latent narrative frames.
+LLM-based semantic labeling for latent narrative frames, keyed by an
+entity/transition-conditioned verb cluster. Uses whichever backend
+llm_backend.py is configured for (local Ollama by default, or the
+Hugging Face Inference API when LLM_BACKEND=hf).
 """
 
-import json
-import requests
 import hashlib
 import numpy as np
 from frame_cache_db import (
@@ -14,10 +15,10 @@ from frame_cache_db import (
     store_cached_frame
 )
 from embedding_model_registry import get_embedding_model
+from llm_backend import generate_text, extract_json
 
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-DEFAULT_MODEL = "llama3"
+DEFAULT_MODEL = None
 
 
 def compute_cluster_hash(
@@ -49,14 +50,14 @@ def compute_cluster_hash(
         hash_string
     ).hexdigest()
 
-def label_latent_frame(verbs,entity=None, source=None, transition=None, model=DEFAULT_MODEL):
+def label_latent_frame(verbs, entity=None, source=None, transition=None, model=DEFAULT_MODEL):
     initialize_frame_cache()
     frame_hash = compute_cluster_hash(verbs)
     cached = get_cached_frame(frame_hash)
 
     if cached is not None:
         return cached
-    
+
     prompt = build_frame_label_prompt(
         verbs=verbs,
         entity=entity,
@@ -64,24 +65,10 @@ def label_latent_frame(verbs,entity=None, source=None, transition=None, model=DE
         transition=transition
     )
 
-    response = requests.post(
-        OLLAMA_URL,
-        json={
-            "model": model,
-            "prompt": prompt,
-            "stream": False,
-            "format": "json"
-        },
-        timeout=120
-    )
+    raw = generate_text(prompt, model=model, json_mode=True)
+    parsed = extract_json(raw)
 
-    response.raise_for_status()
-
-    raw = response.json()["response"]
-
-    try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError:
+    if parsed is None:
         return {
             "label": "unlabeled frame",
             "description": raw,

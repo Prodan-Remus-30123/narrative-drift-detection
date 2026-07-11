@@ -1,18 +1,19 @@
 """
 semantic_frame_labeling.py
 
-LLM-based semantic labeling for latent narrative frames.
+LLM-based semantic labeling for latent narrative frames. Uses
+whichever backend llm_backend.py is configured for (local Ollama by
+default, or the Hugging Face Inference API when LLM_BACKEND=hf).
 """
 
-import json
-import ollama
 from frame_cache_db import (
     get_cached_verb_frame_label,
     store_cached_verb_frame_label,
     make_frame_key
 )
+from llm_backend import generate_text, extract_json
 
-MODEL_NAME = "llama3"
+MODEL_NAME = None
 
 
 
@@ -48,38 +49,14 @@ def label_latent_frame(frame_verbs, model=MODEL_NAME):
         return cached
 
     try:
-        response = ollama.chat(
-            model=model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
+        raw = generate_text(prompt, model=model)
+        parsed = extract_json(raw)
 
-        content = response["message"]["content"]
-        content = content.strip()
-
-        # Remove markdown fences
-        if content.startswith("```json"):
-            content = content.replace("```json", "")
-        if content.startswith("```"):
-            content = content.replace("```", "")
-        if content.endswith("```"):
-            content = content[:-3]
-
-        content = content.strip()
-
-        # Extract JSON region
-
-        start = content.find("{")
-        end = content.rfind("}")
-
-        if start != -1 and end != -1:
-            content = content[start:end + 1]
-
-        parsed = json.loads(content)
+        if parsed is None:
+            return {
+                "frame_label": "unlabeled_frame",
+                "frame_description": f"Could not parse LLM response: {raw!r}"
+            }
 
         result = {
             "frame_label": parsed.get("frame_label", "unknown_frame"),

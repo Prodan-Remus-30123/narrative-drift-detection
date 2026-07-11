@@ -1,0 +1,31 @@
+# Requirements for the Hugging Face Space demo (app.py), curated
+# from the actual import graph of app.py + the pipeline stages it
+# exercises -- NOT the full local dissertation environment (see
+# requirements.txt for that; it also includes collection/enrichment
+# dependencies like newspaper3k and crewai that the Space demo
+# doesn't need).
+#
+# When setting up the Space, this file should become that Space's
+# requirements.txt (see README's "Deploying to Hugging Face" section).
+#
+# Unpinned (rather than matching the exact versions used for local
+# dissertation development): the Space's Docker image runs Python
+# 3.10, while local development used 3.13, and several packages
+# (pandas 3.x, very recent numpy/spacy releases) require Python 3.11+
+# and fail to resolve there. Letting pip pick the newest
+# Python-3.10-compatible version is more robust than chasing floors
+# package by package.
+
+gradio==6.20.0
+pandas
+numpy
+scipy
+scikit-learn
+sentence-transformers
+spacy
+networkx
+matplotlib
+vaderSentiment
+requests
+huggingface_hub
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl

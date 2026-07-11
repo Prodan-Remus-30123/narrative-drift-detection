@@ -4,11 +4,14 @@ database.py
 SQLite storage layer for article ingestion and analysis.
 """
 
+import os
 import sqlite3
 import pandas as pd
 
 
-DB_PATH = "database/articles.db"
+# Overridable so the Hugging Face Space demo can point at the small
+# bundled sample database instead of the full local dissertation one.
+DB_PATH = os.environ.get("ARTICLES_DB_PATH", "database/articles.db")
 
 
 def get_connection():

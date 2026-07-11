@@ -138,19 +138,28 @@ enable them.
 
 ## Narrative Dashboard
 
-![Narrative Dashboard](outputs/20260616_122240/plots/cnn_com/cnn_com_narrative_dashboard.png)
+![Narrative Dashboard](docs/assets/narrative_dashboard.png)
 
 ## Semantic Drift Across Sources
 
-![Semantic Drift](outputs/20260616_122240/plots/semantic_drift_comparison_across_sources.png)
+![Semantic Drift](docs/assets/semantic_drift_comparison.png)
 
 ## Semantic vs Framing Drift
 
-![Semantic vs Framing](outputs/20260616_122240/plots/cnn_com/cnn_com_semantic_vs_framing_drift.png)
+![Semantic vs Framing](docs/assets/semantic_vs_framing_drift.png)
 
 ## Entity Framing Heatmap
 
-![Heatmap](outputs/20260616_122240/plots/cnn_com/cnn_com_entity_framing_heatmap.png)
+![Heatmap](docs/assets/entity_framing_heatmap.png)
+
+---
+
+## Live Demo
+
+A Gradio demo (`app.py`) runs a bounded, live subset of this pipeline over
+a small bundled sample of articles — see [DEPLOY.md](DEPLOY.md) for how to
+publish it as a Hugging Face Space. The full pipeline above always runs
+locally against the complete research database.
 
 
 ---
