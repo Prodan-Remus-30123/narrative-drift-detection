@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from utils.period_sorting import (sort_period_key)
-from utils.plot_saving import save_plot
+from utils.plot_saving import save_plot, DEFAULT_FIGSIZE
 
 def plot_sentiment_evolution(sentiment_results, source, output_dir = None):
 
@@ -10,7 +10,7 @@ def plot_sentiment_evolution(sentiment_results, source, output_dir = None):
     positive = [sentiment_results[p]["positive"] for p in periods]
     negative = [sentiment_results[p]["negative"] for p in periods]
 
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=DEFAULT_FIGSIZE)
 
     plt.plot(
         periods,

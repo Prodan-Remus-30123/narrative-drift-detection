@@ -6,9 +6,9 @@ LLM-based semantic labeling for latent narrative frames.
 
 import json
 import ollama
-from frame_label_cache import (
-    get_cached_label,
-    store_cached_label,
+from frame_cache_db import (
+    get_cached_verb_frame_label,
+    store_cached_verb_frame_label,
     make_frame_key
 )
 
@@ -42,7 +42,7 @@ Return ONLY valid JSON in this format:
 def label_latent_frame(frame_verbs, model=MODEL_NAME):
     prompt = build_frame_label_prompt(frame_verbs)
     cache_key = make_frame_key(frame_verbs)
-    cached = get_cached_label(cache_key)
+    cached = get_cached_verb_frame_label(cache_key)
 
     if cached is not None:
         return cached
@@ -85,7 +85,7 @@ def label_latent_frame(frame_verbs, model=MODEL_NAME):
             "frame_label": parsed.get("frame_label", "unknown_frame"),
             "frame_description": parsed.get("frame_description", "")
         }
-        store_cached_label(cache_key, result)
+        store_cached_verb_frame_label(cache_key, result)
         return result
 
     except Exception as e:

@@ -3,8 +3,11 @@ entity_latent_frames.py
 
 Entity-conditioned latent frame discovery.
 
-Uses entity framing drift output and clusters
-before/after verbs for each actor transition.
+Clusters a single actor's before/after verb sets (drawn from entity
+framing drift, see entity_framing_drift.compute_entity_drift) into
+short LLM-labeled narrative frames, so an actor's coverage can be
+described as e.g. "moved from public health crisis framing to
+geopolitical conflict framing" rather than just a turnover number.
 """
 
 from collections import defaultdict
@@ -12,15 +15,15 @@ import numpy as np
 
 from sklearn.cluster import AgglomerativeClustering
 
-from embeddings import EmbeddingModel
-from agentic_tools.framing_tools import get_entity_framing
-from llm_frame_labeler import label_latent_frame
 from embedding_model_registry import get_embedding_model
-from agentic_tools.context_registry import get_context
+from llm_frame_labeler import label_latent_frame
 
 
-
-DISTANCE_THRESHOLD = 0.55
+# Agglomerative-clustering cosine-distance cutoff for grouping one
+# actor's before/after verbs into latent frames (contrast with
+# latent_frames.GLOBAL_VERB_CLUSTER_DISTANCE_THRESHOLD, which clusters
+# a source's entire verb vocabulary).
+ENTITY_VERB_CLUSTER_DISTANCE_THRESHOLD = 0.55
 
 
 def cluster_verbs(verbs, entity=None, source=None, transition=None):
@@ -34,7 +37,7 @@ def cluster_verbs(verbs, entity=None, source=None, transition=None):
             {
                 "cluster_id": 0,
                 "verbs": verbs,
-                "label": label_cluster_with_llm(verbs, entity=entity, source=source,transition=transition)["label"]
+                "label": label_cluster_with_llm(verbs, entity=entity, source=source, transition=transition)["label"]
             }
         ]
 
@@ -47,7 +50,7 @@ def cluster_verbs(verbs, entity=None, source=None, transition=None):
         n_clusters=None,
         metric="cosine",
         linkage="average",
-        distance_threshold=DISTANCE_THRESHOLD
+        distance_threshold=ENTITY_VERB_CLUSTER_DISTANCE_THRESHOLD
     )
 
     labels = clustering.fit_predict(embeddings)
@@ -108,15 +111,61 @@ def infer_transition_label(before_clusters, after_clusters):
     }
 
 
-def compute_entity_latent_frame_transitions(source, entity):
+def _entity_transitions_from_framing_drift(
+    framing_drift,
+    entity_importance,
+    salience_totals,
+    entity
+):
+    """
+    Reshape compute_entity_drift's transition-keyed output into a flat,
+    single-entity list of before/after verbs plus importance/salience.
+    """
 
-    context = get_context(source)
     entity_key = entity.lower()
-    if entity_key in context.entity_latent_frames:
-        return context.entity_latent_frames[entity]
-    
-    framing_data = get_entity_framing(source=source, entity=entity)
-    framing_results = framing_data["framing_results"]
+    results = []
+
+    for transition, entities in framing_drift.items():
+        for current_entity, stats in entities.items():
+            if current_entity.lower() != entity_key:
+                continue
+
+            results.append({
+                "transition": transition,
+                "entity": current_entity,
+                "vocabulary_turnover": stats.get("vocabulary_turnover"),
+                "shared_similarity": stats.get("shared_similarity"),
+                "drift_class": stats.get("drift_class"),
+                "before_verbs": list(stats.get("before", {}).keys())[:10],
+                "after_verbs": list(stats.get("after", {}).keys())[:10],
+                "importance": float(entity_importance.get(current_entity, 0)),
+                "salience": float(salience_totals.get(current_entity, 0))
+            })
+
+    return results
+
+
+def compute_entity_latent_frame_transitions(
+    source,
+    entity,
+    framing_drift,
+    entity_importance,
+    salience_totals
+):
+    """
+    Cluster one entity's before/after verbs per transition into
+    LLM-labeled latent frames.
+
+    framing_drift/entity_importance/salience_totals are the outputs
+    already computed once per source by the main pipeline
+    (entity_framing_drift.compute_entity_drift/compute_entity_importance,
+    actor_salience.compute_total_actor_salience) — passed in rather than
+    recomputed here.
+    """
+
+    framing_results = _entity_transitions_from_framing_drift(
+        framing_drift, entity_importance, salience_totals, entity
+    )
 
     transitions = []
 
@@ -164,15 +213,46 @@ def compute_entity_latent_frame_transitions(source, entity):
             }
         )
 
-    result = {"source":source, "entity":entity, "latent_frame_transitions":transitions}
-    context.entity_latent_frames[entity_key] = result
-    return result
+    return {"source": source, "entity": entity, "latent_frame_transitions": transitions}
+
+
+def _standalone_source_framing(source):
+    """
+    Compute framing_drift/entity_importance/salience_totals for a source
+    from scratch. Only used by this module's own __main__ demo, so it
+    doesn't need the caching the main pipeline already does per-run.
+    """
+
+    from database import load_full_articles
+    from preprocessing import preprocess_corpus
+    from temporal_entity_analysis import group_articles_by_period
+    from entity_framing_drift import compute_entity_drift, compute_entity_importance
+    from actor_salience import compute_actor_salience, compute_total_actor_salience
+
+    df = load_full_articles()
+    source_df = df[df["source"] == source]
+    grouped = group_articles_by_period(source_df)
+
+    for period in grouped:
+        grouped[period] = preprocess_corpus(grouped[period])
+
+    framing_drift = compute_entity_drift(grouped)
+    salience_totals = compute_total_actor_salience(compute_actor_salience(grouped))
+    entity_importance = compute_entity_importance(framing_drift, salience_totals)
+
+    return framing_drift, entity_importance, salience_totals
 
 
 def main():
+    source = "cnn.com"
+    framing_drift, entity_importance, salience_totals = _standalone_source_framing(source)
+
     result = compute_entity_latent_frame_transitions(
-        source="cnn.com",
-        entity="china"
+        source=source,
+        entity="china",
+        framing_drift=framing_drift,
+        entity_importance=entity_importance,
+        salience_totals=salience_totals
     )
 
     print("\n=== ENTITY LATENT FRAME TRANSITIONS ===")

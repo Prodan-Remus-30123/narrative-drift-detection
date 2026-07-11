@@ -98,11 +98,6 @@ def analyze_entities(texts):
 
             entity = normalize_entity(ent.text)
 
-            # if entity.islower() and len(entity.split()) == 1:
-            #     continue
-
-
-
             if len(entity.split()) == 1 and len(entity) < 4:
                 continue
 
@@ -146,33 +141,14 @@ def analyze_entities(texts):
 
                     break
 
-            if verb in GENERIC_VERBS:
-                continue
-
-            if verb in SEMANTICALLY_WEAK_VERBS:
-                continue
-
+            # GENERIC_VERBS/SEMANTICALLY_WEAK_VERBS are already excluded
+            # by get_valid_framing_lemma above, so `verb` here is never
+            # a member of either set.
             if verb:
                 entity_data[entity]["verbs"][verb] += 1
 
-    MIN_LOCAL_VERB_FREQUENCY = 1
-
-    filtered_entity_data = {}
-
-    for entity, stats in entity_data.items():
-
-        filtered_verbs = Counter()
-
-        for verb, count in stats["verbs"].items():
-
-            if count >= MIN_LOCAL_VERB_FREQUENCY:
-                filtered_verbs[verb] = count
-
-        if len(filtered_verbs) == 0:
-            continue
-
-        stats["verbs"] = filtered_verbs
-
-        filtered_entity_data[entity] = stats
-
-    return filtered_entity_data
+    return {
+        entity: stats
+        for entity, stats in entity_data.items()
+        if stats["verbs"]
+    }

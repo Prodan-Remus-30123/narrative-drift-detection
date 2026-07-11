@@ -1,5 +1,0 @@
-source,avg_semantic_drift,avg_framing_turnover,top_actor,num_periods,num_articles,avg_sentiment
-bbc.co.uk,0.0404,0.9163,china,18,4017,0.0138373881397359
-cnn.com,0.0348,0.932,china,16,4592,0.2195802725004474
-washingtonpost.com,0.0254,0.9496,trump,6,665,-0.03924201098281848
-theguardian.com,0.0249,0.934,china,18,9021,0.10588794023541336

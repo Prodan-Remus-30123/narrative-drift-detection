@@ -5,17 +5,7 @@ Each packet represents one source-level temporal transition.
 Agents consume these packets; they do not recompute analytics.
 """
 
-import numpy as np
-
-
-def _safe_float(value, default=0.0):
-    if value is None:
-        return default
-
-    try:
-        return float(value)
-    except Exception:
-        return default
+from utils.numeric import safe_float as _safe_float
 
 
 def _split_transition(transition):
@@ -188,15 +178,12 @@ def build_evidence_packets_for_source(
 
             entity_items.append({
                 "entity": entity,
-                "drift": None,
-                "drift_class": None,
+                "drift": _safe_float(stats.get("drift")),
+                "drift_class": stats.get("drift_class"),
 
                 "shared_similarity": stats.get("shared_similarity"),
                 "vocabulary_turnover": _safe_float(
                     stats.get("vocabulary_turnover")
-                ),
-                "framing_drift_js": _safe_float(
-                    stats.get("framing_drift_js")
                 ),
                 "framing_drift_js": _safe_float(
                     stats.get("framing_drift_js")

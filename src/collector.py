@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from database import (initialize_database, get_connection)
 from providers.raw_gdelt_provider import (RawGDELTProvider)
 from providers.guardian_provider import (GuardianProvider)
-from providers.gdelt_query_builder import (build_boolean_query)
 from utils.deduplication import (deduplicate_articles)
 from utils.filtering import (filter_articles)
 from utils.date_utils import (generate_monthly_ranges)
@@ -16,6 +15,9 @@ from utils.date_utils import (generate_monthly_ranges)
 
 # COLLECTION_TOPIC = "covid"
 COLLECTION_TOPIC = "ukraine_war"
+
+# Drop low-quality articles (briefings, live blogs, quizzes, ...) by title keyword.
+APPLY_QUALITY_FILTER = False
 
 load_dotenv()
 
@@ -466,7 +468,9 @@ def run_collection():
                     time.sleep(2)
 
                 provider_articles = deduplicate_articles(provider_articles)
-                # provider_articles = filter_articles(provider_articles)
+
+                if APPLY_QUALITY_FILTER:
+                    provider_articles = filter_articles(provider_articles)
 
                 print(
                     f"{provider_name} unique articles: "

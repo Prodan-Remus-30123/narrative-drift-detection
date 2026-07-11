@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from utils.plot_saving import save_plot
+from utils.plot_saving import save_plot, DEFAULT_FIGSIZE
 
 def plot_semantic_vs_framing(semantic_labels, semantic_values, framing_values, source, output_dir = None):
 
     semantic_values = np.array(semantic_values, dtype=float)
     framing_values = np.array(framing_values, dtype=float)
 
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=DEFAULT_FIGSIZE)
 
     plt.plot(
         semantic_labels,

@@ -149,6 +149,13 @@ def build_dynamic_entity_ecosystem(framing_drift, entity_importance=None, min_pr
     return ecosystem
 
 
+HIGH_PERSISTENCE = 0.7
+LOW_PERSISTENCE = 0.5
+MODERATE_JS_DRIFT = 0.35
+HIGH_JS_DRIFT = 0.45
+HIGH_IMPORTANCE = 0.5
+
+
 def classify_entity_ecosystem_role(
     persistence_ratio,
     mean_turnover,
@@ -156,16 +163,22 @@ def classify_entity_ecosystem_role(
     max_js,
     importance
 ):
-    if persistence_ratio >= 0.7 and mean_js < 0.35:
+    """
+    Label an entity's role in the narrative ecosystem from how often it
+    appears (persistence_ratio) and how much its framing shifts
+    (mean/max Jensen-Shannon drift) when it does.
+    """
+
+    if persistence_ratio >= HIGH_PERSISTENCE and mean_js < MODERATE_JS_DRIFT:
         return "stable_core_actor"
 
-    if persistence_ratio >= 0.7 and mean_js >= 0.35:
+    if persistence_ratio >= HIGH_PERSISTENCE and mean_js >= MODERATE_JS_DRIFT:
         return "volatile_core_actor"
 
-    if persistence_ratio < 0.5 and max_js >= 0.45:
+    if persistence_ratio < LOW_PERSISTENCE and max_js >= HIGH_JS_DRIFT:
         return "episodic_disruptor"
 
-    if importance >= 0.5 and mean_js >= 0.35:
+    if importance >= HIGH_IMPORTANCE and mean_js >= MODERATE_JS_DRIFT:
         return "high_impact_shifting_actor"
 
     return "peripheral_actor"

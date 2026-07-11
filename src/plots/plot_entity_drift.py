@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from utils.plot_saving import save_plot
+from utils.plot_saving import save_plot, DEFAULT_FIGSIZE
 
 def plot_top_entity_drift(drift_results, source, top_n=10, output_dir = None):
     averaged = {}
@@ -21,7 +21,7 @@ def plot_top_entity_drift(drift_results, source, top_n=10, output_dir = None):
     entities = [x[0] for x in ranked]
     scores = [x[1] for x in ranked]
 
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=DEFAULT_FIGSIZE)
 
     plt.barh(entities, scores)
 

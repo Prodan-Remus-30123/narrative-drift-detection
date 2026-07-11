@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from utils.period_sorting import sort_period_key
-from utils.plot_saving import save_plot
+from utils.plot_saving import save_plot, DEFAULT_FIGSIZE
 
 def plot_actor_evolution(drift_results, source, top_n=5, output_dir=None):
 
@@ -22,7 +22,7 @@ def plot_actor_evolution(drift_results, source, top_n=5, output_dir=None):
     top_entities = sorted(overall_scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
     all_transitions = sorted(drift_results.keys(), key=sort_period_key)
 
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=DEFAULT_FIGSIZE)
 
     for entity, _ in top_entities:
         y = []

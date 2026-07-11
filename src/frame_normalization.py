@@ -16,7 +16,12 @@ from embedding_model_registry import get_embedding_model
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-DISTANCE_THRESHOLD = 0.30
+# Agglomerative-clustering cosine-distance cutoff for merging
+# semantically similar frame *label strings* (e.g. "International
+# Pressure Framing" / "Global Pressure Framing" -> one canonical
+# label) -- distinct from the verb-clustering thresholds in
+# latent_frames.py / entity_latent_frames.py.
+FRAME_LABEL_DISTANCE_THRESHOLD = 0.30
 
 
 def normalize_frame_labels(frame_labels):
@@ -52,7 +57,7 @@ def normalize_frame_labels(frame_labels):
         n_clusters=None,
         metric="cosine",
         linkage="average",
-        distance_threshold=DISTANCE_THRESHOLD
+        distance_threshold=FRAME_LABEL_DISTANCE_THRESHOLD
     )
 
     cluster_ids = clustering.fit_predict(

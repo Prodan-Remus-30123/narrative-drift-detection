@@ -33,6 +33,7 @@ This project aims to automatically identify these transitions and provide interp
 - Confidence scoring
 - Evidence retrieval
 - Multi-agent narrative explanation using Ollama
+- Actor ↔ latent-frame graph and narrative-ecosystem community detection
 
 ---
 
@@ -61,29 +62,24 @@ J --> K[Narrative Explanation]
 
 ```text
 src/
-├── collector.py
-├── enricher.py
-├── main.py
-├── providers/
-├── preprocessing.py
-├── database.py
-├── embeddings.py
-├── drift.py
-├── entities.py
-├── entity_normalization.py
-├── temporal_entity_analysis.py
-├── latent_frames.py
-├── semantic_frame_labeling.py
-├── narrative_signatures.py
-├── signature_comparison.py
-├── change_point_detection.py
-├── changepoints.py
-├── sentiment_analysis.py
-├── affective_dynamics.py
-├── editorial_behavior.py
-├── evidence_packet_builder.py
-├── agentic_llm/
-├── agentic_explainers/
+├── main.py                    # Pipeline orchestrator (entry point)
+├── collector.py                # Multi-provider article metadata collection
+├── enricher.py                  # Full-text extraction
+├── providers/                    # GDELT / Guardian source adapters
+├── preprocessing.py, database.py, embeddings.py
+├── drift.py                     # Semantic drift (cosine distance over embeddings)
+├── entities.py, entity_normalization.py, temporal_entity_analysis.py
+├── entity_framing_drift.py, actor_salience.py, dynamic_entity_ecosystem.py
+├── actor_graph.py, actor_frame_graph.py, entity_latent_frames.py,
+│   frame_normalization.py, llm_frame_labeler.py, frame_cache_db.py
+├── latent_frames.py, semantic_frame_labeling.py, temporal_frame_evolution.py
+├── narrative_signatures.py, signature_comparison.py, narrative_archetypes.py
+├── change_point_detection.py, temporal_narrative_regimes.py
+├── cross_source_divergence.py, confidence_scoring.py
+├── sentiment_analysis.py, affective_dynamics.py, editorial_behavior.py
+├── evidence_packet_builder.py, evidence_retrieval.py
+├── agentic_explainers/           # LLM-based evidence-grounded explanations
+├── filters/, migrations/
 └── utils/
 ```
 
@@ -129,11 +125,12 @@ Run the complete analysis:
 python src/main.py
 ```
 
-Generate agent-based explanations:
-
-```bash
-python src/test_agentic_system.py
-```
+`main.py` is configured through module-level constants near the top of the
+file (`TOPIC_FILTER`, `DEBUG_SOURCES`, and a set of `SKIP_*` flags). Several
+stages — LLM frame labeling, the actor↔frame graph, evidence packets and
+agentic explanations — require a local Ollama server (see below) and are
+disabled by default; flip the corresponding `SKIP_*` flag to `False` to
+enable them.
 
 ---
 

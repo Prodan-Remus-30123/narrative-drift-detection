@@ -3,6 +3,12 @@ import re
 import matplotlib.pyplot as plt
 
 
+# Standard single-panel line/bar chart size, shared by the plot_*
+# modules that don't have a size-driving reason to differ (e.g. a
+# heatmap sized by entity count, or a multi-panel dashboard).
+DEFAULT_FIGSIZE = (12, 6)
+
+
 def safe_filename(value):
     value = str(value)
     value = value.lower()

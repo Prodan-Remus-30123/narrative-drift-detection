@@ -1,3 +1,26 @@
+"""
+main.py
+
+Pipeline orchestrator and entry point (`python src/main.py`).
+
+For each news source in the database, groups its articles into
+bimonthly periods, then runs the full analysis stack over them:
+semantic drift, entity framing drift, latent frame discovery, sentiment
+and affective dynamics, change-point detection, narrative signatures
+and archetypes, cross-source divergence, and confidence scoring.
+Results are collected into `analysis_results` and written to
+`outputs/<topic>/<run_id>/results/analysis_results.json`, alongside
+per-source plots and summary CSVs.
+
+Configuration is a set of module-level constants below (`TOPIC_FILTER`,
+`DEBUG_SOURCES`, and the `SKIP_*` flags) rather than CLI arguments.
+Stages behind a `SKIP_*` flag that defaults to True depend on a local
+Ollama server (LLM frame labeling, the actor-frame graph, evidence
+packets, agentic explanations) and are off by default so the pipeline
+runs without one.
+"""
+
+import sys
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -5,11 +28,8 @@ from pathlib import Path
 import json
 
 from preprocessing import preprocess_corpus
-from embeddings import EmbeddingModel
 from drift import (compute_cosine_drift, compute_dynamic_threshold, classify_drift)
 from plots.plot_semantic_comparison_across_sources import plot_multiple_sources
-from entities import analyze_entities
-from interpreter import interpret_shift
 from database import load_full_articles
 
 from entity_framing_drift import compute_entity_drift, compute_entity_importance
@@ -26,7 +46,6 @@ from plots.plot_sentiment_evolution import plot_sentiment_evolution
 
 from correlation_analysis import (compute_sentiment_deltas, compute_average_framing, compute_correlation)
 from editorial_behavior import classify_editorial_behavior
-from emotional_volatility import compute_emotional_volatility
 from plots.plot_source_dashboard import plot_source_dashboard
 from utils.period_sorting import sort_period_key
 
@@ -45,6 +64,13 @@ from entity_frame_alignment import (
     build_entity_frame_alignment,
     summarize_entity_frame_migrations,
     print_top_entity_frame_migrations
+)
+from actor_graph import build_actor_verb_graph, compute_actor_centrality
+from entity_latent_frames import compute_entity_latent_frame_transitions
+from actor_frame_graph import (
+    build_actor_frame_graph_from_results,
+    detect_actor_frame_communities,
+    summarize_actor_frame_graph
 )
 from semantic_frame_labeling import (
     label_all_latent_frames,
@@ -137,6 +163,9 @@ SKIP_SIGNATURE_COMPARISON = True
 SAVE_ANALYSIS_RESULTS = True
 VERBOSE_ENTITY_DEBUG = False
 SKIP_ENTITY_FRAME_ALIGNMENT = True
+# Requires a local Ollama server (see llm_frame_labeler.py), like SKIP_FRAME_LABELING.
+SKIP_ACTOR_FRAME_GRAPH = True
+TOP_ACTORS_FOR_FRAME_GRAPH = 10
 PRINT_SENTIMENT_PERIODS = False
 SKIP_CHANGE_POINT_DETECTION = False
 SKIP_EVIDENCE_PACKETS = True
@@ -162,20 +191,6 @@ OUTPUT_DIR = Path("outputs") / TOPIC_FILTER / RUN_ID
 RESULTS_DIR = OUTPUT_DIR / "results"
 PLOTS_DIR = OUTPUT_DIR / "plots"
 
-# def group_by_source_and_month(df):
-#     df["date"] = pd.to_datetime(df["date"], format="mixed", utc=True)
-#     df["date"] = df["date"].dt.tz_localize(None)
-#     df["month"] = df["date"].dt.to_period("M")
-
-#     grouped = {}
-
-#     for (source, month), rows in df.groupby(["source", "month"]):
-#         if source not in grouped:
-#             grouped[source] = {}
-
-#         grouped[source][month] = rows["text"].tolist()
-
-#     return grouped
 
 def make_json_serializable(obj):
     if isinstance(obj, dict):
@@ -270,7 +285,6 @@ def main():
         total_docs = sum( len(grouped[source][period]) for period in grouped[source])
 
         if total_docs < 50:
-            # print(f"\nSkipping {source}: insufficient documents ({total_docs})")
             continue
 
         print(f"\nSource: {source}")
@@ -316,7 +330,6 @@ def main():
             continue
         total_docs = sum(len(grouped[source][period]) for period in grouped[source])
         if total_docs < 50:
-            #   print(f"\nSkipping {source}: insufficient documents ({total_docs})")
             continue
 
         aggregated_vectors = []
@@ -435,15 +448,7 @@ def main():
             drift_labels.append(f"{m1}->{m2}")
 
             print(f"{m1} → {m2} | Drift: {drift:.4f}")
-            # drift_interpretation = analyze_drift(
-            # source=source,
-            # period=f"{m1}->{m2}",
-            # drift_value=drift
-            # )
 
-            # print("\n[Drift Agent]")
-            # print(drift_interpretation)
-        
         dynamic_threshold = compute_dynamic_threshold(drift_values,method="median_mad")
 
         analysis_results[source]["semantic_drift"] = {
@@ -462,14 +467,6 @@ def main():
         source_results[source] = {
             "labels": drift_labels,
             "values": drift_values
-        }
-
-        analysis_results[source][
-            "semantic_drift"
-        ] = {
-            "labels": drift_labels,
-            "values": drift_values,
-            "threshold": dynamic_threshold
         }
 
         print("\n=== Sentiment Evolution ===")
@@ -589,11 +586,9 @@ def main():
                 np.mean(all_drifts)
             )
 
-        ecosystem_summary = summarize_dynamic_entity_ecosystem(
-            entity_ecosystem
+        analysis_results[source]["entity_ecosystem_summary"] = (
+            summarize_dynamic_entity_ecosystem(entity_ecosystem)
         )
-
-        # print(ecosystem_summary)
 
         print_top_dynamic_entities(
             entity_ecosystem,
@@ -636,6 +631,62 @@ def main():
                 )
 
                 analysis_results[source]["frame_migrations"] = {}
+
+        if SKIP_ACTOR_FRAME_GRAPH:
+            print("\n=== Actor-Frame Graph ===")
+            print("Skipped actor-frame graph.")
+            analysis_results[source]["actor_frame_graph"] = {}
+
+        else:
+            print("\n=== Actor-Frame Graph ===")
+
+            actor_verb_graph = build_actor_verb_graph(grouped[source])
+            actor_centrality = compute_actor_centrality(actor_verb_graph)
+            ranked_actors = sorted(
+                actor_centrality.items(),
+                key=lambda x: x[1],
+                reverse=True
+            )
+            top_actor_names = [
+                actor
+                for actor, score in ranked_actors[:TOP_ACTORS_FOR_FRAME_GRAPH]
+            ]
+
+            actor_frame_results = {}
+
+            for actor in top_actor_names:
+                try:
+                    actor_frame_results[actor] = compute_entity_latent_frame_transitions(
+                        source=source,
+                        entity=actor,
+                        framing_drift=framing_drift,
+                        entity_importance=entity_importance,
+                        salience_totals=salience_totals
+                    )
+                except Exception as error:
+                    print(f"Skipping {actor}: {error}")
+
+            actor_frame_graph = build_actor_frame_graph_from_results(
+                source=source,
+                top_actors=top_actor_names,
+                actor_frame_results=actor_frame_results
+            )
+
+            graph_summary = summarize_actor_frame_graph(actor_frame_graph["graph"])
+            communities = detect_actor_frame_communities(actor_frame_graph["graph"])
+
+            print(
+                f"Actor-frame graph: {graph_summary['nodes']} nodes, "
+                f"{graph_summary['edges']} edges, "
+                f"{len(communities)} communities"
+            )
+
+            analysis_results[source]["actor_frame_graph"] = {
+                "top_actors": top_actor_names,
+                "actor_centrality": ranked_actors,
+                "summary": graph_summary,
+                "communities": communities
+            }
 
         change_profile = build_narrative_change_profile(
             analysis_results[source],
@@ -730,25 +781,18 @@ def main():
 
         analysis_results[source]["editorial_behavior"] = behavior
 
-        volatility = compute_emotional_volatility(sentiment_results)
+        volatility = affective_result["compound_volatility"]
         print(f"\nEmotional volatility: "f"{volatility:.4f}")
 
         analysis_results[source]["emotional_volatility"] = volatility
 
 
-        average_framing_values = []
+        sorted_framing_drift = {
+            transition: framing_drift[transition]
+            for transition in sorted(framing_drift.keys(), key=sort_period_key)
+        }
+        average_framing_values = compute_average_framing(sorted_framing_drift)
 
-        for transition in sorted(framing_drift.keys(),key=sort_period_key):
-
-            entities = framing_drift[transition]
-            if len(entities) == 0:
-                average_framing_values.append(np.nan)
-                continue
-
-            turnover_values = [stats.get("vocabulary_turnover") for stats in entities.values() if stats.get("vocabulary_turnover") is not None]
-            avg = sum(turnover_values) / len(turnover_values) if turnover_values else np.nan
-
-            average_framing_values.append(avg)
         if not SKIP_PLOTS:
             plot_semantic_vs_framing(
                 semantic_labels=drift_labels,
@@ -785,16 +829,6 @@ def main():
 
         analysis_results[source]["cross_layer_correlation"] = correlation
 
-        # for transition, entities in framing_drift.items():
-        #     print(f"\n{transition}")
-        #     ranked_entities = sorted(entities.items(), key=lambda x: x[1]["drift"], reverse=True)
-
-        #     for entity, stats in ranked_entities[:5]:
-        #         print(f"\nEntity: {entity}")
-        #         print(f"Drift: " f"{stats['drift']:.3f}")
-        #         print(f"Before: " f"{list(stats['before'].keys())[:5]}")
-        #         print(f"After: " f"{list(stats['after'].keys())[:5]}")
-        
         plot_source_dashboard(
             source=source,
             semantic_labels=drift_labels,
@@ -803,61 +837,6 @@ def main():
             framing_drift=framing_drift,
             output_dir=PLOTS_DIR
         )
-
-        # Entity analysis per month
-        months_sorted = sorted(grouped[source].keys(), key=sort_period_key)
-
-        # for month in months_sorted:
-
-        #     print(f"\n{source} | {month}")
-
-        #     entity_stats = analyze_entities(
-        #         grouped[source][month]
-        #     )
-
-        #     for entity, stats in entity_stats.items():
-
-        #         print(f"\nEntity: {entity}")
-
-        #         print(
-        #             f"Subject count: {stats['subject_count']}"
-        #         )
-
-        #         print(
-        #             f"Object count: {stats['object_count']}"
-        #         )
-
-        #         print(
-        #             f"Top verbs: {stats['verbs'].most_common(5)}"
-        #         )
-
-        #  Narrative interpretation per transition
-
-        # for i in range(len(months_sorted) - 1):
-
-        #     current_month = months_sorted[i + 1]
-
-        #     entity_stats = analyze_entities(
-        #         grouped[source][current_month]
-        #     )
-
-        #     interpretation = interpret_shift(
-        #         source=source,
-        #         period=f"{months_sorted[i]}->{current_month}",
-        #         drift=drift_values[i],
-        #         entity_stats=entity_stats
-        #     )
-
-        #     print("\nNarrative Interpretation:")
-        #     print(
-        #         f"{months_sorted[i]}->{current_month}"
-        #     )
-
-        #     print(interpretation)
-
-        # # Change point
-        # change_points = detect_changepoints(drift_values)
-        # print(f"Detected change points: {change_points}")
 
     if not SKIP_CROSS_SOURCE_DIVERGENCE:
         cross_source_divergence = compute_cross_source_divergence(
@@ -1096,5 +1075,12 @@ def debug_signature_comparison():
 
 
 if __name__ == "__main__":
+    # Force UTF-8 stdout: several print statements use non-ASCII
+    # characters (e.g. "->" arrows), which crash with
+    # UnicodeEncodeError under Windows' default console codepage
+    # whenever output is redirected/piped rather than printed to an
+    # interactive terminal.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+
     main()
-    #debug_signature_comparison()

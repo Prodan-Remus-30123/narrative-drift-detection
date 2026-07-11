@@ -8,34 +8,34 @@ entity-conditioned latent frame transitions.
 import networkx as nx
 
 from actor_graph import compute_actor_graph_centrality
-from entity_latent_frames import compute_entity_latent_frame_transitions
+from entity_latent_frames import (
+    compute_entity_latent_frame_transitions,
+    _standalone_source_framing
+)
 from frame_normalization import normalize_frame_labels
 
 TOP_ACTORS = 10
 
 
-def build_actor_frame_graph(source, top_n=TOP_ACTORS):
-    actor_data = compute_actor_graph_centrality(source)
+def build_actor_frame_graph_from_results(source, top_actors, actor_frame_results):
+    """
+    Build the Actor <-> Frame bipartite graph from already-computed
+    per-actor latent frame transitions (see
+    entity_latent_frames.compute_entity_latent_frame_transitions).
+    """
 
-    top_actors = [actor for actor, score in actor_data["actor_centrality"][:top_n]]
     all_frame_labels = []
     graph = nx.Graph()
-
-    actor_frame_results = {}
     pending_edges = []
 
     for actor in top_actors:
-        try:
-            frame_data = compute_entity_latent_frame_transitions(source=source, entity=actor)
-        except Exception as error:
-            print(f"Skipping {actor}: {error}")
+        frame_data = actor_frame_results.get(actor)
+
+        if frame_data is None:
             continue
 
-        actor_frame_results[actor] = frame_data
         actor_node = f"ACTOR::{actor}"
-
         graph.add_node(actor_node, node_type="actor", label=actor)
-        
 
         for transition in frame_data["latent_frame_transitions"]:
             frame_labels = []
@@ -51,7 +51,7 @@ def build_actor_frame_graph(source, top_n=TOP_ACTORS):
                     continue
 
                 pending_edges.append((actor, frame_label))
-                
+
     normalization_map = normalize_frame_labels(all_frame_labels)
 
     for actor, frame_label in pending_edges:
@@ -76,13 +76,43 @@ def build_actor_frame_graph(source, top_n=TOP_ACTORS):
             graph[actor_node][frame_node]["weight"] += 1
         else:
             graph.add_edge(actor_node, frame_node, weight=1)
-    
+
     return {
         "source": source,
         "top_actors": top_actors,
         "graph": graph,
         "actor_frame_results": actor_frame_results
     }
+
+
+def build_actor_frame_graph(source, top_n=TOP_ACTORS):
+    """
+    Standalone entry point: recomputes actor centrality and framing
+    data for `source` from scratch, then builds the Actor <-> Frame
+    graph. The main pipeline instead reuses data it already computed
+    per-source and calls build_actor_frame_graph_from_results directly.
+    """
+
+    actor_data = compute_actor_graph_centrality(source)
+    top_actors = [actor for actor, score in actor_data["actor_centrality"][:top_n]]
+
+    framing_drift, entity_importance, salience_totals = _standalone_source_framing(source)
+
+    actor_frame_results = {}
+
+    for actor in top_actors:
+        try:
+            actor_frame_results[actor] = compute_entity_latent_frame_transitions(
+                source=source,
+                entity=actor,
+                framing_drift=framing_drift,
+                entity_importance=entity_importance,
+                salience_totals=salience_totals
+            )
+        except Exception as error:
+            print(f"Skipping {actor}: {error}")
+
+    return build_actor_frame_graph_from_results(source, top_actors, actor_frame_results)
 
 
 def detect_actor_frame_communities(graph):

@@ -7,6 +7,9 @@ Detects temporal change points in narrative drift signals.
 import numpy as np
 from sklearn.decomposition import PCA
 
+from utils.numeric import safe_float as _safe_float
+from entity_framing_drift import get_framing_drift_js
+
 
 try:
     import ruptures as rpt
@@ -15,15 +18,6 @@ except ImportError:
 
 
 MIN_SERIES_LENGTH = 4
-
-
-def _safe_float(value, default=0.0):
-    try:
-        if value is None:
-            return default
-        return float(value)
-    except Exception:
-        return default
 
 
 def detect_change_points(
@@ -197,11 +191,7 @@ def detect_source_change_points(source_result):
 
         for entity, stats in entities.items():
             turnover = stats.get("vocabulary_turnover")
-            js = (
-                stats.get("js_drift")
-                or stats.get("jensen_shannon")
-                or stats.get("js")
-            )
+            js = get_framing_drift_js(stats)
 
             if turnover is not None:
                 transition_turnovers.append(_safe_float(turnover))

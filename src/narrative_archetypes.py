@@ -14,15 +14,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
 
-
-def _safe_float(value):
-    if value is None:
-        return 0.0
-
-    try:
-        return float(value)
-    except Exception:
-        return 0.0
+from utils.numeric import safe_float as _safe_float
 
 
 def _top_abs_delta(frames):

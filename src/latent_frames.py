@@ -12,9 +12,7 @@ from collections import defaultdict, Counter
 import numpy as np
 
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics.pairwise import cosine_similarity
 
-from embeddings import EmbeddingModel
 from temporal_entity_analysis import group_articles_by_period
 from entities import analyze_entities
 from preprocessing import preprocess_corpus
@@ -26,7 +24,11 @@ from filters.verb_filters import GENERIC_VERBS, SEMANTICALLY_WEAK_VERBS
 
 
 MIN_VERB_COUNT = 3
-DISTANCE_THRESHOLD = 0.6
+# Agglomerative-clustering cosine-distance cutoff for grouping the
+# source's *global* verb vocabulary into latent frames (contrast with
+# entity_latent_frames.ENTITY_VERB_CLUSTER_DISTANCE_THRESHOLD, which
+# clusters a single actor's before/after verbs).
+GLOBAL_VERB_CLUSTER_DISTANCE_THRESHOLD = 0.6
 MIN_NARRATIVE_CENTRALITY = 2.5
 MIN_FRAME_CLUSTER_SIZE = 3
 
@@ -268,7 +270,7 @@ def cluster_verbs(verb_list, embeddings):
         n_clusters=None,
         metric="cosine",
         linkage="average",
-        distance_threshold=DISTANCE_THRESHOLD
+        distance_threshold=GLOBAL_VERB_CLUSTER_DISTANCE_THRESHOLD
     )
 
     labels = clustering.fit_predict(embeddings)

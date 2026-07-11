@@ -8,8 +8,6 @@ import json
 import requests
 import hashlib
 import numpy as np
-from embeddings import EmbeddingModel
-from frame_label_cache import (get_cached_label, store_cached_label)
 from frame_cache_db import (
     initialize_frame_cache,
     get_cached_frame,

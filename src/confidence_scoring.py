@@ -1,14 +1,22 @@
+from utils.numeric import safe_float as _safe_float
+from entity_framing_drift import get_framing_drift_js
+
+# Weights for the four confidence components; must sum to 1.0.
+SEMANTIC_WEIGHT = 0.30
+FRAMING_WEIGHT = 0.30
+ACTOR_WEIGHT = 0.20
+REGIME_WEIGHT = 0.20
+
+# A source needs at least this many detected temporal regimes to be
+# treated as having full regime-based evidence.
+MAX_EXPECTED_REGIMES = 4
+
+CONFIDENCE_HIGH_THRESHOLD = 0.70
+CONFIDENCE_MEDIUM_THRESHOLD = 0.40
+
+
 def _clamp(value, min_value=0.0, max_value=1.0):
     return max(min_value, min(max_value, value))
-
-
-def _safe_float(value, default=0.0):
-    try:
-        if value is None:
-            return default
-        return float(value)
-    except Exception:
-        return default
 
 
 def compute_confidence_score(source_result):
@@ -56,12 +64,7 @@ def compute_confidence_score(source_result):
 
     for transition, entities in framing_drift.items():
         for entity, stats in entities.items():
-            js = (
-                stats.get("js")
-                or stats.get("js_drift")
-                or stats.get("jensen_shannon")
-            )
-
+            js = get_framing_drift_js(stats)
             turnover = stats.get("vocabulary_turnover")
 
             if js is not None:
@@ -79,24 +82,24 @@ def compute_confidence_score(source_result):
 
     if regimes.get("status") == "ok":
         regime_strength = min(
-            len(regimes.get("regimes", [])) / 4,
+            len(regimes.get("regimes", [])) / MAX_EXPECTED_REGIMES,
             1.0
         )
     else:
         regime_strength = 0.0
 
     confidence = (
-        0.30 * semantic_strength
-        + 0.30 * framing_strength
-        + 0.20 * actor_strength
-        + 0.20 * regime_strength
+        SEMANTIC_WEIGHT * semantic_strength
+        + FRAMING_WEIGHT * framing_strength
+        + ACTOR_WEIGHT * actor_strength
+        + REGIME_WEIGHT * regime_strength
     )
 
     confidence = _clamp(confidence)
 
-    if confidence >= 0.70:
+    if confidence >= CONFIDENCE_HIGH_THRESHOLD:
         label = "high"
-    elif confidence >= 0.40:
+    elif confidence >= CONFIDENCE_MEDIUM_THRESHOLD:
         label = "medium"
     else:
         label = "low"

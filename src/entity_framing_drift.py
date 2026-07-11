@@ -20,6 +20,23 @@ MIN_SHARED_VERBS = 2
 MIN_VERB_LENGTH = 3
 MIN_GLOBAL_VERB_COUNT = 10
 
+
+def get_framing_drift_js(stats):
+    """
+    Read a per-entity transition's Jensen-Shannon framing-drift score
+    (the "framing_drift_js" field produced by compute_entity_drift
+    below), tolerating older/alternate key names some cached
+    analysis_results.json files may still use.
+    """
+
+    return (
+        stats.get("framing_drift_js")
+        or stats.get("js_drift")
+        or stats.get("jensen_shannon")
+        or stats.get("js")
+    )
+
+
 def is_valid_verb(verb):
     if not isinstance(verb, str):
         return False
@@ -163,18 +180,6 @@ def vocabulary_turnover(vector_a, vector_b):
 
     return 1 - jaccard_similarity
 
-def normalize_distribution(vector):
-    total = sum(vector.values())
-
-    if total == 0:
-        return {}
-
-    return {
-        key: value / total
-        for key, value in vector.items()
-    }
-
-
 def jensen_shannon_distance(vector_a, vector_b):
     keys = sorted(
         set(vector_a.keys()).union(vector_b.keys())
@@ -269,37 +274,12 @@ def compute_entity_drift(grouped_texts):
         period_vectors
     )
 
-    # print("\n=== GLOBAL VERB FILTER ===")
-
-    kept = sum(
-        1
-        for count in verb_global_count.values()
-        if count >= MIN_GLOBAL_VERB_COUNT
-    )
-
-    # print(
-    #     f"Kept verbs: {kept} / "
-    #     f"{len(verb_global_count)}"
-    # )
-
     period_vectors = weight_entity_vectors(
         period_vectors,
         verb_df,
         verb_global_count,
         total_entity_vectors
     )
-
-    for period, entities in period_vectors.items():
-        for entity, verbs in entities.items():
-
-            if "m" in verbs:
-
-                print("\n====================")
-                print("FOUND VERB M")
-                print("====================")
-                print("period:", period)
-                print("entity:", entity)
-                print("verbs:", verbs)
 
     periods = sorted(period_vectors.keys())
 
@@ -370,8 +350,8 @@ def compute_entity_drift(grouped_texts):
 
 
             drift_results[transition][entity] = {
-                "drift": None,
-                "drift_class": None,
+                "drift": turnover,
+                "drift_class": drift_class,
                 "shared_similarity": shared_similarity,
                 "vocabulary_turnover": turnover,
                 "framing_drift_js": framing_drift_js,

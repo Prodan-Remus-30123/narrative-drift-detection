@@ -124,10 +124,9 @@ def compute_frame_signature(latent_frames, semantic_frames=None):
                 )
             )
 
-    top_frame_descriptions = [
-        frame.get("description", "")
-        for _, frame in ranked_frames[:5]
-    ]
+            top_frame_descriptions.append(
+                frame.get("description", "")
+            )
 
     return {
         "num_latent_frames": len(latent_frames),

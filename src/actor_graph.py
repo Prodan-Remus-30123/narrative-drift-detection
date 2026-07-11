@@ -7,7 +7,6 @@ Narrative actor graph centrality.
 
 import networkx as nx
 
-from collections import defaultdict
 from database import load_full_articles
 from preprocessing import preprocess_corpus
 from temporal_entity_analysis import group_articles_by_period
@@ -60,17 +59,26 @@ def compute_actor_centrality(graph):
     return actor_scores
 
 
-def compute_actor_graph_centrality(source):
+def compute_actor_graph_centrality(source, grouped_texts=None):
+    """
+    Build the actor-verb graph and rank actors by PageRank centrality.
 
-    df = load_full_articles()
+    grouped_texts, if given, should be a {period: [preprocessed texts]}
+    mapping already prepared by the caller (e.g. the main pipeline's
+    per-source loop) so the corpus isn't reloaded/reprocessed from
+    scratch. If omitted, it's loaded and preprocessed here.
+    """
 
-    source_df = df[df["source"] == source]
-    grouped = group_articles_by_period(source_df)
+    if grouped_texts is None:
+        df = load_full_articles()
 
-    for period in grouped:
-        grouped[period] = preprocess_corpus(grouped[period])
+        source_df = df[df["source"] == source]
+        grouped_texts = group_articles_by_period(source_df)
 
-    graph = build_actor_verb_graph(grouped)
+        for period in grouped_texts:
+            grouped_texts[period] = preprocess_corpus(grouped_texts[period])
+
+    graph = build_actor_verb_graph(grouped_texts)
     centrality = compute_actor_centrality(graph)
     ranked = sorted(centrality.items(), key=lambda x: x[1], reverse=True)
 

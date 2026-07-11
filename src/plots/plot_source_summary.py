@@ -1,7 +1,10 @@
-import pandas as pd
-from utils.plot_saving import save_plot
-
 def build_source_summary(source, semantic_values, framing_drift, entity_importance, num_periods, num_articles, avg_sentiment):
+    """
+    Aggregate one source's per-transition metrics into a single summary
+    row (average semantic drift, average framing turnover, top actor by
+    importance) for the cross-source summary table. Despite living in
+    the plots package, this produces data, not a chart.
+    """
 
     avg_semantic = (sum(semantic_values) / len(semantic_values) if semantic_values else 0.0)
 
