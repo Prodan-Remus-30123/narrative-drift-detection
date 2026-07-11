@@ -70,6 +70,6 @@ plots/
 
 # Hugging Face Space demo: docs and small bundled sample dataset,
 # explicitly un-ignored despite the broad *.md / data rules above.
-!SPACE_README.md
-!DEPLOY.md
+!deploy/SPACE_README.md
+!deploy/DEPLOY.md
 !data/sample_articles.db

@@ -41,8 +41,8 @@ cd space
 cp -r ../ProiectDisertatie/src .
 cp -r ../ProiectDisertatie/data .
 cp ../ProiectDisertatie/app.py .
-cp ../ProiectDisertatie/requirements-space.txt requirements.txt
-cp ../ProiectDisertatie/SPACE_README.md README.md
+cp ../ProiectDisertatie/deploy/requirements-space.txt requirements.txt
+cp ../ProiectDisertatie/deploy/SPACE_README.md README.md
 
 git add -A
 git commit -m "Deploy narrative drift detection demo"

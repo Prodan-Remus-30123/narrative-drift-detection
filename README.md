@@ -157,9 +157,9 @@ enable them.
 ## Live Demo
 
 A Gradio demo (`app.py`) runs a bounded, live subset of this pipeline over
-a small bundled sample of articles — see [DEPLOY.md](DEPLOY.md) for how to
-publish it as a Hugging Face Space. The full pipeline above always runs
-locally against the complete research database.
+a small bundled sample of articles — see [deploy/DEPLOY.md](deploy/DEPLOY.md)
+for how to publish it as a Hugging Face Space. The full pipeline above
+always runs locally against the complete research database.
 
 
 ---
